@@ -23,9 +23,8 @@ map 4 4<C-w>w
 map 5 5<C-w>w
 map 6 6<C-w>w
 map 7 7<C-w>w
-map 8 8<C-w>w
-map 9 :w<CR>:make<CR>
-map 0 :w<CR>:make<CR>:!clear<CR>:!time ./%<<CR>
+map 8 :w<CR>:make<CR>
+map 9 :w<CR>:make<CR>:!clear<CR>:!time ./%<<CR>
 
 command W w !sudo tee % > /dev/null
 
