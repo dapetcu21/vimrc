@@ -16,15 +16,15 @@ set smartindent
 
 set makeprg=make\ %<\ LDLIBS=\"-lm\"\ CFLAGS=\"-Wall\ -O2\ -W\"\ CPPFLAGS=\"-Wall\ -O2\ -W\"
 
-map 1 1<C-w>w
-map 2 2<C-w>w
-map 3 3<C-w>w
-map 4 4<C-w>w
-map 5 5<C-w>w
-map 6 6<C-w>w
-map 7 7<C-w>w
-map 8 :w<CR>:make<CR>
-map 9 :w<CR>:make<CR>:!clear<CR>:!time ./%<<CR>
+map <F1> 1<C-w>w
+map <F2> 2<C-w>w
+map <F3> 3<C-w>w
+map <F4> 4<C-w>w
+map <F5> 5<C-w>w
+map <F6> 6<C-w>w
+map <F7> 7<C-w>w
+map <F8> :w<CR>:make<CR>
+map <F9> :w<CR>:make<CR>:!clear<CR>:!time ./%<<CR>
 
 command W w !sudo tee % > /dev/null
 
