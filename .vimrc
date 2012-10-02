@@ -65,3 +65,5 @@ set wrapmargin=0
 set mouse=a
 
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+autocmd VimEnter * if !argc() | NERDTree | endif
+
