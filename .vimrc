@@ -42,6 +42,7 @@ imap <C-v> <Esc><C-v>a
 set completeopt=menu,menuone,longest
 set pumheight=15
 let g:clang_complete_macros=1
+let g:clang_complete_copen=1
 
 if has("gui_running")
     nmap <C-Space> <C-Bslash>
