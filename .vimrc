@@ -72,3 +72,14 @@ map <C-p><C-p> :call fuf#setOneTimeVariables(['g:fuf_coveragefile_globPatterns',
 map <C-p><C-o> :FufCoverageFile<CR>
 map <C-p><C-i> :FufCoverageFileChange<CR>
 map <C-p><C-r> :FufRenewCache<CR>
+
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
+
+imap <C-h> <left>
+imap <C-j> <down>
+imap <C-k> <up>
+imap <C-l> <right>
+
