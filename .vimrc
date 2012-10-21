@@ -66,5 +66,9 @@ set wrapmargin=0
 set mouse=a
 
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-autocmd VimEnter * if !argc() | NERDTree | endif
+autocmd VimEnter * if !argc() | NERDTree | wincmd l | endif
 
+map <C-p><C-p> :call fuf#setOneTimeVariables(['g:fuf_coveragefile_globPatterns', ['**/*.h', '**/*.cpp', '**/*.c', '**/*.m', '**/*.mm', '**/*.txt', '**/*.lua', '**/*.fsh', '**/*.vsh', '**/*.fx', '**/*.py', '**/*.php', '**/*.pl', '**/*.pas', '**/*.cs', '**/*.java', '**/*.rb', '**/*.cmake']]) \| FufCoverageFile <CR>
+map <C-p><C-o> :FufCoverageFile<CR>
+map <C-p><C-i> :FufCoverageFileChange<CR>
+map <C-p><C-r> :FufRenewCache<CR>
