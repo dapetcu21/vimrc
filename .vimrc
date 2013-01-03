@@ -14,6 +14,10 @@ set tabstop=4
 set shiftwidth=4
 set smartindent
 
+au FileType python set tabstop=2 | set shiftwidth=2
+au FileType lua set tabstop=2 | set shiftwidth=2
+au FileType make set noexpandtab
+
 set makeprg=make\ %<\ LDLIBS=\"-lm\"\ CFLAGS=\"-Wall\ -O2\ -W\"\ CPPFLAGS=\"-Wall\ -O2\ -W\"
 
 map <F1> 1<C-w>w
@@ -68,7 +72,7 @@ set mouse=a
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 autocmd VimEnter * if !argc() | NERDTree | wincmd l | endif
 
-map <C-p><C-p> :call fuf#setOneTimeVariables(['g:fuf_coveragefile_globPatterns', ['**/*.h', '**/*.cpp', '**/*.c', '**/*.m', '**/*.mm', '**/*.txt', '**/*.lua', '**/*.fsh', '**/*.vsh', '**/*.fx', '**/*.py', '**/*.php', '**/*.pl', '**/*.pas', '**/*.cs', '**/*.java', '**/*.rb', '**/*.cmake']]) \| FufCoverageFile <CR>
+map <C-p><C-p> :call fuf#setOneTimeVariables(['g:fuf_coveragefile_globPatterns', ['**/*.h', '**/*.cpp', '**/*.c', '**/*.m', '**/*.mm', '**/*.xm', '**/*.txt', '**/*.lua', '**/*.fsh', '**/*.vsh', '**/*.fx', '**/*.py', '**/*.php', '**/*.pl', '**/*.pas', '**/*.cs', '**/*.java', '**/*.rb', '**/*.cmake']]) \| FufCoverageFile <CR>
 map <C-p><C-o> :FufCoverageFile<CR>
 map <C-p><C-i> :FufCoverageFileChange<CR>
 map <C-p><C-r> :FufRenewCache<CR>
