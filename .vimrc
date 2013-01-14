@@ -46,7 +46,10 @@ imap <C-v> <Esc><C-v>a
 set completeopt=menu,menuone,longest
 set pumheight=15
 let g:clang_complete_macros=1
-let g:clang_complete_copen=1
+
+"usually autocomplete in Cocoa is slow as fuck
+au FileType objc   let g:clang_complete_auto=0
+au FileType objcpp let g:clang_complete_auto=0
 
 if has("gui_running")
     nmap <C-Space> <C-Bslash>
@@ -72,15 +75,16 @@ set mouse=a
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 autocmd VimEnter * if !argc() | NERDTree | wincmd l | endif
 
-map <C-p><C-p> :call fuf#setOneTimeVariables(['g:fuf_coveragefile_globPatterns', ['**/*.h', '**/*.cpp', '**/*.c', '**/*.m', '**/*.mm', '**/*.xm', '**/*.txt', '**/*.lua', '**/*.fsh', '**/*.vsh', '**/*.fx', '**/*.py', '**/*.php', '**/*.pl', '**/*.pas', '**/*.cs', '**/*.java', '**/*.rb', '**/*.cmake']]) \| FufCoverageFile <CR>
-map <C-p><C-o> :FufCoverageFile<CR>
-map <C-p><C-i> :FufCoverageFileChange<CR>
-map <C-p><C-r> :FufRenewCache<CR>
+set wildignore+=*.o,*.obj,.git,*build*,*.dynlib,*.a
+map <C-p><C-p> :CommandT<CR>
+map <C-p><C-o> :CommandTBuffer<CR>
+map <C-p><C-r> :CommandTFlush<CR>
 
 map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
+map <C-o> <Return>
 
 imap <C-h> <left>
 imap <C-j> <down>

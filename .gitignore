@@ -1,3 +1,9 @@
 .DS_Store
 *.swp
 .netrwhist
+/.vim/ruby/command-t/Makefile
+/.vim/ruby/command-t/ext.bundle
+/.vim/ruby/command-t/ext.o
+/.vim/ruby/command-t/match.o
+/.vim/ruby/command-t/matcher.o
+/.vim/ruby/command-t/mkmf.log
