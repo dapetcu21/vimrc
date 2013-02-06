@@ -14,9 +14,25 @@ set tabstop=4
 set shiftwidth=4
 set smartindent
 
-au FileType python set tabstop=2 | set shiftwidth=2
-au FileType lua set tabstop=2 | set shiftwidth=2
-au FileType make set noexpandtab
+filetype off
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+Bundle 'gmarik/vundle'
+Bundle 'Valloric/YouCompleteMe'
+Bundle 'scrooloose/nerdtree'
+Bundle 'embear/vim-localvimrc'
+Bundle 'msanders/cocoa.vim'
+Bundle 'git://git.wincent.com/command-t.git'
+filetype plugin indent on
+
+au FileType python  set expandtab   | set tabstop=2 | set shiftwidth=2
+au FileType lua     set expandtab   | set tabstop=2 | set shiftwidth=2
+au FileType cmake   set expandtab   | set tabstop=2 | set shiftwidth=2
+au FileType make    set noexpandtab | set tabstop=4 | set shiftwidth=4
+au FileType cpp     set expandtab   | set tabstop=4 | set shiftwidth=4
+au FileType c       set expandtab   | set tabstop=4 | set shiftwidth=4
+au FileType objc    set expandtab   | set tabstop=4 | set shiftwidth=4
+au FileType objcpp  set expandtab   | set tabstop=4 | set shiftwidth=4
 
 set makeprg=make\ %<\ LDLIBS=\"-lm\"\ CFLAGS=\"-Wall\ -O2\ -W\"\ CPPFLAGS=\"-Wall\ -O2\ -W\"
 
@@ -45,22 +61,19 @@ imap <C-v> <Esc><C-v>a
 
 set completeopt=menu,menuone,longest
 set pumheight=15
-let g:clang_complete_macros=1
+highlight Pmenu ctermfg=255
 
-"usually autocomplete in Cocoa is slow as fuck
-au FileType objc   let g:clang_complete_auto=0
-au FileType objcpp let g:clang_complete_auto=0
-
-if has("gui_running")
-    nmap <C-Space> <C-Bslash>
-    imap <C-Space> <C-Bslash>
-elseif has("win32unix")
-    nmap <C-@> <C-Bslash>
-    imap <C-@> <C-Bslash>
+if !has("gui_running")
+    if has("win32unix")
+        nmap <C-@> <C-Space>
+        imap <C-@> <C-Space>
+    else
+        nmap <Nul> <C-Space>
+        imap <Nul> <C-Space>
+    endif
 else
-    nmap <Nul> <C-Bslash>
-    imap <Nul> <C-Bslash>
-endif    
+    colorscheme Tomorrow-Night
+endif
 
 nmap <C-Bslash> i<C-x><C-u>
 imap <C-Bslash> <C-x><C-u>
@@ -84,10 +97,10 @@ map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
-map <C-o> <Return>
 
 imap <C-h> <left>
 imap <C-j> <down>
 imap <C-k> <up>
 imap <C-l> <right>
+imap <C-o> <Return>
 
