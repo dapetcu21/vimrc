@@ -88,7 +88,7 @@ set mouse=a
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 autocmd VimEnter * if !argc() | NERDTree | wincmd l | endif
 
-set wildignore+=*.o,*.obj,.git,*build*,*.dynlib,*.a
+set wildignore+=*.o,*.obj,.git,*build*,*.dylib,*.a
 map <C-p><C-p> :CommandT<CR>
 map <C-p><C-o> :CommandTBuffer<CR>
 map <C-p><C-r> :CommandTFlush<CR>
