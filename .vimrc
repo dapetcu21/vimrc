@@ -5,14 +5,18 @@ set ruler showcmd
 set hls ic is
 set showmatch
 set bg=dark
-set nowrap
-syntax on
 set number
-
+set wrap
+set linebreak
+set nolist
+set textwidth=0
+set wrapmargin=0
+set mouse=a
 set expandtab
 set tabstop=4
 set shiftwidth=4
 set smartindent
+syntax on
 
 filetype off
 set rtp+=~/.vim/bundle/vundle/
@@ -23,6 +27,7 @@ Bundle 'scrooloose/nerdtree'
 Bundle 'embear/vim-localvimrc'
 Bundle 'msanders/cocoa.vim'
 Bundle 'git://git.wincent.com/command-t.git'
+Bundle 'DHowett/theos', { 'rtp': 'extras/vim/' }
 filetype plugin indent on
 
 au FileType python  set expandtab   | set tabstop=2 | set shiftwidth=2
@@ -33,6 +38,9 @@ au FileType cpp     set expandtab   | set tabstop=4 | set shiftwidth=4
 au FileType c       set expandtab   | set tabstop=4 | set shiftwidth=4
 au FileType objc    set expandtab   | set tabstop=4 | set shiftwidth=4
 au FileType objcpp  set expandtab   | set tabstop=4 | set shiftwidth=4
+
+au BufNewFile,BufRead *.xm  set filetype=logos
+au BufNewFile,BufRead *.xmm set filetype=logos
 
 set makeprg=make\ %<\ LDLIBS=\"-lm\"\ CFLAGS=\"-Wall\ -O2\ -W\"\ CPPFLAGS=\"-Wall\ -O2\ -W\"
 
@@ -74,16 +82,6 @@ if !has("gui_running")
 else
     colorscheme Tomorrow-Night
 endif
-
-nmap <C-Bslash> i<C-x><C-u>
-imap <C-Bslash> <C-x><C-u>
-
-set wrap
-set linebreak
-set nolist
-set textwidth=0
-set wrapmargin=0
-set mouse=a
 
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 autocmd VimEnter * if !argc() | NERDTree | wincmd l | endif
