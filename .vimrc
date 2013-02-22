@@ -145,8 +145,9 @@ endfunction
 command! MakeAndRun call MakeAndRun()
 map <F9> :MakeAndRun<CR>
 
-function! SetUpPlugins
+function! SetUpPlugins()
     !cd ~/.vim/ruby/command-t && ruby extconf.rb && make
     "TODO: youcompleteme
 endfunction
 command! SetUpPlugins call SetUpPlugins()
+
