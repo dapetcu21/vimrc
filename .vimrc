@@ -12,9 +12,6 @@ set nolist
 set textwidth=0
 set wrapmargin=0
 set mouse=a
-set expandtab
-set tabstop=4
-set shiftwidth=4
 set smartindent
 syntax on
 
@@ -22,27 +19,40 @@ filetype off
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 Bundle 'gmarik/vundle'
-Bundle 'Valloric/YouCompleteMe'
 Bundle 'scrooloose/nerdtree'
 Bundle 'embear/vim-localvimrc'
 Bundle 'msanders/cocoa.vim'
-Bundle 'git://git.wincent.com/command-t.git'
 Bundle 'DHowett/theos', { 'rtp': 'extras/vim/' }
+Bundle 'scrooloose/syntastic'
+Bundle 'Nemo157/glsl.vim'
+if has("ruby")
+    Bundle 'git://git.wincent.com/command-t.git'
+endif
+if v:version >= 703 && has("patch584") && has("python")
+    Bundle 'Valloric/YouCompleteMe'
+else
+    function! TabOrComplete()
+        if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
+            return "\<C-N>"
+        else
+            return "\<Tab>"
+        endif
+    endfunction
+    inoremap <Tab> <C-R>=TabOrComplete()<CR>
+endif
 filetype plugin indent on
 
-au FileType python  set expandtab   | set tabstop=2 | set shiftwidth=2
-au FileType lua     set expandtab   | set tabstop=2 | set shiftwidth=2
-au FileType cmake   set expandtab   | set tabstop=2 | set shiftwidth=2
-au FileType make    set noexpandtab | set tabstop=4 | set shiftwidth=4
-au FileType cpp     set expandtab   | set tabstop=4 | set shiftwidth=4
-au FileType c       set expandtab   | set tabstop=4 | set shiftwidth=4
-au FileType objc    set expandtab   | set tabstop=4 | set shiftwidth=4
-au FileType objcpp  set expandtab   | set tabstop=4 | set shiftwidth=4
+set expandtab
+set shiftwidth=4
+set tabstop=4
+au FileType *       setlocal expandtab   | setlocal tabstop=4 | setlocal shiftwidth=4
+au FileType python  setlocal expandtab   | setlocal tabstop=2 | setlocal shiftwidth=2
+au FileType lua     setlocal expandtab   | setlocal tabstop=2 | setlocal shiftwidth=2
+au FileType cmake   setlocal expandtab   | setlocal tabstop=2 | setlocal shiftwidth=2
+au FileType make    setlocal noexpandtab | setlocal tabstop=4 | setlocal shiftwidth=4
 
-au BufNewFile,BufRead *.xm  set filetype=logos
-au BufNewFile,BufRead *.xmm set filetype=logos
-
-set makeprg=make\ %<\ LDLIBS=\"-lm\"\ CFLAGS=\"-Wall\ -O2\ -W\"\ CPPFLAGS=\"-Wall\ -O2\ -W\"
+au BufNewFile,BufRead *.xm\|*.xmm  setlocal filetype=logos
+au BufNewFile,BufRead *.vsh\|*.fsh setlocal filetype=glsl
 
 map <F1> 1<C-w>w
 map <F2> 2<C-w>w
@@ -51,8 +61,7 @@ map <F4> 4<C-w>w
 map <F5> 5<C-w>w
 map <F6> 6<C-w>w
 map <F7> 7<C-w>w
-map <F8> :w<CR>:make<CR>
-map <F9> :w<CR>:make<CR>:!clear<CR>:!time ./%<<CR>
+map <F8> 8<C-w>w
 
 command W w !sudo tee % > /dev/null
 
@@ -70,6 +79,8 @@ imap <C-v> <Esc><C-v>a
 set completeopt=menu,menuone,longest
 set pumheight=15
 highlight Pmenu ctermfg=255
+set updatetime=500
+map <Leader>c :YcmForceCompileAndDiagnostics<CR>
 
 if !has("gui_running")
     if has("win32unix")
@@ -84,7 +95,7 @@ else
 endif
 
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-autocmd VimEnter * if !argc() | NERDTree | wincmd l | endif
+map <Leader>t :NERDTreeToggle<CR>
 
 set wildignore+=*.o,*.obj,.git,*build*,*.dylib,*.a
 map <C-p><C-p> :CommandT<CR>
@@ -102,3 +113,40 @@ imap <C-k> <up>
 imap <C-l> <right>
 imap <C-o> <Return>
 
+function! CompileOrLint()
+endfunction
+
+function! MakeAndRun()
+    w
+    if !empty(matchstr(getline(1), "^#!")) || (&ft == "sh")
+        silent !chmod +x %
+        ! time %
+    elseif &ft == "python"
+        let mainpy = findfile("__main__.py", expand("%:p:h") . ";")
+        if empty(mainpy)
+            !python %
+        else
+            execute "!python " . fnamemodify(mainpy, ":p:h") 
+        endif
+    else
+        let mkf = findfile("Makefile", expand("%:p:h") . ";")
+        if empty(mkf)
+            if &ft == "c"
+                !cc -Wall -W -lm -g %:p -o %:p:r && time %:p:r
+            elseif &ft == "cpp"
+                !c++ -Wall -W -lm -g %:p -o %:p:r && time %:p:r
+            endif
+        else
+            execute "! cd " . fnamemodify(mkf, ":p:h") . " && make -j2"
+        endif
+    endif
+endfunction
+
+command! MakeAndRun call MakeAndRun()
+map <F9> :MakeAndRun<CR>
+
+function! SetUpPlugins
+    !cd ~/.vim/ruby/command-t && ruby extconf.rb && make
+    "TODO: youcompleteme
+endfunction
+command! SetUpPlugins call SetUpPlugins()
