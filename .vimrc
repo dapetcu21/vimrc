@@ -128,6 +128,8 @@ function! MakeAndRun()
         else
             execute "!python " . fnamemodify(mainpy, ":p:h") 
         endif
+    elseif &ft == "lua"
+        !lua %
     else
         let mkf = findfile("Makefile", expand("%:p:h") . ";")
         if empty(mkf)
