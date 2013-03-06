@@ -27,9 +27,11 @@ Bundle 'scrooloose/syntastic'
 Bundle 'Nemo157/glsl.vim'
 if has("ruby")
     Bundle 'git://git.wincent.com/command-t.git'
+    let g:installedCommandT = 1
 endif
 if v:version >= 703 && has("patch584") && has("python")
     Bundle 'Valloric/YouCompleteMe'
+    let g:installedYCM = 1
 else
     function! TabOrComplete()
         if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
@@ -63,7 +65,7 @@ map <F6> 6<C-w>w
 map <F7> 7<C-w>w
 map <F8> 8<C-w>w
 
-command W w !sudo tee % > /dev/null
+command! W w !sudo tee % > /dev/null
 
 if has("unix")
     if system("echo -n \"$(uname)\"") == "Darwin"
@@ -148,8 +150,14 @@ command! MakeAndRun call MakeAndRun()
 map <F9> :MakeAndRun<CR>
 
 function! SetUpPlugins()
-    !cd ~/.vim/ruby/command-t && ruby extconf.rb && make
-    "TODO: youcompleteme
+    BundleInstall
+    if g:installedCommandT
+        silent !cd ~/.vim/bundle/command-t/ruby/command-t && ruby extconf.rb && make 
+    endif
+    if g:installedYCM
+        silent !cd ~/.vim/bundle/YouCompleteMe && ./install.sh --clang-completer
+    endif
+    redraw!
 endfunction
 command! SetUpPlugins call SetUpPlugins()
 

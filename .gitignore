@@ -2,4 +2,4 @@
 *.swp
 .netrwhist
 .VimballRecord
-/bundles
+/.vim/bundle
