@@ -25,6 +25,8 @@ Bundle 'msanders/cocoa.vim'
 Bundle 'DHowett/theos', { 'rtp': 'extras/vim/' }
 Bundle 'scrooloose/syntastic'
 Bundle 'Nemo157/glsl.vim'
+Bundle 'airblade/vim-gitgutter'
+Bundle 'tpope/vim-fugitive'
 if has("ruby")
     Bundle 'git://git.wincent.com/command-t.git'
     let g:installedCommandT = 1
