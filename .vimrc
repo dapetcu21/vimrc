@@ -159,6 +159,9 @@ endfunction
 command! -nargs=+ Google call Google(<f-args>)
 map <Leader>g :Google <cword> <CR>
 
+runtime ftplugin/man.vim
+map K :Man <cword> <CR>
+
 function! SetUpPlugins()
     BundleInstall
     if g:installedCommandT
