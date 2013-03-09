@@ -86,6 +86,7 @@ set pumheight=15
 highlight Pmenu ctermfg=255
 set updatetime=500
 map <Leader>c :YcmForceCompileAndDiagnostics<CR>
+        map <Leader>g :! gnome-open http://google.com/search?q=<cword> <CR>
 
 if !has("gui_running")
     if has("win32unix")
@@ -157,7 +158,7 @@ function! Google(...)
     else
         let prog = "gnome-open"
     endif
-    execute "! " . prog . " http://google.com/search?q=" . join(a:000, "+") 
+    execute "silent ! " . prog . " http://google.com/search?q=" . join(a:000, "+") 
 endfunction
 command! -nargs=+ Google call Google(<f-args>)
 map <Leader>g :Google <cword> <CR>
