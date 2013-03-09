@@ -27,6 +27,7 @@ Bundle 'scrooloose/syntastic'
 Bundle 'Nemo157/glsl.vim'
 Bundle 'airblade/vim-gitgutter'
 Bundle 'tpope/vim-fugitive'
+Bundle 'Open-associated-programs'
 if has("ruby")
     Bundle 'git://git.wincent.com/command-t.git'
     let g:installedCommandT = 1
@@ -153,12 +154,7 @@ command! MakeAndRun call MakeAndRun()
 map <F9> :MakeAndRun<CR>
 
 function! Google(...)
-    if g:uname == "Darwin"
-        let prog = "open"
-    else
-        let prog = "gnome-open"
-    endif
-    execute "silent ! " . prog . " http://google.com/search?q=" . join(a:000, "+") 
+    call xolox#open#url("http://google.com/search?q=" . join(map(copy(a:000), 'expand(v:val)'), "+"))
 endfunction
 command! -nargs=+ Google call Google(<f-args>)
 map <Leader>g :Google <cword> <CR>
