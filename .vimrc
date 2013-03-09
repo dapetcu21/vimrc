@@ -87,7 +87,6 @@ set pumheight=15
 highlight Pmenu ctermfg=255
 set updatetime=500
 map <Leader>c :YcmForceCompileAndDiagnostics<CR>
-        map <Leader>g :! gnome-open http://google.com/search?q=<cword> <CR>
 
 if !has("gui_running")
     if has("win32unix")
