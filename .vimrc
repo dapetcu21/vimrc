@@ -69,8 +69,9 @@ map <F8> 8<C-w>w
 
 command! W w !sudo tee % > /dev/null
 
+let g:uname = system("echo -n \"$(uname)\"")
 if has("unix")
-    if system("echo -n \"$(uname)\"") == "Darwin"
+    if  g:uname == "Darwin"
         vmap <C-c> y:call system("pbcopy", getreg("\""))<CR>
         nmap <C-v> :call setreg("\"",system("pbpaste"))<CR>p
     else
@@ -117,9 +118,6 @@ imap <C-k> <up>
 imap <C-l> <right>
 imap <C-o> <Return>
 
-function! CompileOrLint()
-endfunction
-
 function! MakeAndRun()
     w
     if !empty(matchstr(getline(1), "^#!")) || (&ft == "sh")
@@ -134,6 +132,8 @@ function! MakeAndRun()
         endif
     elseif &ft == "lua"
         !lua %
+    elseif &ft == "vim"
+        so %
     else
         let mkf = findfile("Makefile", expand("%:p:h") . ";")
         if empty(mkf)
@@ -150,6 +150,17 @@ endfunction
 
 command! MakeAndRun call MakeAndRun()
 map <F9> :MakeAndRun<CR>
+
+function! Google(...)
+    if g:uname == "Darwin"
+        let prog = "open"
+    else
+        let prog = "gnome-open"
+    endif
+    execute "! " . prog . " http://google.com/search?q=" . join(a:000, "+") 
+endfunction
+command! -nargs=+ Google call Google(<f-args>)
+map <Leader>g :Google <cword> <CR>
 
 function! SetUpPlugins()
     BundleInstall
