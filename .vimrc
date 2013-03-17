@@ -165,14 +165,23 @@ map K :Man <cword> <CR>
 function! CycleConjugates()
     let files = split(globpath(expand('%:p:h'), expand('%:t:r').'.*'), '\n')
     let thisfile = expand("%:p")
-    if !empty(files)
-        let pos = index(files, thisfile)
-        if pos >= 0
-            let pos = pos + 1
-            if pos >= len(files)
-                let pos = 0
+    let pos = index(files, thisfile)
+    if pos >= 0
+        let pos = pos + 1
+        if pos >= len(files)
+            let pos = 0
+        endif
+        let newfile = files[pos]
+        echo newfile
+        let win = bufwinnr(newfile)
+        if win < 0
+            if &mod
+                execute 'vsplit ' . newfile
+            else
+                execute 'e ' . newfile
             endif
-            execute 'e '.files[pos]
+        else
+            execute win . 'wincmd w'
         endif
     endif
 endfunction
