@@ -162,6 +162,23 @@ map <Leader>g :Google <cword> <CR>
 runtime ftplugin/man.vim
 map K :Man <cword> <CR>
 
+function! CycleConjugates()
+    let files = split(globpath(expand('%:p:h'), expand('%:t:r').'.*'), '\n')
+    let thisfile = expand("%:p")
+    if !empty(files)
+        let pos = index(files, thisfile)
+        if pos >= 0
+            let pos = pos + 1
+            if pos >= len(files)
+                let pos = 0
+            endif
+            execute 'e '.files[pos]
+        endif
+    endif
+endfunction
+command! CycleConjugates call CycleConjugates()
+map <Leader>j :CycleConjugates <CR>
+
 function! SetUpPlugins()
     BundleInstall
     if g:installedCommandT
