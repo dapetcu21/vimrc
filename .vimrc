@@ -104,7 +104,13 @@ endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 map <Leader>t :NERDTreeToggle<CR>
 
-set wildignore+=*.o,*.obj,.git,*build*,*.dylib,*.a
+let g:gitgutter_all_on_focusgained = 0
+
+let g:localvimrc_persistent = 1
+let g:localvimrc_sandbox = 0
+set viminfo+=!
+
+set wildignore+=*.o,*.obj,.git,*build*,*.dylib,*.a,*.so
 map <C-p><C-p> :CommandT<CR>
 map <C-p><C-o> :CommandTBuffer<CR>
 map <C-p><C-r> :CommandTFlush<CR>
@@ -153,6 +159,25 @@ endfunction
 command! MakeAndRun call MakeAndRun()
 map <F9> :MakeAndRun<CR>
 
+function! ShowAssembly()
+    if &ft == "c" || &ft == "cpp"
+        w
+        if &ft == "c" 
+            let compiler = "cc"
+        else
+            let compiler = "c++"
+        end
+        let fn = expand("%:p")
+        enew
+        execute "read !" . compiler . " -Wall -W -O3 -S " . fn . " -o -"
+        set readonly
+        set ft=asm
+    endif
+endfunction
+
+command! ShowAssembly call ShowAssembly()
+map <F10> :ShowAssembly<CR>
+
 function! Google(...)
     call xolox#open#url("http://google.com/search?q=" . join(map(copy(a:000), 'expand(v:val)'), "+"))
 endfunction
@@ -162,8 +187,13 @@ map <Leader>g :Google <cword> <CR>
 runtime ftplugin/man.vim
 map K :Man <cword> <CR>
 
+let g:conjugate_paths="[expand('%:p:h')]"
 function! CycleConjugates()
-    let files = split(globpath(expand('%:p:h'), expand('%:t:r').'.*'), '\n')
+    let files = []
+    let paths = eval(g:conjugate_paths)
+    for path in paths
+        let files = files + split(globpath(path, expand('%:t:r').'.*'), '\n')
+    endfor
     let thisfile = expand("%:p")
     let pos = index(files, thisfile)
     if pos >= 0
@@ -172,7 +202,6 @@ function! CycleConjugates()
             let pos = 0
         endif
         let newfile = files[pos]
-        echo newfile
         let win = bufwinnr(newfile)
         if win < 0
             if &mod
