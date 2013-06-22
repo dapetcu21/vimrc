@@ -15,6 +15,7 @@ set mouse=a
 set smartindent
 syntax on
 
+
 filetype off
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
@@ -28,6 +29,9 @@ Bundle 'Nemo157/glsl.vim'
 Bundle 'airblade/vim-gitgutter'
 Bundle 'tpope/vim-fugitive'
 Bundle 'Open-associated-programs'
+Bundle 'kchmck/vim-coffee-script'
+Bundle 'digitaltoad/vim-jade'
+Bundle 'wavded/vim-stylus'
 if has("ruby")
     Bundle 'git://git.wincent.com/command-t.git'
     let g:installedCommandT = 1
@@ -53,6 +57,9 @@ set tabstop=4
 au FileType *       setlocal expandtab   | setlocal tabstop=4 | setlocal shiftwidth=4
 au FileType python  setlocal expandtab   | setlocal tabstop=2 | setlocal shiftwidth=2
 au FileType lua     setlocal expandtab   | setlocal tabstop=2 | setlocal shiftwidth=2
+au FileType coffee  setlocal expandtab   | setlocal tabstop=2 | setlocal shiftwidth=2
+au FileType stylus  setlocal expandtab   | setlocal tabstop=2 | setlocal shiftwidth=2
+au FileType jade    setlocal expandtab   | setlocal tabstop=2 | setlocal shiftwidth=2
 au FileType cmake   setlocal expandtab   | setlocal tabstop=2 | setlocal shiftwidth=2
 au FileType make    setlocal noexpandtab | setlocal tabstop=4 | setlocal shiftwidth=4
 
@@ -151,7 +158,7 @@ function! MakeAndRun()
                 !c++ -Wall -W -lm -g %:p -o %:p:r && time %:p:r
             endif
         else
-            execute "! cd " . fnamemodify(mkf, ":p:h") . " && make -j2"
+            execute "! cd " . fnamemodify(mkf, ":p:h") . " && make -j8"
         endif
     endif
 endfunction
@@ -169,7 +176,7 @@ function! ShowAssembly()
         end
         let fn = expand("%:p")
         enew
-        execute "read !" . compiler . " -Wall -W -O3 -S " . fn . " -o -"
+        execute "read !" . compiler . " -Wall -W -S " . fn . " -o -"
         set readonly
         set ft=asm
     endif
