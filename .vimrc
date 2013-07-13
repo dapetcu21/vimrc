@@ -21,7 +21,6 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 Bundle 'gmarik/vundle'
 Bundle 'scrooloose/nerdtree'
-Bundle 'embear/vim-localvimrc'
 Bundle 'msanders/cocoa.vim'
 Bundle 'DHowett/theos', { 'rtp': 'extras/vim/' }
 Bundle 'scrooloose/syntastic'
@@ -112,10 +111,6 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 map <Leader>t :NERDTreeToggle<CR>
 
 let g:gitgutter_all_on_focusgained = 0
-
-let g:localvimrc_persistent = 1
-let g:localvimrc_sandbox = 0
-set viminfo+=!
 
 set wildignore+=*.o,*.obj,.git,*build*,*.dylib,*.a,*.so
 map <C-p><C-p> :CommandT<CR>
@@ -224,15 +219,26 @@ endfunction
 command! CycleConjugates call CycleConjugates()
 map <Leader>j :CycleConjugates <CR>
 
+function! InstallCommandT()
+    silent !cd ~/.vim/bundle/command-t/ruby/command-t && ruby extconf.rb && make 
+endfunction
+
+function! InstallYCM()
+    silent !cd ~/.vim/bundle/YouCompleteMe && ./install.sh --clang-completer
+endfunction
+
 function! SetUpPlugins()
     BundleInstall
     if g:installedCommandT
-        silent !cd ~/.vim/bundle/command-t/ruby/command-t && ruby extconf.rb && make 
+        call InstallCommandT()
     endif
     if g:installedYCM
-        silent !cd ~/.vim/bundle/YouCompleteMe && ./install.sh --clang-completer
+        call InstallYCM()
     endif
     redraw!
 endfunction
 command! SetUpPlugins call SetUpPlugins()
 
+if filereadable(glob("~/.vimrc.local")) 
+    source ~/.vimrc.local
+endif
