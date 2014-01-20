@@ -13,7 +13,10 @@ set textwidth=0
 set wrapmargin=0
 set mouse=a
 set smartindent
+set guioptions-=r
+set guioptions-=L
 syntax on
+set clipboard=unnamed
 
 
 filetype off
@@ -31,11 +34,14 @@ Bundle 'Open-associated-programs'
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'digitaltoad/vim-jade'
 Bundle 'wavded/vim-stylus'
+Bundle 'kloppster/Wordpress-Vim-Syntax'
+let g:installedCommandT = 0
+let g:installedYCM = 0
 if has("ruby")
     Bundle 'git://git.wincent.com/command-t.git'
     let g:installedCommandT = 1
 endif
-if v:version >= 703 && has("patch584") && has("python")
+if ((v:version == 703 && has("patch584") ) || v:version > 703) && has("python")
     Bundle 'Valloric/YouCompleteMe'
     let g:installedYCM = 1
 else
@@ -54,6 +60,7 @@ set expandtab
 set shiftwidth=4
 set tabstop=4
 au FileType *       setlocal expandtab   | setlocal tabstop=4 | setlocal shiftwidth=4
+au FileType text    setlocal expandtab   | setlocal tabstop=2 | setlocal shiftwidth=2
 au FileType python  setlocal expandtab   | setlocal tabstop=2 | setlocal shiftwidth=2
 au FileType lua     setlocal expandtab   | setlocal tabstop=2 | setlocal shiftwidth=2
 au FileType coffee  setlocal expandtab   | setlocal tabstop=2 | setlocal shiftwidth=2
@@ -148,9 +155,11 @@ function! MakeAndRun()
         let mkf = findfile("Makefile", expand("%:p:h") . ";")
         if empty(mkf)
             if &ft == "c"
-                !cc -Wall -W -lm -g %:p -o %:p:r && time %:p:r
+                !cc -Wall -W -lm -g "%:p" -o "%:p:r" && time "%:p:r"
             elseif &ft == "cpp"
-                !c++ -Wall -W -lm -g %:p -o %:p:r && time %:p:r
+                !c++ -Wall -W -lm -g "%:p" -o "%:p:r" && time "%:p:r"
+            elseif &ft == "java"
+                !javac "%:p" && cd "%:p:h" && time java "%:t:r"
             endif
         else
             execute "! cd " . fnamemodify(mkf, ":p:h") . " && make -j8"
@@ -171,7 +180,7 @@ function! ShowAssembly()
         end
         let fn = expand("%:p")
         enew
-        execute "read !" . compiler . " -Wall -W -S " . fn . " -o -"
+        execute "read !" . compiler . " -Wall -W -S \"" . fn . "\" -o -"
         set readonly
         set ft=asm
     endif
