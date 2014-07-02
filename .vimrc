@@ -17,7 +17,7 @@ set guioptions-=r
 set guioptions-=L
 syntax on
 set clipboard=unnamed
-
+set visualbell
 
 filetype off
 set rtp+=~/.vim/bundle/vundle/
@@ -35,6 +35,7 @@ Bundle 'kchmck/vim-coffee-script'
 Bundle 'digitaltoad/vim-jade'
 Bundle 'wavded/vim-stylus'
 Bundle 'kloppster/Wordpress-Vim-Syntax'
+Bundle 'rking/ag.vim'
 let g:installedCommandT = 0
 let g:installedYCM = 0
 if has("ruby")
@@ -64,6 +65,7 @@ au FileType text    setlocal expandtab   | setlocal tabstop=2 | setlocal shiftwi
 au FileType python  setlocal expandtab   | setlocal tabstop=2 | setlocal shiftwidth=2
 au FileType lua     setlocal expandtab   | setlocal tabstop=2 | setlocal shiftwidth=2
 au FileType coffee  setlocal expandtab   | setlocal tabstop=2 | setlocal shiftwidth=2
+au FileType javascript      setlocal expandtab   | setlocal tabstop=2 | setlocal shiftwidth=2
 au FileType stylus  setlocal expandtab   | setlocal tabstop=2 | setlocal shiftwidth=2
 au FileType jade    setlocal expandtab   | setlocal tabstop=2 | setlocal shiftwidth=2
 au FileType cmake   setlocal expandtab   | setlocal tabstop=2 | setlocal shiftwidth=2
@@ -119,7 +121,7 @@ map <Leader>t :NERDTreeToggle<CR>
 
 let g:gitgutter_all_on_focusgained = 0
 
-set wildignore+=*.o,*.obj,.git,*build*,*.dylib,*.a,*.so
+set wildignore+=*.o,*.obj,.git,*build*,*.dylib,*.a,*.so,node_modules
 map <C-p><C-p> :CommandT<CR>
 map <C-p><C-o> :CommandTBuffer<CR>
 map <C-p><C-r> :CommandTFlush<CR>
@@ -138,8 +140,8 @@ imap <C-o> <Return>
 function! MakeAndRun()
     w
     if !empty(matchstr(getline(1), "^#!")) || (&ft == "sh")
-        silent !chmod +x %
-        ! time %
+        silent !chmod +x "%:p"
+        ! time "%:p"
     elseif &ft == "python"
         let mainpy = findfile("__main__.py", expand("%:p:h") . ";")
         if empty(mainpy)
