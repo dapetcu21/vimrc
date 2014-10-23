@@ -298,30 +298,45 @@ command! CycleConjugates call CycleConjugates()
 map <Leader>j :CycleConjugates <CR>
 
 "-- Installation scripts
+function! InstallScriptCommandT()
+    return "cd ~/.vim/bundle/command-t/ruby/command-t && ruby extconf.rb && make"
+endfunction
+
+function! InstallScriptYCM()
+    return "cd ~/.vim/bundle/YouCompleteMe && ./install.sh --clang-completer"
+endfunction
+
+function! InstallScriptTern()
+    return "cd ~/.vim/bundle/tern_for_vim && npm install"
+endfunction
+
+
 function! InstallCommandT()
-    !cd ~/.vim/bundle/command-t/ruby/command-t && ruby extconf.rb && make 
+    execute "!" . InstallScriptCommandT()
 endfunction
 
 function! InstallYCM()
-    !cd ~/.vim/bundle/YouCompleteMe && ./install.sh --clang-completer
+    execute "!" . InstallScriptYCM()
 endfunction
 
 function! InstallTern()
-    !cd ~/.vim/bundle/tern_for_vim && npm install
+    execute "!" . InstallScriptTern()
 endfunction
+
 
 function! SetUpPlugins()
     BundleInstall
+    let cmd = "echo \"Installing external dependencies...\""
     if g:installedCommandT
-        call InstallCommandT()
+        let cmd = cmd . " && " . InstallScriptCommandT()
     endif
     if g:installedNPM
-        call InstallTern()
+        let cmd = cmd . " && " . InstallScriptTern()
     endif
     if g:installedYCM
-        call InstallYCM()
+        let cmd = cmd . " && " . InstallScriptYCM()
     endif
-    redraw!
+    execute "!" . cmd
 endfunction
 command! SetUpPlugins call SetUpPlugins()
 
