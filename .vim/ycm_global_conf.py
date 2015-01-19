@@ -1,20 +1,40 @@
 import os
 import ycm_core
-from clang_helpers import PrepareClangFlags
 
 flags = [
-"-fblocks",
-"-fexceptions"
-]
+'-Wall',
+'-Wextra',
+'-Werror',
+'-Wno-long-long',
+'-Wno-variadic-macros',
+'-fexceptions',
+'-DNDEBUG',
 
+# Local includes
+'-I',
+'.',
+
+# Homebrew-installed libraries
+'-F',
+'/usr/local/Frameworks',
+'-isystem',
+'/usr/include',
+'-isystem',
+'/usr/local/include',
+
+# Xcode trickery
+'-isystem',
+'/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1',
+'-isystem',
+'/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include',
+]
 
 def DirectoryOfThisScript():
   return os.path.dirname( os.path.abspath( __file__ ) )
 
-
 def MakeRelativePathsInFlagsAbsolute( flags, working_directory ):
   if not working_directory:
-    return flags
+    return list( flags )
   new_flags = []
   make_next_absolute = False
   path_flags = [ '-isystem', '-I', '-iquote', '--sysroot=' ]
@@ -42,10 +62,12 @@ def MakeRelativePathsInFlagsAbsolute( flags, working_directory ):
 
 
 def FlagsForFile( filename ):
+  cplusplus = False
   relative_to = DirectoryOfThisScript()
   final_flags = MakeRelativePathsInFlagsAbsolute( flags, relative_to )
   if filename.endswith('.cpp'):
     final_flags += [ "-x", "c++" ]
+    cplusplus = True
   elif filename.endswith('.c'):
     final_flags += [ "-x", "c" ]
   elif filename.endswith('.m'):
@@ -53,7 +75,13 @@ def FlagsForFile( filename ):
     objc = True
   elif filename.endswith('.mm') or filename.endswith('.h'):
     final_flags += [ "-x", "objective-c++" ]
+    cplusplus = True
     objc = True
+
+  if cplusplus:
+    final_flags += [ '-std=c++11' ]
+  else:
+    final_flags += [ '-std=c99' ]
 
   return {
     'flags': final_flags,

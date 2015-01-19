@@ -141,7 +141,7 @@ set completeopt=menu,menuone,longest
 set pumheight=15
 highlight Pmenu ctermfg=255
 set updatetime=500
-map <Leader>c :YcmForceCompileAndDiagnostics<CR>
+map <Leader>y :YcmForceCompileAndDiagnostics<CR>
 let g:ycm_global_ycm_extra_conf = expand("$HOME") . "/.vim/ycm_global_conf.py"
 
 if !has("gui_running")
