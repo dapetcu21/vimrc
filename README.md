@@ -4,7 +4,7 @@ Feel free to use it / modify it / do whatever with it.
 
 ## Installing dependencies
 
-This vimrc needs a vim with Python and Ruby support, Clang (to compile youcompleteme), the Python headers (ycm) and NPM (for jshint) to work perfectly.
+This vimrc needs a vim with Python and Ruby support, Clang (to compile youcompleteme), the Python headers (ycm) and npm (for JSHint) to work perfectly.
 
 ### Ubuntu:
 
