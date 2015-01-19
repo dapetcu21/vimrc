@@ -312,6 +312,10 @@ function! InstallScriptTern()
     return "cd ~/.vim/bundle/tern_for_vim && npm install"
 endfunction
 
+function! InstallScriptJSHint()
+    return "npm install -g jshint jsxhint"
+endfunction
+
 
 function! InstallCommandT()
     execute "!" . InstallScriptCommandT()
@@ -325,6 +329,10 @@ function! InstallTern()
     execute "!" . InstallScriptTern()
 endfunction
 
+function! InstallJSHint()
+    execute "!" . InstallScriptJSHint()
+endfunction
+
 
 function! SetUpPlugins()
     BundleInstall
@@ -333,6 +341,7 @@ function! SetUpPlugins()
         let cmd = cmd . " && " . InstallScriptCommandT()
     endif
     if g:installedNPM
+        let cmd = cmd . " && " . InstallScriptJSHint()
         let cmd = cmd . " && " . InstallScriptTern()
     endif
     if g:installedYCM
