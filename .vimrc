@@ -55,6 +55,7 @@ Bundle 'wavded/vim-stylus'
 let g:installedCommandT = 0
 let g:installedYCM = 0
 let g:installedNPM = 0
+let g:installYCMWithClang = 0
 
 if executable("npm")
     Bundle 'marijnh/tern_for_vim'
@@ -305,7 +306,11 @@ function! InstallScriptCommandT()
 endfunction
 
 function! InstallScriptYCM()
-    return "cd ~/.vim/bundle/YouCompleteMe && ./install.sh --clang-completer"
+    if g:installYCMWithClang
+        return "cd ~/.vim/bundle/YouCompleteMe && ./install.sh --clang-completer"
+    else
+        return "cd ~/.vim/bundle/YouCompleteMe && ./install.sh"
+    endif
 endfunction
 
 function! InstallScriptTern()

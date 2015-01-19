@@ -17,4 +17,8 @@ fi
 
 ln -s ${PWD}/.vimrc ${HOME}/.vimrc
 ln -s ${PWD}/.vim ${HOME}/.vim
-vim +SetUpPlugins +qall
+if [ "$1" == "--with-clang" ]; then
+    vim "+let g:installYCMWithClang=1" +SetUpPlugins +qall
+else
+    vim +SetUpPlugins +qall
+fi
