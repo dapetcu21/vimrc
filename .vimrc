@@ -110,6 +110,8 @@ au FileType json        setlocal expandtab   | setlocal tabstop=2 | setlocal shi
 au FileType stylus      setlocal expandtab   | setlocal tabstop=2 | setlocal shiftwidth=2
 au FileType jade        setlocal expandtab   | setlocal tabstop=2 | setlocal shiftwidth=2
 
+"-- Configure JSXHint for React development
+let g:syntastic_javascript_checkers = ['jsxhint']
 
 "-- For when you forget to run sudo vim
 command! W w !sudo tee % > /dev/null
