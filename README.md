@@ -9,7 +9,7 @@ This vimrc needs a vim with Python and Ruby support, Clang (to compile youcomple
 ### Ubuntu:
 
 ```
-sudo apt-get install build-essential python-dev cmake nodejs vim-nox
+sudo apt-get install build-essential python-dev ruby-dev cmake nodejs vim-nox
 ```
 
 ### OS X with Homebrew:
