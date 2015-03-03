@@ -22,6 +22,10 @@ set visualbell
 set background=dark
 set shortmess=aO
 
+"-- Solves some UTF-8 issues with SSH sessions
+set encoding=utf-8
+set termencoding=utf-8
+
 "-- Installed plugins
 filetype off
 set rtp+=~/.vim/bundle/vundle/
