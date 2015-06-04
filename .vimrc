@@ -5,7 +5,6 @@ set autoindent
 set ruler showcmd
 set hls ic is
 set showmatch
-set bg=dark
 set number
 set wrap
 set linebreak
@@ -48,6 +47,7 @@ Bundle 'tpope/vim-fugitive'
 
 "- Filetype plugins
 Bundle 'Nemo157/glsl.vim'
+Bundle 'mustache/vim-mustache-handlebars'
 Bundle 'msanders/cocoa.vim'
 Bundle 'DHowett/theos', { 'rtp': 'extras/vim/' }
 Bundle 'elzr/vim-json'
@@ -156,8 +156,32 @@ if !has("gui_running")
         nmap <Nul> <C-Space>
         imap <Nul> <C-Space>
     endif
+endif
+
+"-- Color scheme
+
+function! NightTheme()
+    let $COLORSCHEME = "night"
+    set background=dark
+    if has("gui_running")
+        colorscheme base16-default
+    endif
+endfunction
+command! Night call NightTheme()
+
+function! DayTheme()
+    let $COLORSCHEME = "day"
+    set background=light
+    if has("gui_running")
+        colorscheme base16-summerfruit
+    endif
+endfunction
+command! Day call DayTheme()
+
+if $COLORSCHEME == 'day'
+    call DayTheme()
 else
-    colorscheme base16-default
+    call NightTheme()
 endif
 
 "-- NERDTree config
@@ -191,7 +215,7 @@ function! MakeAndRun()
     elseif &ft == "lua"
         !lua %
     elseif &ft == "javascript"
-        execute "!" . g:nodejs . " %"
+        execute "!" . g:nodejs . " \"%\""
     elseif &ft == "vim"
         so %
     else
