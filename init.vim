@@ -7,6 +7,9 @@ Plug 'MaxMEllon/vim-jsx-pretty'
 Plug 'tpope/vim-commentary'
 Plug 'morhetz/gruvbox'
 Plug 'tikhomirov/vim-glsl'
+Plug 'tpope/vim-fugitive'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 call plug#end()
 
@@ -42,6 +45,8 @@ au FileType make   setlocal noexpandtab | setlocal tabstop=4 | setlocal shiftwid
 au BufNewFile,BufRead *.script\|*.gui_script\|*.render_script\|*.editor_script\|*.lua_  setlocal filetype=lua
 au BufNewFile,BufRead *.vsh\|*.fsh\|*.fp\|*.vp setlocal filetype=glsl
 
+command! EditInit :e ~/.config/nvim/init.vim
+
 "=== Automatically save the session when leaving Vim :
 fu! GetSessPath()
   return stdpath('data') . '/sessions/.' . getcwd() . '/session.vim'
@@ -74,7 +79,7 @@ set sessionoptions-=options  " Don't save options
 
 "=== Plugin config
 :nnoremap <space>e :CocCommand explorer<CR>
-
+let g:airline_powerline_fonts = 1
 
 "=== vim.coc config:
 
