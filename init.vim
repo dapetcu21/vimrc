@@ -10,8 +10,11 @@ Plug 'tikhomirov/vim-glsl'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'tpope/vim-obsession'
+Plug 'dhruvasagar/vim-prosession'
 
 call plug#end()
+
 
 "=== coc extensions
 let g:coc_global_extensions = [
@@ -38,48 +41,33 @@ set pumblend=20
 " Search visual selection
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 
+command! EditInit :e ~/.config/nvim/init.vim
+
+
+"=== Indentation
 set expandtab shiftwidth=2 tabstop=2
 au FileType *      setlocal expandtab | setlocal tabstop=2 | setlocal shiftwidth=2
 au FileType make   setlocal noexpandtab | setlocal tabstop=4 | setlocal shiftwidth=4
 
+
+"== File types
 au BufNewFile,BufRead *.script\|*.gui_script\|*.render_script\|*.editor_script\|*.lua_  setlocal filetype=lua
 au BufNewFile,BufRead *.vsh\|*.fsh\|*.fp\|*.vp setlocal filetype=glsl
 
-command! EditInit :e ~/.config/nvim/init.vim
-
-"=== Automatically save the session when leaving Vim :
-fu! GetSessPath()
-  return stdpath('data') . '/sessions/.' . getcwd() . '/session.vim'
-endfunction
-
-fu! SaveSess()
-  let session_path = GetSessPath()
-  exec '!mkdir -p ' . escape(fnamemodify(session_path, ':h'), ' \')
-  execute 'mksession! ' . session_path
-endfunction
-
-fu! RestoreSess()
-  let session_path = GetSessPath()
-  if filereadable(session_path)
-    execute 'so ' . session_path
-    if bufexists(1)
-      for l in range(1, bufnr('$'))
-        if bufwinnr(l) == -1
-          exec 'sbuffer ' . l
-        endif
-      endfor
-    endif
-  endif
-endfunction
-
-autocmd VimLeave * call SaveSess()
-autocmd VimEnter * nested call RestoreSess()
-
-set sessionoptions-=options  " Don't save options
 
 "=== Plugin config
 :nnoremap <space>e :CocCommand explorer<CR>
+
 let g:airline_powerline_fonts = 1
+
+let g:prosession_dir = stdpath('data') . '/prosession'
+
+set sessionoptions-=options  " Don't save options
+set sessionoptions-=buffers  " Don't save hidden buffers
+set sessionoptions-=help     " Don't save help windows
+
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+
 
 "=== vim.coc config:
 
@@ -250,8 +238,4 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
-
-"== vim.coc plugin config
-command! -nargs=0 Prettier :CocCommand prettier.formatFile
-
 
