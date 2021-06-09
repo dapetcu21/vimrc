@@ -37,12 +37,14 @@ set mouse=a
 set number
 set termguicolors
 set pumblend=20
+filetype plugin indent on
+set nowrap
 
 " Search visual selection
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 
 command! EditInit :e ~/.config/nvim/init.vim
-
+filetype plugin indent on
 
 "=== Indentation
 set expandtab shiftwidth=2 tabstop=2
