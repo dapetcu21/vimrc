@@ -12,6 +12,8 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-obsession'
 Plug 'dhruvasagar/vim-prosession'
+Plug 'soywod/quicklist.vim'
+Plug 'yegappan/greplace'
 
 call plug#end()
 
@@ -49,6 +51,9 @@ vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 " Quick access to edit this file
 command! EditInit :e ~/.config/nvim/init.vim
 
+" Git untracked grep (grep everywhere except .gitignore'd files)
+command! Gugrep :Ggrep --untracked
+
 "=== Indentation
 set expandtab shiftwidth=2 tabstop=2
 au FileType *      setlocal expandtab | setlocal tabstop=2 | setlocal shiftwidth=2
@@ -61,7 +66,7 @@ au BufNewFile,BufRead *.vsh\|*.fsh\|*.fp\|*.vp setlocal filetype=glsl
 
 
 "=== Plugin config
-:nnoremap <space>e :CocCommand explorer<CR>
+nnoremap <space>e :CocCommand explorer<CR>
 
 let g:airline_powerline_fonts = 1
 
@@ -72,6 +77,10 @@ set sessionoptions-=buffers  " Don't save hidden buffers
 set sessionoptions-=help     " Don't save help windows
 
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
+
+nmap <leader>c <plug>(quicklist-toggle-qf)
+nmap <leader>l <plug>(quicklist-toggle-lc)
+nnoremap <silent> <leader>gc :<C-u>Gqfopen<CR><C-W>L
 
 
 "=== vim.coc config:
@@ -237,8 +246,12 @@ nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
 nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
 " Search files.
 nnoremap <silent><nowait> <space>f  :<C-u>CocList files<cr>
+" Search buffers.
+nnoremap <silent><nowait> <space>b  :<C-u>CocList buffers<cr>
 " Most recently used files
 nnoremap <silent><nowait> <space>m  :<C-u>CocList mru<CR>
+" Quickfix list
+nnoremap <silent><nowait> <space>q  :<C-u>CocList quickfix<CR>
 " Do default action for next item.
 nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
