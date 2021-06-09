@@ -248,7 +248,5 @@ nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 "== vim.coc plugin config
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
-vmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
 
 
