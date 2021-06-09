@@ -32,19 +32,22 @@ let g:coc_global_extensions = [
 
 "=== General settings
 colorscheme gruvbox
+set termguicolors
+set pumblend=20
+
 set clipboard=unnamedplus
 set mouse=a
 set number
-set termguicolors
-set pumblend=20
-filetype plugin indent on
 set nowrap
+
+" Load filetype plugins from ~/.config/nvim/ftplugins
+filetype plugin indent on
 
 " Search visual selection
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 
+" Quick access to edit this file
 command! EditInit :e ~/.config/nvim/init.vim
-filetype plugin indent on
 
 "=== Indentation
 set expandtab shiftwidth=2 tabstop=2
@@ -234,6 +237,8 @@ nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
 nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
 " Search files.
 nnoremap <silent><nowait> <space>f  :<C-u>CocList files<cr>
+" Most recently used files
+nnoremap <silent><nowait> <space>m  :<C-u>CocList mru<CR>
 " Do default action for next item.
 nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
