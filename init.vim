@@ -60,7 +60,7 @@ au FileType *      setlocal expandtab | setlocal tabstop=2 | setlocal shiftwidth
 au FileType make   setlocal noexpandtab | setlocal tabstop=4 | setlocal shiftwidth=4
 
 
-"== File types
+"=== File types
 au BufNewFile,BufRead *.script\|*.gui_script\|*.render_script\|*.editor_script\|*.lua_  setlocal filetype=lua
 au BufNewFile,BufRead *.vsh\|*.fsh\|*.fp\|*.vp setlocal filetype=glsl
 
