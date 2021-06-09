@@ -19,17 +19,18 @@ call plug#end()
 
 
 "=== coc extensions
-let g:coc_global_extensions = [
-      \'coc-explorer', "File explorer sidebar
-      \'coc-git', "Git integration
-      \'coc-lists', "Extra fuzzy finder lists, like for switching files
-      \'coc-tsserver', "TypeScript LSP
-      \'coc-lua', "Lua LSP
-      \'coc-json', "JSON LSP
-      \'coc-yaml', "YAML LSP
-      \'coc-prettier', "JS/TS code formatter
-      \'coc-format-json', "JSON formatter
-      \'coc-marketplace' ] "Coc extension marketplace
+let g:coc_global_extensions = map([
+      \['coc-explorer', "File explorer sidebar"],
+      \['coc-git', "Git integration"],
+      \['coc-lists', "Extra fuzzy finder lists, like for switching files"],
+      \['coc-tsserver', "TypeScript LSP"],
+      \['coc-lua', "Lua LSP"],
+      \['coc-json', "JSON LSP"],
+      \['coc-yaml', "YAML LSP"],
+      \['coc-prettier', "JS/TS code formatter"],
+      \['coc-format-json', "JSON formatter"],
+      \['coc-marketplace', "Coc extension marketplace"],
+\], "v:val[0]") 
 
 
 "=== General settings
