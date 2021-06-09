@@ -14,6 +14,7 @@ Plug 'tpope/vim-obsession' "Dependency for prosession
 Plug 'dhruvasagar/vim-prosession' "Save window session on exit
 Plug 'soywod/quicklist.vim' "Quicklist keyboard shortcuts
 Plug 'yegappan/greplace' "Edit quicklist like a buffer
+Plug 'bronson/vim-trailing-whitespace' "Show and fix trailing whitespace
 
 call plug#end()
 
@@ -30,7 +31,7 @@ let g:coc_global_extensions = map([
       \['coc-prettier', "JS/TS code formatter"],
       \['coc-format-json', "JSON formatter"],
       \['coc-marketplace', "Coc extension marketplace"],
-\], "v:val[0]") 
+\], "v:val[0]")
 
 
 "=== General settings
