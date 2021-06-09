@@ -1,35 +1,35 @@
 "=== Plug plugins
 call plug#begin(stdpath('data') . '/plugged')
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'HerringtonDarkholme/yats.vim'
-Plug 'MaxMEllon/vim-jsx-pretty'
-Plug 'tpope/vim-commentary'
-Plug 'morhetz/gruvbox'
-Plug 'tikhomirov/vim-glsl'
-Plug 'tpope/vim-fugitive'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'tpope/vim-obsession'
-Plug 'dhruvasagar/vim-prosession'
-Plug 'soywod/quicklist.vim'
-Plug 'yegappan/greplace'
+Plug 'neoclide/coc.nvim', {'branch': 'release'} "VSCode-like extension host
+Plug 'tpope/vim-fugitive' "Git integration
+Plug 'HerringtonDarkholme/yats.vim' "TypeScript syntax highlighting
+Plug 'MaxMEllon/vim-jsx-pretty' "JSX/TSX syntax highlighting
+Plug 'tikhomirov/vim-glsl' "GLSL Syntax highlighting
+Plug 'tpope/vim-commentary' "Toggle comments with gc<movement>
+Plug 'morhetz/gruvbox' "Color theme
+Plug 'vim-airline/vim-airline' "Status line
+Plug 'vim-airline/vim-airline-themes' "Status line themes
+Plug 'tpope/vim-obsession' "Dependency for prosession
+Plug 'dhruvasagar/vim-prosession' "Save window session on exit
+Plug 'soywod/quicklist.vim' "Quicklist keyboard shortcuts
+Plug 'yegappan/greplace' "Edit quicklist like a buffer
 
 call plug#end()
 
 
 "=== coc extensions
 let g:coc_global_extensions = [
-      \'coc-json',
-      \'coc-git',
-      \'coc-tsserver',
-      \'coc-lua',
-      \'coc-prettier',
-      \'coc-explorer',
-      \'coc-lists',
-      \'coc-format-json',
-      \'coc-yaml',
-      \'coc-marketplace' ]
+      \'coc-explorer', "File explorer sidebar
+      \'coc-git', "Git integration
+      \'coc-lists', "Extra fuzzy finder lists, like for switching files
+      \'coc-tsserver', "TypeScript LSP
+      \'coc-lua', "Lua LSP
+      \'coc-json', "JSON LSP
+      \'coc-yaml', "YAML LSP
+      \'coc-prettier', "JS/TS code formatter
+      \'coc-format-json', "JSON formatter
+      \'coc-marketplace' ] "Coc extension marketplace
 
 
 "=== General settings
