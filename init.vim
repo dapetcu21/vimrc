@@ -20,21 +20,21 @@ call plug#end()
 
 
 "=== coc extensions
-let g:coc_global_extensions = map([
-      \['coc-explorer', "File explorer sidebar"],
-      \['coc-git', "Git integration"],
-      \['coc-lists', "Extra fuzzy finder lists, like for switching files"],
-      \['coc-tsserver', "TypeScript LSP"],
-      \['coc-clangd', "C++ LSP"],
-      \['coc-lua', "Lua LSP"],
-      \['coc-json', "JSON LSP"],
-      \['coc-yaml', "YAML LSP"],
-      \['coc-prettier', "JS/TS code formatter"],
-      \['coc-format-json', "JSON formatter"],
-      \['coc-marketplace', "Coc extension marketplace"],
-      \['coc-defold-ide', "Defold-related stuff"],
-      \['coc-terminal', "Toggle terminal"],
-\], "v:val[0]")
+let s:coc_ge = []
+call add(s:coc_ge, 'coc-explorer') "File explorer sidebar
+call add(s:coc_ge, 'coc-git') "Git integration
+call add(s:coc_ge, 'coc-lists') "Extra fuzzy finder lists, like for switching files
+call add(s:coc_ge, 'coc-tsserver') "TypeScript LSP
+call add(s:coc_ge, 'coc-clangd') "C++ LSP
+call add(s:coc_ge, 'coc-lua') "Lua LSP
+call add(s:coc_ge, 'coc-json') "JSON LSP
+call add(s:coc_ge, 'coc-yaml') "YAML LSP
+call add(s:coc_ge, 'coc-prettier') "JS/TS code formatter
+call add(s:coc_ge, 'coc-format-json') "JSON formatter
+call add(s:coc_ge, 'coc-marketplace') "Coc extension marketplace
+call add(s:coc_ge, 'coc-defold-ide') "Defold-related stuff
+call add(s:coc_ge, 'coc-terminal') "Toggle terminal
+let g:coc_global_extensions = s:coc_ge
 
 
 "=== General settings
