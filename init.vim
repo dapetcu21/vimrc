@@ -70,6 +70,9 @@ au BufNewFile,BufRead *.vsh\|*.fsh\|*.fp\|*.vp setlocal filetype=glsl
 "=== Plugin config
 nnoremap <space>e :CocCommand explorer<CR>
 
+nnoremap <space>h :CocCommand defold-ide.refactorHash<CR>
+vnoremap <space>h :CocCommand defold-ide.refactorHashVisual<CR>
+
 let g:airline_powerline_fonts = 1
 
 let g:prosession_dir = stdpath('data') . '/prosession'
