@@ -72,13 +72,6 @@ au BufNewFile,BufRead *.vsh\|*.fsh\|*.fp\|*.vp setlocal filetype=glsl
 
 
 "=== Plugin config
-nnoremap <space>e :CocCommand explorer<CR>
-
-nnoremap <space>h :CocCommand defold-ide.refactorHash<CR>
-vnoremap <space>h :CocCommand defold-ide.refactorHashVisual<CR>
-
-nmap <space>t <Plug>(coc-terminal-toggle)
-
 let g:airline_powerline_fonts = 1
 
 let g:prosession_dir = stdpath('data') . '/prosession'
@@ -88,6 +81,15 @@ set sessionoptions-=buffers  " Don't save hidden buffers
 set sessionoptions-=help     " Don't save help windows
 
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
+
+"=== Key maps
+nnoremap <space>e :CocCommand explorer<CR>
+
+nnoremap <space>h :CocCommand defold-ide.refactorHash<CR>
+vnoremap <space>h :CocCommand defold-ide.refactorHashVisual<CR>
+
+nmap <space>t <Plug>(coc-terminal-toggle)
+tnoremap <leader><ESC> <C-\><C-n>
 
 nmap <leader>c <plug>(quicklist-toggle-qf)
 nmap <leader>l <plug>(quicklist-toggle-lc)
