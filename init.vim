@@ -25,12 +25,15 @@ let g:coc_global_extensions = map([
       \['coc-git', "Git integration"],
       \['coc-lists', "Extra fuzzy finder lists, like for switching files"],
       \['coc-tsserver', "TypeScript LSP"],
+      \['coc-clangd', "C++ LSP"],
       \['coc-lua', "Lua LSP"],
       \['coc-json', "JSON LSP"],
       \['coc-yaml', "YAML LSP"],
       \['coc-prettier', "JS/TS code formatter"],
       \['coc-format-json', "JSON formatter"],
       \['coc-marketplace', "Coc extension marketplace"],
+      \['coc-defold-ide', "Defold-related stuff"],
+      \['coc-terminal', "Toggle terminal"],
 \], "v:val[0]")
 
 
@@ -72,6 +75,8 @@ nnoremap <space>e :CocCommand explorer<CR>
 
 nnoremap <space>h :CocCommand defold-ide.refactorHash<CR>
 vnoremap <space>h :CocCommand defold-ide.refactorHashVisual<CR>
+
+nmap <space>t <Plug>(coc-terminal-toggle)
 
 let g:airline_powerline_fonts = 1
 
