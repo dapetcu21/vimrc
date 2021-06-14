@@ -15,6 +15,7 @@ Plug 'dhruvasagar/vim-prosession' "Save window session on exit
 Plug 'soywod/quicklist.vim' "Quicklist keyboard shortcuts
 Plug 'yegappan/greplace' "Edit quicklist like a buffer
 Plug 'bronson/vim-trailing-whitespace' "Show and fix trailing whitespace
+Plug 'editorconfig/editorconfig-vim' "Show
 
 call plug#end()
 
