@@ -1,10 +1,10 @@
 "=== Plug plugins
 call plug#begin(stdpath('data') . '/plugged')
 
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} "Fast syntax highlighting
+Plug 'nvim-treesitter/playground'
 Plug 'neoclide/coc.nvim', {'branch': 'release'} "VSCode-like extension host
 Plug 'tpope/vim-fugitive' "Git integration
-Plug 'HerringtonDarkholme/yats.vim' "TypeScript syntax highlighting
-Plug 'MaxMEllon/vim-jsx-pretty' "JSX/TSX syntax highlighting
 Plug 'tikhomirov/vim-glsl' "GLSL Syntax highlighting
 Plug 'tpope/vim-commentary' "Toggle comments with gc<movement>
 Plug 'morhetz/gruvbox' "Color theme
@@ -69,6 +69,57 @@ au FileType make   setlocal noexpandtab | setlocal tabstop=4 | setlocal shiftwid
 "=== File types
 au BufNewFile,BufRead *.script\|*.gui_script\|*.render_script\|*.editor_script\|*.lua_  setlocal filetype=lua
 au BufNewFile,BufRead *.vsh\|*.fsh\|*.fp\|*.vp setlocal filetype=glsl
+au BufNewFile,BufRead *.fui setlocal filetype=fuior
+
+"=== Tree-sitter
+lua <<EOF
+local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+parser_config.fuior = {
+  install_info = {
+    url = "https://github.com/critique-gaming/tree-sitter-fuior", -- local path or git repo
+    branch = "main",
+    files = {"src/parser.c"},
+  },
+}
+
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "maintained",
+  highlight = { enable = true },
+  indent = { enable = true },
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = "gnn",
+      node_incremental = "grn",
+      scope_incremental = "grc",
+      node_decremental = "grm",
+    },
+  },
+  playground = {
+    enable = true,
+    disable = {},
+    updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
+    persist_queries = false, -- Whether the query persists across vim sessions
+    keybindings = {
+      toggle_query_editor = 'o',
+      toggle_hl_groups = 'i',
+      toggle_injected_languages = 't',
+      toggle_anonymous_nodes = 'a',
+      toggle_language_display = 'I',
+      focus_language = 'f',
+      unfocus_language = 'F',
+      update = 'R',
+      goto_node = '<cr>',
+      show_help = '?',
+    },
+  },
+  query_linter = {
+    enable = true,
+    use_virtual_text = true,
+    lint_events = {"BufWrite", "CursorHold"},
+  },
+}
+EOF
 
 
 "=== Plugin config
@@ -79,6 +130,16 @@ let g:prosession_dir = stdpath('data') . '/prosession'
 set sessionoptions-=options  " Don't save options
 set sessionoptions-=buffers  " Don't save hidden buffers
 set sessionoptions-=help     " Don't save help windows
+
+"=== Show filename in title bar
+autocmd BufEnter * let &titlestring = "nvim (" . fnamemodify(expand("%"), ":~") . ")"
+if &term == "screen"
+  set t_ts=^[k
+  set t_fs=^[\
+endif
+if &term == "screen" || strpart(&term, 0, 5) == "xterm"
+  set title
+endif
 
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
@@ -94,7 +155,6 @@ tnoremap <leader><ESC> <C-\><C-n>
 nmap <leader>c <plug>(quicklist-toggle-qf)
 nmap <leader>l <plug>(quicklist-toggle-lc)
 nnoremap <silent> <leader>gc :<C-u>Gqfopen<CR><C-W>L
-
 
 "=== vim.coc config:
 
