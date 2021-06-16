@@ -52,7 +52,7 @@
 ;; Variables
 [
   (identifier)
-  (stat_lvalue)
+  (assign_lvalue)
 ] @variable
 (declare_var_decorator ["@" (decorator_name)] @keyword)
 
@@ -78,18 +78,14 @@
   (arg_name) @parameter)
 
 ;; Types
-(var_type (identifier) @type)
-(arg_type (identifier) @type)
-(return_type (identifier) @type)
-(unary_type_expression (identifier) @type)
-(binary_type_expression (identifier) @type)
+(type_identifier) @type
 
 ;; Nodes
 (comment) @comment
 
 ;; Text
-(show_text (text_actor) @type)
-(show_text (text_animation) @variable)
+(text_statement (text_actor) @type)
+(text_statement (text_animation) @variable)
 (text_copy) @string
 
 ;; Error
