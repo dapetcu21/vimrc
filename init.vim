@@ -50,21 +50,44 @@ func! SetITermProfile(profile)
 endfunction
 
 func! DarkMode()
+  let g:COLOR_SCHEME_MODE="dark"
   set background=dark
   colorscheme gruvbox
+  AirlineTheme gruvbox
   call SetITermProfile("DarkMode")
 endfunction
 
 func! LightMode()
+  let g:COLOR_SCHEME_MODE="light"
   set background=light
   colorscheme solarized
+  AirlineTheme solarized
   call SetITermProfile("LightMode")
+endfunction
+
+func! ToggleDarkMode()
+  if g:COLOR_SCHEME_MODE == "dark"
+    call LightMode()
+  else
+    call DarkMode()
+  endif
 endfunction
 
 command! LightMode :call LightMode()
 command! DarkMode :call DarkMode()
+command! ToggleDarkMode :call ToggleDarkMode()
 
-DarkMode "Dark mode on startup
+func s:DarkModeInit()
+  if !exists("g:COLOR_SCHEME_MODE")
+    let g:COLOR_SCHEME_MODE="dark"
+  end
+  if g:COLOR_SCHEME_MODE == "light"
+    LightMode
+  else
+    DarkMode
+  endif
+endfunction
+au VimEnter * call s:DarkModeInit()
 
 
 "=== General settings
