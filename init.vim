@@ -50,7 +50,7 @@ func! SetITermProfile(profile)
 endfunction
 
 func! DarkMode()
-  let g:COLOR_SCHEME_MODE="dark"
+  let g:COLOR_SCHEME_MODE = "dark"
   set background=dark
   colorscheme gruvbox
   AirlineTheme gruvbox
@@ -58,7 +58,7 @@ func! DarkMode()
 endfunction
 
 func! LightMode()
-  let g:COLOR_SCHEME_MODE="light"
+  let g:COLOR_SCHEME_MODE = "light"
   set background=light
   colorscheme solarized
   AirlineTheme solarized
@@ -78,16 +78,13 @@ command! DarkMode :call DarkMode()
 command! ToggleDarkMode :call ToggleDarkMode()
 
 func s:DarkModeInit()
-  if !exists("g:COLOR_SCHEME_MODE")
-    let g:COLOR_SCHEME_MODE="dark"
-  end
-  if g:COLOR_SCHEME_MODE == "light"
+  if exists("g:COLOR_SCHEME_MODE") && g:COLOR_SCHEME_MODE == "light"
     LightMode
   else
     DarkMode
   endif
 endfunction
-au VimEnter * call s:DarkModeInit()
+au VimEnter * call s:DarkModeInit() "After ShaDa loaded
 
 
 "=== General settings
