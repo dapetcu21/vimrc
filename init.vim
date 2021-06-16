@@ -8,6 +8,7 @@ Plug 'tpope/vim-fugitive' "Git integration
 Plug 'tikhomirov/vim-glsl' "GLSL Syntax highlighting
 Plug 'tpope/vim-commentary' "Toggle comments with gc<movement>
 Plug 'morhetz/gruvbox' "Color theme
+Plug 'altercation/vim-colors-solarized' "Color theme
 Plug 'vim-airline/vim-airline' "Status line
 Plug 'vim-airline/vim-airline-themes' "Status line themes
 Plug 'tpope/vim-obsession' "Dependency for prosession
@@ -15,7 +16,7 @@ Plug 'dhruvasagar/vim-prosession' "Save window session on exit
 Plug 'soywod/quicklist.vim' "Quicklist keyboard shortcuts
 Plug 'yegappan/greplace' "Edit quicklist like a buffer
 Plug 'bronson/vim-trailing-whitespace' "Show and fix trailing whitespace
-Plug 'editorconfig/editorconfig-vim' "Show
+Plug 'editorconfig/editorconfig-vim' "Respect .editor-config
 
 call plug#end()
 
@@ -38,11 +39,37 @@ call add(s:coc_ge, 'coc-terminal') "Toggle terminal
 let g:coc_global_extensions = s:coc_ge
 
 
+"=== Color schemes
+func! SetITermProfile(profile)
+  if $TERM_PROGRAM == "iTerm.app"
+    new
+    call setline(1, "\033]50;SetProfile=" . a:profile . "\007")
+    write >> /dev/stdout
+    q!
+  endif
+endfunction
+
+func! DarkMode()
+  set background=dark
+  colorscheme gruvbox
+  call SetITermProfile("DarkMode")
+endfunction
+
+func! LightMode()
+  set background=light
+  colorscheme solarized
+  call SetITermProfile("LightMode")
+endfunction
+
+command! LightMode :call LightMode()
+command! DarkMode :call DarkMode()
+
+DarkMode "Dark mode on startup
+
+
 "=== General settings
-colorscheme gruvbox
 set termguicolors
 set pumblend=20
-
 set clipboard=unnamedplus
 set mouse=a
 set number
