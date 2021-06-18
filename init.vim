@@ -39,54 +39,6 @@ call add(s:coc_ge, 'coc-terminal') "Toggle terminal
 let g:coc_global_extensions = s:coc_ge
 
 
-"=== Color schemes
-func! SetITermProfile(profile)
-  if $TERM_PROGRAM == "iTerm.app"
-    new
-    call setline(1, "\033]50;SetProfile=" . a:profile . "\007")
-    write >> /dev/stdout
-    q!
-  endif
-endfunction
-
-func! DarkMode()
-  let g:COLOR_SCHEME_MODE = "dark"
-  set background=dark
-  colorscheme gruvbox
-  AirlineTheme gruvbox
-  call SetITermProfile("DarkMode")
-endfunction
-
-func! LightMode()
-  let g:COLOR_SCHEME_MODE = "light"
-  set background=light
-  colorscheme solarized
-  AirlineTheme solarized
-  call SetITermProfile("LightMode")
-endfunction
-
-func! ToggleDarkMode()
-  if g:COLOR_SCHEME_MODE == "dark"
-    call LightMode()
-  else
-    call DarkMode()
-  endif
-endfunction
-
-command! LightMode :call LightMode()
-command! DarkMode :call DarkMode()
-command! ToggleDarkMode :call ToggleDarkMode()
-
-func s:DarkModeInit()
-  if exists("g:COLOR_SCHEME_MODE") && g:COLOR_SCHEME_MODE == "light"
-    LightMode
-  else
-    DarkMode
-  endif
-endfunction
-au VimEnter * call s:DarkModeInit() "After ShaDa loaded
-
-
 "=== General settings
 set termguicolors
 set pumblend=20
@@ -132,7 +84,7 @@ parser_config.fuior = {
 require'nvim-treesitter.configs'.setup {
   ensure_installed = "maintained",
   highlight = { enable = true },
-  indent = { enable = true },
+  indent = { enable = false },
   incremental_selection = {
     enable = true,
     keymaps = {
@@ -178,8 +130,22 @@ set sessionoptions-=options  " Don't save options
 set sessionoptions-=buffers  " Don't save hidden buffers
 set sessionoptions-=help     " Don't save help windows
 
+
 "=== Show filename in title bar
-autocmd BufEnter * let &titlestring = "nvim (" . fnamemodify(expand("%"), ":~") . ")"
+function! UpdateTitle()
+  let l:pwd = fnamemodify(getcwd(), ":~") 
+  let l:fname = fnamemodify(expand("%"), ":.")
+  let l:hfname = fnamemodify(expand("%"), ":~")
+  if strlen(hfname) < strlen(fname)
+    let l:fname = hfname
+  end
+  let l:short_name = strpart(fname, strlen(fname) - 30)
+  if short_name != fname
+    let l:short_name = "..." . short_name
+  end
+  let &titlestring = "[" . pwd . "] " . short_name
+endfunction
+autocmd WinEnter * call UpdateTitle()
 if &term == "screen"
   set t_ts=^[k
   set t_fs=^[\
@@ -189,6 +155,59 @@ if &term == "screen" || strpart(&term, 0, 5) == "xterm"
 endif
 
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
+
+
+"=== Color schemes
+
+func! SetITermProfile(profile)
+  if $TERM_PROGRAM == "iTerm.app"
+    new
+    call setline(1, "\033]50;SetProfile=" . a:profile . "\007")
+    write >> /dev/stdout
+    q!
+    set notitle
+    set title
+    call UpdateTitle()
+  endif
+endfunction
+
+func! DarkMode()
+  let g:COLOR_SCHEME_MODE = "dark"
+  set background=dark
+  colorscheme gruvbox
+  AirlineTheme gruvbox
+  call SetITermProfile("Default")
+endfunction
+
+func! LightMode()
+  let g:COLOR_SCHEME_MODE = "light"
+  set background=light
+  colorscheme solarized
+  AirlineTheme solarized
+  call SetITermProfile("Light")
+endfunction
+
+func! ToggleDarkMode()
+  if g:COLOR_SCHEME_MODE == "dark"
+    call LightMode()
+  else
+    call DarkMode()
+  endif
+endfunction
+
+command! LightMode :call LightMode()
+command! DarkMode :call DarkMode()
+command! ToggleDarkMode :call ToggleDarkMode()
+
+func s:DarkModeInit()
+  if exists("g:COLOR_SCHEME_MODE") && g:COLOR_SCHEME_MODE == "light"
+    LightMode
+  else
+    DarkMode
+  endif
+endfunction
+au VimEnter * call s:DarkModeInit() "After ShaDa loaded
+
 
 "=== Key maps
 nnoremap <space>e :CocCommand explorer<CR>
