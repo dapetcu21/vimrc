@@ -130,31 +130,41 @@ set sessionoptions-=options  " Don't save options
 set sessionoptions-=buffers  " Don't save hidden buffers
 set sessionoptions-=help     " Don't save help windows
 
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+
 
 "=== Show filename in title bar
-function! UpdateTitle()
-  let l:pwd = fnamemodify(getcwd(), ":~") 
-  let l:fname = fnamemodify(expand("%"), ":.")
-  let l:hfname = fnamemodify(expand("%"), ":~")
-  if strlen(hfname) < strlen(fname)
-    let l:fname = hfname
-  end
-  let l:short_name = strpart(fname, strlen(fname) - 30)
-  if short_name != fname
-    let l:short_name = "..." . short_name
-  end
-  let &titlestring = "[" . pwd . "] " . short_name
-endfunction
-autocmd WinEnter * call UpdateTitle()
-if &term == "screen"
-  set t_ts=^[k
-  set t_fs=^[\
-endif
-if &term == "screen" || strpart(&term, 0, 5) == "xterm"
+
+if has("gui") || $TERM =~ '^\(screen\|xterm\)'
+  function! s:abbreviate_filename(fname, maxlen)
+    let l:short_name = strpart(a:fname, strlen(a:fname) - a:maxlen)
+    if short_name != a:fname
+      let l:short_name = "..." . short_name
+    end
+    return l:short_name
+  endfunction
+
+  function! UpdateTitle()
+    let l:pwd = s:abbreviate_filename(fnamemodify(getcwd(), ":~"), 30)
+    let l:fname = fnamemodify(expand("%"), ":.")
+    let l:hfname = fnamemodify(expand("%"), ":~")
+    if strlen(hfname) < strlen(fname)
+      let l:fname = hfname
+    end
+    let l:fname = s:abbreviate_filename(fname, 30)
+    let &titlestring = "[" . pwd . "] " . fname
+  endfunction
+
+  autocmd WinEnter * call UpdateTitle()
+  autocmd BufEnter * call UpdateTitle()
+
+  if &term == "screen"
+    set t_ts=^[k
+    set t_fs=^[\
+  endif
+  call UpdateTitle()
   set title
 endif
-
-command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
 
 "=== Color schemes
@@ -165,9 +175,6 @@ func! SetITermProfile(profile)
     call setline(1, "\033]50;SetProfile=" . a:profile . "\007")
     write >> /dev/stdout
     q!
-    set notitle
-    set title
-    call UpdateTitle()
   endif
 endfunction
 
