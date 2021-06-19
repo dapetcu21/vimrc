@@ -75,7 +75,15 @@ au BufNewFile,BufRead *.fui setlocal filetype=fuior
 
 "=== Tree-sitter
 lua <<EOF
-local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+local parsers
+local configs
+local ok, err = pcall(function ()
+  parsers = require "nvim-treesitter.parsers"
+  configs = require "nvim-treesitter.configs"
+end)
+if not ok then return end
+
+local parser_config = parsers.get_parser_configs()
 parser_config.fuior = {
   install_info = {
     url = "https://github.com/critique-gaming/tree-sitter-fuior", -- local path or git repo
@@ -84,7 +92,7 @@ parser_config.fuior = {
   },
 }
 
-require'nvim-treesitter.configs'.setup {
+configs.setup {
   ensure_installed = "maintained",
   highlight = { enable = true },
   indent = { enable = false },
