@@ -158,7 +158,7 @@ if has("gui") || $TERM =~ '^\(screen\|xterm\)'
   autocmd WinEnter * call UpdateTitle()
   autocmd BufEnter * call UpdateTitle()
 
-  if &term == "screen"
+  if $TERM == "screen"
     set t_ts=^[k
     set t_fs=^[\
   endif
