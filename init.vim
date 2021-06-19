@@ -160,7 +160,7 @@ command! -nargs=0 Prettier :CocCommand prettier.formatFile
 "=== Color schemes
 
 func! SetITermProfile(profile)
-  if $TERM_PROGRAM == "iTerm.app"
+  if $TERM_PROGRAM == "iTerm.app" && !s:supress_profile_change
     new
     call setline(1, "\033]50;SetProfile=" . a:profile . "\007")
     write >> /dev/stdout
@@ -195,16 +195,19 @@ func! ToggleDarkMode()
   endif
 endfunction
 
+let s:supress_profile_change = 0
 command! LightMode :call LightMode()
 command! DarkMode :call DarkMode()
 command! ToggleDarkMode :call ToggleDarkMode()
 
 func s:DarkModeInit()
+  let s:supress_profile_change = 1
   if exists("g:COLOR_SCHEME_MODE") && g:COLOR_SCHEME_MODE == "light"
     LightMode
   else
     DarkMode
   endif
+  let s:supress_profile_change = 0
 endfunction
 au VimEnter * call s:DarkModeInit() "After ShaDa loaded
 
