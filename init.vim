@@ -40,12 +40,15 @@ let g:coc_global_extensions = s:coc_ge
 
 
 "=== General settings
+set encoding=utf-8
+set autoread "Reload files that changed on disk
 set termguicolors
 set pumblend=20
 set clipboard=unnamedplus
 set mouse=a
 set number
 set nowrap
+set cmdheight=1
 
 " Load filetype plugins from ~/.config/nvim/ftplugins
 filetype plugin indent on
@@ -236,17 +239,9 @@ nnoremap <silent> <leader>gc :<C-u>Gqfopen<CR><C-W>L
 
 " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
 " unicode characters in the file autoload/float.vim
-set encoding=utf-8
 
 " TextEdit might fail if hidden is not set.
 set hidden
-
-" Some servers have issues with backup files, see #649.
-" set nobackup
-" set nowritebackup
-
-" Give more space for displaying messages.
-set cmdheight=2
 
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
