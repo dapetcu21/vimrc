@@ -93,7 +93,7 @@ parser_config.fuior = {
 }
 
 configs.setup {
-  ensure_installed = "maintained",
+  ensure_installed = { parsers.maintained_parsers(), "fuior" },
   highlight = { enable = true },
   indent = { enable = false },
   incremental_selection = {
