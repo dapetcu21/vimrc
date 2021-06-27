@@ -36,6 +36,7 @@ call add(s:coc_ge, 'coc-format-json') "JSON formatter
 call add(s:coc_ge, 'coc-marketplace') "Coc extension marketplace
 call add(s:coc_ge, 'coc-defold-ide') "Defold-related stuff
 call add(s:coc_ge, 'coc-terminal') "Toggle terminal
+call add(s:coc_ge, 'coc-fuior') "Fuior linting and hot reload
 let g:coc_global_extensions = s:coc_ge
 
 
