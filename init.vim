@@ -138,6 +138,7 @@ EOF
 let g:airline_powerline_fonts = 1
 
 let g:prosession_dir = stdpath('data') . '/prosession'
+let g:Prosession_ignore_expr = {-> !isdirectory('.git')} # Only save sessions in git repos
 
 set sessionoptions-=options  " Don't save options
 set sessionoptions-=buffers  " Don't save hidden buffers
