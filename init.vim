@@ -42,6 +42,7 @@ let g:coc_global_extensions = s:coc_ge
 
 "=== General settings
 set encoding=utf-8
+lang en_US.UTF-8 "Creates clipboard issues somehow
 set autoread "Reload files that changed on disk
 set termguicolors
 set pumblend=20
