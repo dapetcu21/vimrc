@@ -15,8 +15,9 @@ Plug 'tpope/vim-obsession' "Dependency for prosession
 Plug 'dhruvasagar/vim-prosession' "Save window session on exit
 Plug 'soywod/quicklist.vim' "Quicklist keyboard shortcuts
 Plug 'yegappan/greplace' "Edit quicklist like a buffer
-Plug 'bronson/vim-trailing-whitespace' "Show and fix trailing whitespace
+Plug 'ntpeters/vim-better-whitespace' "Show and fix trailing whitespace
 Plug 'editorconfig/editorconfig-vim' "Respect .editor-config
+Plug 'ericcurtin/CurtineIncSw.vim' "Quickly switch between .h and .cpp with <space>i
 
 call plug#end()
 
@@ -58,11 +59,18 @@ filetype plugin indent on
 " Search visual selection
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 
+" Global search selection or word under cursor
+vnoremap <space>/ y:<C-u>execute "Ggrep " . escape(@", '/\')<CR>
+nnoremap <space>/ bvey:<C-u>execute "Ggrep " . escape(@", '/\')<CR>
+
 " Quick access to edit this file
 command! EditInit :e ~/.config/nvim/init.vim
 
 " Git untracked grep (grep everywhere except .gitignore'd files)
 command! Gugrep :Ggrep --untracked
+
+" Quick access to nohl
+nnoremap <silent><nowait> <space>n  :<C-u>nohl<CR>
 
 "=== Indentation
 set expandtab shiftwidth=2 tabstop=2
@@ -146,6 +154,11 @@ set sessionoptions-=help     " Don't save help windows
 
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
+map <silent><nowait> <space>i :call CurtineIncSw()<CR>
+let g:better_whitespace_enabled=1
+let g:strip_whitespace_on_save=1
+let g:show_spaces_that_precede_tabs=1
+let g:better_whitespace_filetypes_blacklist=['coc-explorer', 'fugitive', 'diff', 'gitcommit', 'unite', 'qf', 'help', 'markdown']
 
 "=== Show filename in title bar
 
@@ -197,6 +210,7 @@ func! DarkMode()
   set background=dark
   colorscheme gruvbox
   AirlineTheme gruvbox
+  highlight ExtraWhitespace ctermbg=9 guibg=#FF0000
   call SetITermProfile("Default")
 endfunction
 
@@ -204,6 +218,7 @@ func! LightMode()
   let g:COLOR_SCHEME_MODE = "light"
   set background=light
   colorscheme solarized
+  highlight ExtraWhitespace ctermbg=9 guibg=#FF0000
   AirlineTheme solarized
   call SetITermProfile("Light")
 endfunction
