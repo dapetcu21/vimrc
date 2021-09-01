@@ -60,14 +60,14 @@ filetype plugin indent on
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 
 " Global search selection or word under cursor
-vnoremap <space>/ y:<C-u>execute "Ggrep " . escape(@", '/\')<CR>
-nnoremap <space>/ bvey:<C-u>execute "Ggrep " . escape(@", '/\')<CR>
+vnoremap <space>/ y:<C-u>execute "Gugrep " . escape(@", '/\')<CR>
+nnoremap <space>/ bvey:<C-u>execute "Gugrep " . escape(@", '/\')<CR>
 
 " Quick access to edit this file
 command! EditInit :e ~/.config/nvim/init.vim
 
 " Git untracked grep (grep everywhere except .gitignore'd files)
-command! Gugrep :Ggrep --untracked
+command! -nargs=+ Gugrep :Ggrep --untracked <args>
 
 " Quick access to nohl
 nnoremap <silent><nowait> <space>n  :<C-u>nohl<CR>
