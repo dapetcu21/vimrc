@@ -158,7 +158,7 @@ map <silent><nowait> <space>i :call CurtineIncSw()<CR>
 let g:better_whitespace_enabled=1
 let g:strip_whitespace_on_save=1
 let g:show_spaces_that_precede_tabs=1
-let g:better_whitespace_filetypes_blacklist=['coc-explorer', 'fugitive', 'diff', 'gitcommit', 'unite', 'qf', 'help', 'markdown']
+let g:better_whitespace_filetypes_blacklist=['coc-explorer', 'fugitive', 'diff', 'git', 'gitcommit', 'unite', 'qf', 'help', 'markdown']
 
 "=== Show filename in title bar
 
