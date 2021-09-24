@@ -56,8 +56,9 @@ set cmdheight=1
 " Load filetype plugins from ~/.config/nvim/ftplugins
 filetype plugin indent on
 
-" Search visual selection
+" Search visual selection or current word
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
+nnoremap // bvey/\V<C-R>=escape(@",'/\')<CR><CR>
 
 " Global search selection or word under cursor
 vnoremap <space>/ y:<C-u>execute "Gugrep " . escape(@", '/\')<CR>
