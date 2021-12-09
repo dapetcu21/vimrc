@@ -59,12 +59,12 @@ set cmdheight=1
 filetype plugin indent on
 
 " Search visual selection or current word
-vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
-nnoremap // bvey/\V<C-R>=escape(@",'/\')<CR><CR>
+vnoremap <leader>/ y/\V<C-R>=escape(@",'/\')<CR><CR>
+nnoremap <leader>/ lbvhey/\V<C-R>=escape(@",'/\')<CR><CR>
 
 " Global search selection or word under cursor
 vnoremap <space>/ y:<C-u>execute "Gugrep " . escape(@", '/\')<CR>
-nnoremap <space>/ bvey:<C-u>execute "Gugrep " . escape(@", '/\')<CR>
+nnoremap <space>/ lbvhey:<C-u>execute "Gugrep " . escape(@", '/\')<CR>
 
 " Quick access to edit this file
 command! EditInit :e ~/.config/nvim/init.vim
