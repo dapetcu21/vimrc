@@ -43,7 +43,6 @@ let g:coc_global_extensions = s:coc_ge
 
 "=== General settings
 set encoding=utf-8
-lang en_US.UTF-8 "Creates clipboard issues somehow
 set autoread "Reload files that changed on disk
 if $COLORTERM == 'truecolor'
   set termguicolors
@@ -54,6 +53,13 @@ set mouse=a
 set number
 set nowrap
 set cmdheight=1
+
+"Fix unicode clipboard issues
+try
+  lang en_US.UTF-8
+catch /^Vim\%((\a\+)\)\=:E319/
+  "lang is unsupported in this vim
+endtry
 
 " Load filetype plugins from ~/.config/nvim/ftplugins
 filetype plugin indent on
@@ -70,7 +76,7 @@ nnoremap <space>/ lbvhey:<C-u>execute "Gugrep " . escape(@", '/\')<CR>
 command! EditInit :e ~/.config/nvim/init.vim
 
 " Git untracked grep (grep everywhere except .gitignore'd files)
-command! -nargs=+ Gugrep :Ggrep --untracked <args>
+command! -nargs=+ Gugrep :Ggrep -I --untracked <args>
 
 " Quick access to nohl
 nnoremap <silent><nowait> <space>n  :<C-u>nohl<CR>
