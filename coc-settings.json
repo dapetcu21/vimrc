@@ -113,7 +113,8 @@
     "assert_not_type",
     "assert_same",
     "assert_unique",
-    "safearea"
+    "safearea",
+    "imgui"
   ],
   "clangd.path": "/Users/da_petcu21/.config/coc/extensions/coc-clangd-data/install/12.0.0/clangd_12.0.0/bin/clangd"
 }
