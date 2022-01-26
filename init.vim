@@ -66,11 +66,11 @@ filetype plugin indent on
 
 " Search visual selection or current word
 vnoremap <leader>/ y/\V<C-R>=escape(@",'/\')<CR><CR>
-nnoremap <leader>/ lbvhey/\V<C-R>=escape(@",'/\')<CR><CR>
+nnoremap <leader>/ /\V<C-R>=expand('<cword>')<CR><CR>
 
 " Global search selection or word under cursor
 vnoremap <space>/ y:<C-u>execute "Gugrep " . escape(@", '/\')<CR>
-nnoremap <space>/ lbvhey:<C-u>execute "Gugrep " . escape(@", '/\')<CR>
+nnoremap <space>/ :<C-u>execute "Gugrep " . expand('<cword>')<CR>
 
 " Quick access to edit this file
 command! EditInit :e ~/.config/nvim/init.vim
