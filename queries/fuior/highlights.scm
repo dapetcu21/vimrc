@@ -58,6 +58,7 @@
 
 ;; Constants
 (boolean) @boolean
+(nil) @constant.builtin
 (string) @string
 (intl_string) @string
 (number) @number
