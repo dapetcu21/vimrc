@@ -18,6 +18,7 @@ Plug 'yegappan/greplace' "Edit quicklist like a buffer
 Plug 'ntpeters/vim-better-whitespace' "Show and fix trailing whitespace
 Plug 'editorconfig/editorconfig-vim' "Respect .editor-config
 Plug 'ericcurtin/CurtineIncSw.vim' "Quickly switch between .h and .cpp with <space>i
+Plug 'ap/vim-css-color' "CSS color highlighting
 
 call plug#end()
 
