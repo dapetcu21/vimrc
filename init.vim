@@ -84,8 +84,8 @@ nnoremap <silent><nowait> <space>n  :<C-u>nohl<CR>
 
 "=== Indentation
 set expandtab shiftwidth=2 tabstop=2
-au FileType *      setlocal expandtab | setlocal tabstop=2 | setlocal shiftwidth=2
-au FileType make   setlocal noexpandtab | setlocal tabstop=4 | setlocal shiftwidth=4
+au FileType *      if get(b:, 'editorconfig_applied', 0) != 1 | setlocal expandtab | setlocal tabstop=2 | setlocal shiftwidth=2 | endif
+au FileType make   if get(b:, 'editorconfig_applied', 0) != 1 | setlocal noexpandtab | setlocal tabstop=4 | setlocal shiftwidth=4 | endif
 
 
 "=== File types
