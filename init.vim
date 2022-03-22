@@ -70,14 +70,20 @@ vnoremap <leader>/ y/\V<C-R>=escape(@",'/\')<CR><CR>
 nnoremap <leader>/ /\V<C-R>=expand('<cword>')<CR><CR>
 
 " Global search selection or word under cursor
-vnoremap <space>/ y:<C-u>execute "Gugrep " . escape(@", '/\')<CR>
-nnoremap <space>/ :<C-u>execute "Gugrep " . expand('<cword>')<CR>
+vnoremap <space>/ y:<C-u>execute "grep " . escape(@", '/\')<CR>
+nnoremap <space>/ :<C-u>execute "grep " . expand('<cword>')<CR>
 
 " Quick access to edit this file
 command! EditInit :e ~/.config/nvim/init.vim
 
 " Git untracked grep (grep everywhere except .gitignore'd files)
 command! -nargs=+ Gugrep :Ggrep -I --untracked <args>
+
+" The Silver Searcher
+if executable('ag')
+  set grepprg=ag\ --nogroup\ --nocolor\ --column
+  set grepformat=%f:%l:%c:%m
+endif
 
 " Quick access to nohl
 nnoremap <silent><nowait> <space>n  :<C-u>nohl<CR>
