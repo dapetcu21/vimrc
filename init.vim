@@ -69,8 +69,8 @@ vnoremap <leader>/ y/\V<C-R>=escape(@",'/\')<CR><CR>
 nnoremap <leader>/ /\V<C-R>=expand('<cword>')<CR><CR>
 
 " Global search selection or word under cursor
-vnoremap <space>/ y:<C-u>execute "grep " . escape(@", '/\')<CR>
-nnoremap <space>/ :<C-u>execute "grep " . expand('<cword>')<CR>
+vnoremap <space>/ y:<C-u>execute "grep \'" . escape(@", '/\') . "\'"<CR>
+nnoremap <space>/ :<C-u>execute "grep \'" . expand('<cword>') . "\'"<CR>
 
 " Quick access to edit this file
 command! EditInit :e ~/.config/nvim/init.vim
