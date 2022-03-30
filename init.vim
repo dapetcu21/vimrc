@@ -17,7 +17,6 @@ Plug 'soywod/quicklist.vim' "Quicklist keyboard shortcuts
 Plug 'yegappan/greplace' "Edit quicklist like a buffer
 Plug 'ntpeters/vim-better-whitespace' "Show and fix trailing whitespace
 Plug 'editorconfig/editorconfig-vim' "Respect .editor-config
-Plug 'ericcurtin/CurtineIncSw.vim' "Quickly switch between .h and .cpp with <space>i
 Plug 'ap/vim-css-color' "CSS color highlighting
 
 call plug#end()
@@ -170,7 +169,7 @@ set sessionoptions-=help     " Don't save help windows
 
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
-map <silent><nowait> <space>i :call CurtineIncSw()<CR>
+map <silent><nowait> <space>i :CocCommand clangd.switchSourceHeader<CR>
 let g:better_whitespace_enabled=1
 let g:strip_whitespace_on_save=1
 let g:show_spaces_that_precede_tabs=1
