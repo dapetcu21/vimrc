@@ -18,6 +18,8 @@ Plug 'yegappan/greplace' "Edit quicklist like a buffer
 Plug 'ntpeters/vim-better-whitespace' "Show and fix trailing whitespace
 Plug 'editorconfig/editorconfig-vim' "Respect .editor-config
 Plug 'ap/vim-css-color' "CSS color highlighting
+Plug 'rhysd/vim-clang-format' "C++ auto-indenting
+Plug 'ii14/exrc.vim' "Ask to run .exrc
 
 call plug#end()
 
@@ -77,6 +79,9 @@ command! EditInit :e ~/.config/nvim/init.vim
 
 " Git untracked grep (grep everywhere except .gitignore'd files)
 command! -nargs=+ Gugrep :Ggrep -I --untracked <args>
+
+" Clang Format
+nnoremap <space>= :ClangFormat<CR>
 
 " The Silver Searcher
 if executable('ag')
