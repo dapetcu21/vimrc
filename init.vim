@@ -20,6 +20,7 @@ Plug 'editorconfig/editorconfig-vim' "Respect .editor-config
 Plug 'ap/vim-css-color' "CSS color highlighting
 Plug 'rhysd/vim-clang-format' "C++ auto-indenting
 Plug 'ii14/exrc.vim' "Ask to run .exrc
+Plug 'sakhnik/nvim-gdb', { 'do': ':!./install.sh' } "C/C++ debugger integration
 
 call plug#end()
 
@@ -91,6 +92,19 @@ endif
 
 " Quick access to nohl
 nnoremap <silent><nowait> <space>n  :<C-u>nohl<CR>
+
+" nvim-lldb
+let g:nvimgdb_use_find_executables = 0
+let g:nvimgdb_use_cmake_to_find_executables = 0
+let g:nvimgdb_key_frameup = '<c-shift-p>'
+let g:nvimgdb_key_framedown = '<c-shift-n>'
+
+func! UnrealDebug()
+  execute 'GdbStartLLDB lldb $UE5_DIR/Engine/Binaries/Mac/UnrealEditor.app/Contents/MacOS/UnrealEditor -- ' . glob(getcwd() . '/*.uproject', 0, 1)[0]
+endfunction
+command! UnrealDebug call UnrealDebug()
+nnoremap <silent> <space>du :UnrealDebug<CR>
+
 
 "=== Indentation
 set expandtab shiftwidth=2 tabstop=2
