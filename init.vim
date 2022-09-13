@@ -56,6 +56,7 @@ set mouse=a
 set number
 set nowrap
 set cmdheight=1
+autocmd TermOpen * setlocal scrollback=-1
 
 "Fix unicode clipboard issues
 try
