@@ -197,6 +197,17 @@ let g:better_whitespace_filetypes_blacklist=['coc-explorer', 'fugitive', 'diff',
 
 autocmd User FugitiveIndex silent wincmd L
 
+function! ToggleGStatus()
+    if buflisted(bufname('.git/index'))
+        bd .git/index
+    else
+        G
+    endif
+endfunction
+command ToggleGStatus :call ToggleGStatus()
+
+map <silent><nowait> <space>g :ToggleGStatus<CR>
+
 "=== Show filename in title bar
 
 if has("gui") || $TERM =~ '^\(screen\|xterm\)'
