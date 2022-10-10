@@ -8,7 +8,7 @@ Plug 'tpope/vim-fugitive' "Git integration
 Plug 'tikhomirov/vim-glsl' "GLSL Syntax highlighting
 Plug 'tpope/vim-commentary' "Toggle comments with gc<movement>
 Plug 'morhetz/gruvbox' "Color theme
-Plug 'altercation/vim-colors-solarized' "Color theme
+Plug 'sainnhe/gruvbox-material' "Color theme
 Plug 'vim-airline/vim-airline' "Status line
 Plug 'vim-airline/vim-airline-themes' "Status line themes
 Plug 'tpope/vim-obsession' "Dependency for prosession
@@ -20,7 +20,8 @@ Plug 'editorconfig/editorconfig-vim' "Respect .editor-config
 Plug 'ap/vim-css-color' "CSS color highlighting
 Plug 'rhysd/vim-clang-format' "C++ auto-indenting
 Plug 'ii14/exrc.vim' "Ask to run .exrc
-Plug 'sakhnik/nvim-gdb', { 'do': ':!./install.sh' } "C/C++ debugger integration
+Plug 'mfussenegger/nvim-dap' "Debug adapter protocol
+Plug 'rcarriga/nvim-dap-ui' "DAP UI
 
 call plug#end()
 
@@ -94,17 +95,54 @@ endif
 " Quick access to nohl
 nnoremap <silent><nowait> <space>n  :<C-u>nohl<CR>
 
-" nvim-lldb
-let g:nvimgdb_use_find_executables = 0
-let g:nvimgdb_use_cmake_to_find_executables = 0
-let g:nvimgdb_key_frameup = '<c-shift-p>'
-let g:nvimgdb_key_framedown = '<c-shift-n>'
+" DAP
+lua << EOF
+local dap = require("dap")
+dap.adapters.lldb = {
+  type = 'executable',
+  command = '/usr/local/opt/llvm/bin/lldb-vscode',
+  name = 'lldb'
+}
+dap.configurations.lldb = dap.configurations.lldb or {}
+dap.configurations.cpp = dap.configurations.lldb
 
-func! UnrealDebug()
-  execute 'GdbStartLLDB lldb $UE5_DIR/Engine/Binaries/Mac/UnrealEditor.app/Contents/MacOS/UnrealEditor -- ' . glob(getcwd() . '/*.uproject', 0, 1)[0]
-endfunction
-command! UnrealDebug call UnrealDebug()
-nnoremap <silent> <space>du :UnrealDebug<CR>
+local dapui = require("dapui")
+
+dapui.setup({
+  layouts = {
+    {
+      elements = {
+        { id = 'scopes', size = 0.4 },
+        { id = 'breakpoints', size = 0.1 },
+        { id = 'stacks', size = 0.4 },
+        { id = 'watches', size = 0.1 },
+      },
+      size = 45,
+      position = "left", -- Can be "left" or "right"
+    },
+    {
+      elements = {
+        'repl'
+      },
+      size = 10,
+      position = "bottom", -- Can be "bottom" or "top"
+    },
+  },
+})
+
+dap.listeners.after.event_initialized["dapui_config"] = function()
+  dapui.open()
+end
+dap.listeners.before.event_terminated["dapui_config"] = function()
+  dapui.close()
+end
+dap.listeners.before.event_exited["dapui_config"] = function()
+  dapui.close()
+end
+
+EOF
+
+nnoremap <silent> <space>d :DapContinue<CR>
 
 
 "=== Indentation
@@ -198,8 +236,8 @@ let g:better_whitespace_filetypes_blacklist=['coc-explorer', 'fugitive', 'diff',
 autocmd User FugitiveIndex silent wincmd L
 
 function! ToggleGStatus()
-    if buflisted(bufname('.git/index'))
-        bd .git/index
+    if buflisted(bufname('.git//'))
+        bd .git//
     else
         G
     endif
@@ -256,8 +294,8 @@ endfunction
 func! DarkMode()
   let g:COLOR_SCHEME_MODE = "dark"
   set background=dark
-  colorscheme gruvbox
-  AirlineTheme gruvbox
+  colorscheme gruvbox-material
+  AirlineTheme gruvbox_material
   highlight ExtraWhitespace ctermbg=9 guibg=#FF0000
   call SetITermProfile("Default")
 endfunction
@@ -265,9 +303,9 @@ endfunction
 func! LightMode()
   let g:COLOR_SCHEME_MODE = "light"
   set background=light
-  colorscheme solarized
+  colorscheme gruvbox-material
   highlight ExtraWhitespace ctermbg=9 guibg=#FF0000
-  AirlineTheme solarized
+  AirlineTheme gruvbox_material
   call SetITermProfile("Light")
 endfunction
 
@@ -334,15 +372,22 @@ else
 endif
 
 " Use tab for trigger completion with characters ahead and navigate.
+" NOTE: There's always complete item selected by default, you may want to enable
+" no select by `"suggest.noselect": true` in your configuration file.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
       \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
-function! s:check_back_space() abort
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice.
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction

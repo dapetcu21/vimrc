@@ -1,6 +1,7 @@
 {
   "explorer.icon.enableNerdfont": true,
   "explorer.file.showHiddenFiles": true,
+  "suggest.noselect": true,
   "suggest.completionItemKindLabels": {
 		"keyword": "\uf1de",
 		"variable": "\ue79b",
