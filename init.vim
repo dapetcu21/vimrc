@@ -223,6 +223,7 @@ let g:Prosession_ignore_expr = {-> !isdirectory('.git')} " Only save sessions in
 
 set sessionoptions-=options  " Don't save options
 set sessionoptions-=buffers  " Don't save hidden buffers
+set sessionoptions-=terminal " Don't save terminals
 set sessionoptions-=help     " Don't save help windows
 
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
