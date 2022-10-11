@@ -142,7 +142,7 @@ end
 
 EOF
 
-nnoremap <silent> <space>d :DapContinue<CR>
+nnoremap <silent> <space>d :DapLoadLaunchJSON<CR>:DapContinue<CR>
 
 
 "=== Indentation
