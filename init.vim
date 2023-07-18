@@ -37,6 +37,7 @@ call add(s:coc_ge, 'coc-lua') "Lua LSP
 call add(s:coc_ge, 'coc-json') "JSON LSP
 call add(s:coc_ge, 'coc-yaml') "YAML LSP
 call add(s:coc_ge, 'coc-prettier') "JS/TS code formatter
+call add(s:coc_ge, 'coc-eslint') "JS/TS code linter
 call add(s:coc_ge, 'coc-format-json') "JSON formatter
 call add(s:coc_ge, 'coc-marketplace') "Coc extension marketplace
 call add(s:coc_ge, 'coc-defold-ide') "Defold-related stuff
