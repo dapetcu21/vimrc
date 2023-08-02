@@ -23,6 +23,13 @@ Plug 'ii14/exrc.vim' "Ask to run .exrc
 Plug 'mfussenegger/nvim-dap' "Debug adapter protocol
 Plug 'rcarriga/nvim-dap-ui' "DAP UI
 
+function! SourceIfExists(file)
+  if filereadable(expand(a:file))
+    exe 'source' a:file
+  endif
+endfunction
+call SourceIfExists(stdpath('config') . '/local_plugins.vim')
+
 call plug#end()
 
 
@@ -545,3 +552,4 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
+call SourceIfExists(stdpath('config') . '/local_init.vim')

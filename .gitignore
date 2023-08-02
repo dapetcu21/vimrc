@@ -1,3 +1,5 @@
 .netrwhist
 sessions
 .clangd
+/local_plugins.vim
+/local_init.vim
