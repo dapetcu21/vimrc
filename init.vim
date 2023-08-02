@@ -79,7 +79,7 @@ vnoremap <space>/ y:<C-u>execute "grep \'" . escape(@", '/\') . "\'"<CR>
 nnoremap <space>/ :<C-u>execute "grep \'" . expand('<cword>') . "\'"<CR>
 
 " Quick access to edit this file
-command! EditInit :e ~/.config/nvim/init.vim
+command! EditInit :execute "e " . stdpath("config") . "/init.vim"
 
 " Git untracked grep (grep everywhere except .gitignore'd files)
 command! -nargs=+ Gugrep :Ggrep -I --untracked <args>
@@ -161,11 +161,19 @@ au BufNewFile,BufRead *.fui setlocal filetype=fuior
 lua <<EOF
 local parsers
 local configs
+local install
 local ok, err = pcall(function ()
   parsers = require "nvim-treesitter.parsers"
   configs = require "nvim-treesitter.configs"
+  install = require "nvim-treesitter.install"
 end)
 if not ok then return end
+
+local is_windows = vim.loop.os_uname().sysname:find("Windows") and true or false
+if is_windows then
+  table.insert(install.compilers, "C:\\Program Files\\LLVM\\bin\\clang.exe")
+  install.prefer_git = false
+end
 
 local parser_config = parsers.get_parser_configs()
 parser_config.fuior = {
@@ -176,8 +184,21 @@ parser_config.fuior = {
   },
 }
 
+local parser_list = parsers.available_parsers()
+table.insert(parser_list, "fuior")
+
+-- Astro doesn't compile on Windows
+if is_windows then
+  for i, v in ipairs(parser_list) do
+    if v == "astro" then
+      table.remove(parser_list, i)
+      break
+    end
+  end
+end
+
 configs.setup {
-  ensure_installed = { parsers.available_parsers(), "fuior" },
+  ensure_installed = parser_list,
   highlight = { enable = true },
   indent = { enable = false },
   incremental_selection = {
