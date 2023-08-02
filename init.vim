@@ -263,7 +263,13 @@ let g:strip_whitespace_on_save=1
 let g:show_spaces_that_precede_tabs=1
 let g:better_whitespace_filetypes_blacklist=['coc-explorer', 'fugitive', 'diff', 'git', 'gitcommit', 'unite', 'qf', 'help', 'markdown']
 
-autocmd User FugitiveIndex silent wincmd L
+function! TryWincmdL()
+	try
+		wincmd L
+	catch /.*/
+	endtry
+endfunction
+autocmd User FugitiveIndex silent call TryWincmdL()
 
 function! ToggleGStatus()
     if buflisted(bufname('.git//'))
