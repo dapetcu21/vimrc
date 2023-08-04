@@ -1,6 +1,10 @@
+# TODO: Check if these are installed already
+# TODO: Prompt to restart shell session
+# TODO: Install nvim
+# TODO: Check if symlinks are enabled (developer mode)
+
 winget install -e --id OpenJS.NodeJS
 winget install -e --id LLVM.LLVM
-
-refreshenv
+winget install -e --id BurntSushi.ripgrep.MSVC
 
 nvim +PlugInstall +qall
