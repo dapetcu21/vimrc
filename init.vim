@@ -1,6 +1,8 @@
 "=== Plug plugins
 call plug#begin(stdpath('data') . '/plugged')
 
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} "Fast syntax highlighting
 Plug 'nvim-treesitter/playground'
 Plug 'neoclide/coc.nvim', {'branch': 'release'} "VSCode-like extension host
@@ -544,7 +546,7 @@ nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
 " Search workspace symbols.
 nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
 " Search files.
-nnoremap <silent><nowait> <space>f  :<C-u>CocList files<cr>
+nnoremap <silent><nowait> <space>f  :<C-u>Files<cr>
 " Search buffers.
 nnoremap <silent><nowait> <space>b  :<C-u>CocList buffers<cr>
 " Most recently used files
