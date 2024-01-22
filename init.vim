@@ -96,8 +96,11 @@ command! -nargs=+ Gugrep :Ggrep -I --untracked <args>
 " Clang Format
 nnoremap <space>= :ClangFormat<CR>
 
-" The Silver Searcher
-if executable('ag')
+" Ripgrep or The Silver Searcher
+if executable("rg")
+  set grepprg=rg\ --vimgrep\ --smart-case\ --hidden
+  set grepformat=%f:%l:%c:%m
+elseif executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor\ --column
   set grepformat=%f:%l:%c:%m
 endif
