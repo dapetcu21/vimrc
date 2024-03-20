@@ -181,7 +181,12 @@ command ToggleGStatus :call ToggleGStatus()
 map <silent><nowait> <space>g :ToggleGStatus<CR>
 
 lua << EOF
-require("nvim-tree").setup()
+require("nvim-tree").setup({
+  sync_root_with_cwd = true,
+  view = {
+    width = 50,
+  },
+})
 EOF
 
 
