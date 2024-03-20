@@ -287,6 +287,17 @@ command ToggleGStatus :call ToggleGStatus()
 
 map <silent><nowait> <space>g :ToggleGStatus<CR>
 
+"=== Fuzzy finder
+"
+let g:fzf_vim = {}
+let g:fzf_vim.buffers_jump = 1
+
+let s:cygwin_bash = exepath("C:\cygwin64\bin\bash.exe")
+if len(s:cygwin_bash)
+  let g:fzf_vim.preview_bash = exepath(s:cygwin_bash)
+endif
+
+
 "=== Show filename in title bar
 
 if has("gui") || $TERM =~ '^\(screen\|xterm\)'
