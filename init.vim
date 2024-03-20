@@ -2,7 +2,9 @@
 call plug#begin(stdpath('data') . '/plugged')
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
+Plug 'ibhagwan/fzf-lua'
+Plug 'nvim-tree/nvim-tree.lua'
+Plug 'nvim-tree/nvim-web-devicons'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} "Fast syntax highlighting
 Plug 'nvim-treesitter/playground'
 Plug 'neoclide/coc.nvim', {'branch': 'release'} "VSCode-like extension host
@@ -37,7 +39,6 @@ call plug#end()
 
 "=== coc extensions
 let s:coc_ge = []
-call add(s:coc_ge, 'coc-explorer') "File explorer sidebar
 call add(s:coc_ge, 'coc-git') "Git integration
 call add(s:coc_ge, 'coc-lists') "Extra fuzzy finder lists, like for switching files
 call add(s:coc_ge, 'coc-tsserver') "TypeScript LSP
@@ -68,6 +69,8 @@ set number
 set nowrap
 set cmdheight=1
 autocmd TermOpen * setlocal scrollback=-1
+let g:loaded_netrw = 1
+let g:loaded_netrwPlugin = 1
 
 "Fix unicode clipboard issues
 try
@@ -79,13 +82,23 @@ endtry
 " Load filetype plugins from ~/.config/nvim/ftplugins
 filetype plugin indent on
 
+" Ripgrep or The Silver Searcher
+if executable("rg")
+  set grepprg=rg\ --vimgrep\ --smart-case\ --hidden
+  set grepformat=%f:%l:%c:%m
+elseif executable('ag')
+  set grepprg=ag\ --nogroup\ --nocolor\ --column
+  set grepformat=%f:%l:%c:%m
+endif
+
+
+"=== Keybindings and command mappings
+" Quick access to nohl
+nnoremap <silent><nowait> <space>n  :<C-u>nohl<CR>
+
 " Search visual selection or current word
 vnoremap <leader>/ y/\V<C-R>=escape(@",'/\')<CR><CR>
 nnoremap <leader>/ /\V<C-R>=expand('<cword>')<CR><CR>
-
-" Global search selection or word under cursor
-vnoremap <space>/ y:<C-u>execute "grep \'" . escape(@", '/\') . "\'"<CR>
-nnoremap <space>/ :<C-u>execute "grep \'" . expand('<cword>') . "\'"<CR>
 
 " Quick access to edit this file
 command! EditInit :execute "e " . stdpath("config") . "/init.vim"
@@ -96,19 +109,83 @@ command! -nargs=+ Gugrep :Ggrep -I --untracked <args>
 " Clang Format
 nnoremap <space>= :ClangFormat<CR>
 
-" Ripgrep or The Silver Searcher
-if executable("rg")
-  set grepprg=rg\ --vimgrep\ --smart-case\ --hidden
-  set grepformat=%f:%l:%c:%m
-elseif executable('ag')
-  set grepprg=ag\ --nogroup\ --nocolor\ --column
-  set grepformat=%f:%l:%c:%m
-endif
+" Terminal
+nmap <silent><nowait> <space>t <Plug>(coc-terminal-toggle)
+tnoremap <silent><nowait> <leader><ESC> <C-\><C-n>
 
-" Quick access to nohl
-nnoremap <silent><nowait> <space>n  :<C-u>nohl<CR>
+" Quicklist
+nmap <silent><nowait> <leader>c <plug>(quicklist-toggle-qf)
+nmap <silent><nowait> <leader>l <plug>(quicklist-toggle-lc)
+nnoremap <silent> <leader>gc :<C-u>Gqfopen<CR><C-W>L
 
-" DAP
+" Global search selection or word under cursor
+vnoremap <silent><nowait> <space>/ :<C-u>FzfLua grep_visual<CR>
+nnoremap <silent><nowait> <space>/ :<C-u>FzfLua grep_cword<CR>
+
+nnoremap <silent><nowait> <space>z  :<C-u>FzfLua<cr>
+nnoremap <silent><nowait> <space>f  :<C-u>FzfLua files<cr>
+nnoremap <silent><nowait> <space>b  :<C-u>FzfLua buffers<cr>
+nnoremap <silent><nowait> <space>q  :<C-u>FzfLua quickfix<CR>
+
+nnoremap <silent><nowait> <space>e :<C-u>NvimTreeToggle<CR>
+nnoremap <silent><nowait> <leader>e :<C-u>NvimTreeFindFile<CR>
+
+"=== Indentation
+set expandtab shiftwidth=2 tabstop=2
+au FileType *      if get(b:, 'editorconfig_applied', 0) != 1 | setlocal expandtab | setlocal tabstop=2 | setlocal shiftwidth=2 | endif
+au FileType make   if get(b:, 'editorconfig_applied', 0) != 1 | setlocal noexpandtab | setlocal tabstop=4 | setlocal shiftwidth=4 | endif
+
+
+"=== File types
+au BufNewFile,BufRead *.script\|*.gui_script\|*.render_script\|*.editor_script\|*.lua_  setlocal filetype=lua
+au BufNewFile,BufRead *.vsh\|*.fsh\|*.fp\|*.vp setlocal filetype=glsl
+au BufNewFile,BufRead *.fui setlocal filetype=fuior
+
+
+"=== Plugin config
+let g:airline_powerline_fonts = 1
+
+let g:prosession_dir = stdpath('data') . '/prosession'
+let g:Prosession_ignore_expr = {-> !isdirectory('.git')} " Only save sessions in git repos
+
+set sessionoptions-=options  " Don't save options
+set sessionoptions-=buffers  " Don't save hidden buffers
+set sessionoptions-=terminal " Don't save terminals
+set sessionoptions-=help     " Don't save help windows
+
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+
+map <silent><nowait> <space>i :CocCommand clangd.switchSourceHeader<CR>
+let g:better_whitespace_enabled=1
+let g:strip_whitespace_on_save=1
+let g:show_spaces_that_precede_tabs=1
+let g:better_whitespace_filetypes_blacklist=['NvimTree', 'fugitive', 'diff', 'git', 'gitcommit', 'unite', 'qf', 'help', 'markdown']
+
+function! TryWincmdL()
+	try
+		wincmd L
+	catch /.*/
+	endtry
+endfunction
+autocmd User FugitiveIndex silent call TryWincmdL()
+
+function! ToggleGStatus()
+    if buflisted(bufname('.git//'))
+        bd .git//
+    else
+        G
+    endif
+endfunction
+command ToggleGStatus :call ToggleGStatus()
+
+map <silent><nowait> <space>g :ToggleGStatus<CR>
+
+lua << EOF
+require("nvim-tree").setup()
+EOF
+
+
+"=== DAP
 lua << EOF
 local dap = require("dap")
 dap.adapters.lldb = {
@@ -157,17 +234,6 @@ EOF
 
 nnoremap <silent> <space>d :DapLoadLaunchJSON<CR>:DapContinue<CR>
 
-
-"=== Indentation
-set expandtab shiftwidth=2 tabstop=2
-au FileType *      if get(b:, 'editorconfig_applied', 0) != 1 | setlocal expandtab | setlocal tabstop=2 | setlocal shiftwidth=2 | endif
-au FileType make   if get(b:, 'editorconfig_applied', 0) != 1 | setlocal noexpandtab | setlocal tabstop=4 | setlocal shiftwidth=4 | endif
-
-
-"=== File types
-au BufNewFile,BufRead *.script\|*.gui_script\|*.render_script\|*.editor_script\|*.lua_  setlocal filetype=lua
-au BufNewFile,BufRead *.vsh\|*.fsh\|*.fp\|*.vp setlocal filetype=glsl
-au BufNewFile,BufRead *.fui setlocal filetype=fuior
 
 "=== Tree-sitter
 lua <<EOF
@@ -247,55 +313,6 @@ configs.setup {
   },
 }
 EOF
-
-
-"=== Plugin config
-let g:airline_powerline_fonts = 1
-
-let g:prosession_dir = stdpath('data') . '/prosession'
-let g:Prosession_ignore_expr = {-> !isdirectory('.git')} " Only save sessions in git repos
-
-set sessionoptions-=options  " Don't save options
-set sessionoptions-=buffers  " Don't save hidden buffers
-set sessionoptions-=terminal " Don't save terminals
-set sessionoptions-=help     " Don't save help windows
-
-command! -nargs=0 Prettier :CocCommand prettier.formatFile
-
-map <silent><nowait> <space>i :CocCommand clangd.switchSourceHeader<CR>
-let g:better_whitespace_enabled=1
-let g:strip_whitespace_on_save=1
-let g:show_spaces_that_precede_tabs=1
-let g:better_whitespace_filetypes_blacklist=['coc-explorer', 'fugitive', 'diff', 'git', 'gitcommit', 'unite', 'qf', 'help', 'markdown']
-
-function! TryWincmdL()
-	try
-		wincmd L
-	catch /.*/
-	endtry
-endfunction
-autocmd User FugitiveIndex silent call TryWincmdL()
-
-function! ToggleGStatus()
-    if buflisted(bufname('.git//'))
-        bd .git//
-    else
-        G
-    endif
-endfunction
-command ToggleGStatus :call ToggleGStatus()
-
-map <silent><nowait> <space>g :ToggleGStatus<CR>
-
-"=== Fuzzy finder
-"
-let g:fzf_vim = {}
-let g:fzf_vim.buffers_jump = 1
-
-let s:cygwin_bash = exepath("C:\cygwin64\bin\bash.exe")
-if len(s:cygwin_bash)
-  let g:fzf_vim.preview_bash = exepath(s:cygwin_bash)
-endif
 
 
 "=== Show filename in title bar
@@ -385,19 +402,6 @@ func s:DarkModeInit()
 endfunction
 au VimEnter * call s:DarkModeInit() "After ShaDa loaded
 
-
-"=== Key maps
-nnoremap <space>e :CocCommand explorer<CR>
-
-nnoremap <space>h :CocCommand defold-ide.refactorHash<CR>
-vnoremap <space>h :CocCommand defold-ide.refactorHashVisual<CR>
-
-nmap <space>t <Plug>(coc-terminal-toggle)
-tnoremap <leader><ESC> <C-\><C-n>
-
-nmap <leader>c <plug>(quicklist-toggle-qf)
-nmap <leader>l <plug>(quicklist-toggle-lc)
-nnoremap <silent> <leader>gc :<C-u>Gqfopen<CR><C-W>L
 
 "=== vim.coc config:
 
@@ -548,7 +552,8 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 " provide custom statusline: lightline.vim, vim-airline.
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
-" Mappings for CoCList
+" Mappings for CoCList and Fzf
+" All Fzf providers.
 " Show all diagnostics.
 nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
 " Manage extensions.
@@ -559,19 +564,16 @@ nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
 nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
 " Search workspace symbols.
 nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
-" Search files.
-nnoremap <silent><nowait> <space>f  :<C-u>Files<cr>
-" Search buffers.
-nnoremap <silent><nowait> <space>b  :<C-u>CocList buffers<cr>
 " Most recently used files
 nnoremap <silent><nowait> <space>m  :<C-u>CocList mru<CR>
-" Quickfix list
-nnoremap <silent><nowait> <space>q  :<C-u>CocList quickfix<CR>
 " Do default action for next item.
 nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+
+nnoremap <space>h :CocCommand defold-ide.refactorHash<CR>
+vnoremap <space>h :CocCommand defold-ide.refactorHashVisual<CR>
 
 call SourceIfExists(stdpath('config') . '/local_init.vim')
