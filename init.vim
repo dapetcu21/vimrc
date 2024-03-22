@@ -458,6 +458,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
       vim.lsp.buf.format { async = true }
     end, opts)
     vim.keymap.set('n', '<space>a', vim.lsp.buf.code_action, opts)
+    vim.keymap.set('n', '<space>s', '<cmd>FzfLua lsp_document_symbols<cr>', opts)
+    vim.keymap.set('n', '<space>S', '<cmd>FzfLua lsp_live_workspace_symbols<cr>', opts)
   end,
 })
 
