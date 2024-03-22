@@ -158,6 +158,14 @@ let g:strip_whitespace_on_save=1
 let g:show_spaces_that_precede_tabs=1
 let g:better_whitespace_filetypes_blacklist=['NvimTree', 'fugitive', 'diff', 'git', 'gitcommit', 'unite', 'qf', 'help', 'markdown']
 
+lua << EOF
+require'fzf-lua'.setup {
+  grep = {
+    rg_glob = true,
+  },
+}
+EOF
+
 function! TryWincmdL()
 	try
 		wincmd L
