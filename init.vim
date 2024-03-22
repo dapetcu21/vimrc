@@ -1,47 +1,20 @@
-"=== Plug plugins
-call plug#begin(stdpath('data') . '/plugged')
+"=== Startup settings
+let g:loaded_netrw = 1
+let g:loaded_netrwPlugin = 1
 
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'ibhagwan/fzf-lua'
-Plug 'nvim-tree/nvim-tree.lua'
-Plug 'nvim-tree/nvim-web-devicons'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} "Fast syntax highlighting
-Plug 'nvim-treesitter/playground'
-Plug 'tpope/vim-fugitive' "Git integration
-Plug 'tikhomirov/vim-glsl' "GLSL Syntax highlighting
-Plug 'tpope/vim-commentary' "Toggle comments with gc<movement>
-Plug 'morhetz/gruvbox' "Color theme
-Plug 'sainnhe/gruvbox-material' "Color theme
-Plug 'vim-airline/vim-airline' "Status line
-Plug 'vim-airline/vim-airline-themes' "Status line themes
-Plug 'tpope/vim-obsession' "Dependency for prosession
-Plug 'dhruvasagar/vim-prosession' "Save window session on exit
-Plug 'soywod/quicklist.vim' "Quicklist keyboard shortcuts
-Plug 'yegappan/greplace' "Edit quicklist like a buffer
-Plug 'ntpeters/vim-better-whitespace' "Show and fix trailing whitespace
-Plug 'editorconfig/editorconfig-vim' "Respect .editor-config
-Plug 'ap/vim-css-color' "CSS color highlighting
-Plug 'rhysd/vim-clang-format' "C++ auto-indenting
-Plug 'ii14/exrc.vim' "Ask to run .exrc
-Plug 'mfussenegger/nvim-dap' "Debug adapter protocol
-Plug 'rcarriga/nvim-dap-ui' "DAP UI
-Plug 'neovim/nvim-lspconfig' "LSP
-Plug 'ms-jpq/coq_nvim', {'branch': 'coq'} "Auto-complete
-Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'} "Auto-complete snippets
-Plug 'p00f/clangd_extensions.nvim'
+set encoding=utf-8
 
-function! SourceIfExists(file)
-  if filereadable(expand(a:file))
-    exe 'source' a:file
-  endif
-endfunction
-call SourceIfExists(stdpath('config') . '/local_plugins.vim')
+"Fix unicode clipboard issues
+try
+  lang en_US.UTF-8
+catch /^Vim\%((\a\+)\)\=:E319/
+  "lang is unsupported in this vim
+endtry
 
-call plug#end()
-
+"=== Load plugins
+lua require("userconf")
 
 "=== General settings
-set encoding=utf-8
 set autoread "Reload files that changed on disk
 if $COLORTERM == 'truecolor'
   set termguicolors
@@ -53,26 +26,9 @@ set number
 set nowrap
 set cmdheight=1
 autocmd TermOpen * setlocal scrollback=-1
-let g:loaded_netrw = 1
-let g:loaded_netrwPlugin = 1
 set hidden
 set updatetime=300
-
-" Always show the signcolumn, otherwise it would shift the text each time
-" diagnostics appear/become resolved.
-if has("nvim-0.5.0") || has("patch-8.1.1564")
-  " Recently vim can merge signcolumn and number column into one
-  set signcolumn=number
-else
-  set signcolumn=yes
-endif
-
-"Fix unicode clipboard issues
-try
-  lang en_US.UTF-8
-catch /^Vim\%((\a\+)\)\=:E319/
-  "lang is unsupported in this vim
-endtry
+set signcolumn=number
 
 " Load filetype plugins from ~/.config/nvim/ftplugins
 filetype plugin indent on
@@ -128,6 +84,8 @@ nnoremap <silent><nowait> <leader>e :<C-u>NvimTreeFindFile<CR>
 
 nnoremap <silent><nowait> <space>i :<C-u>ClangdSwitchSourceHeader<CR>
 
+nnoremap <silent><nowait> <space>d :DapLoadLaunchJSON<CR>:DapContinue<CR>
+
 "=== Indentation
 set expandtab shiftwidth=2 tabstop=2
 au FileType *      if get(b:, 'editorconfig_applied', 0) != 1 | setlocal expandtab | setlocal tabstop=2 | setlocal shiftwidth=2 | endif
@@ -143,28 +101,10 @@ au BufNewFile,BufRead *.fui setlocal filetype=fuior
 
 
 "=== Plugin config
-let g:airline_powerline_fonts = 1
-
-let g:prosession_dir = stdpath('data') . '/prosession'
-let g:Prosession_ignore_expr = {-> !isdirectory('.git')} " Only save sessions in git repos
-
-set sessionoptions-=options  " Don't save options
-set sessionoptions-=buffers  " Don't save hidden buffers
-set sessionoptions-=terminal " Don't save terminals
-set sessionoptions-=help     " Don't save help windows
-
 let g:better_whitespace_enabled=1
 let g:strip_whitespace_on_save=1
 let g:show_spaces_that_precede_tabs=1
 let g:better_whitespace_filetypes_blacklist=['NvimTree', 'fugitive', 'diff', 'git', 'gitcommit', 'unite', 'qf', 'help', 'markdown']
-
-lua << EOF
-require'fzf-lua'.setup {
-  grep = {
-    rg_glob = true,
-  },
-}
-EOF
 
 function! TryWincmdL()
 	try
@@ -184,145 +124,6 @@ endfunction
 command ToggleGStatus :call ToggleGStatus()
 
 map <silent><nowait> <space>g :ToggleGStatus<CR>
-
-lua << EOF
-require("nvim-tree").setup({
-  sync_root_with_cwd = true,
-  view = {
-    width = 50,
-  },
-})
-EOF
-
-
-"=== DAP
-lua << EOF
-local dap = require("dap")
-dap.adapters.lldb = {
-  type = 'executable',
-  command = '/usr/local/opt/llvm/bin/lldb-vscode',
-  name = 'lldb'
-}
-dap.configurations.lldb = dap.configurations.lldb or {}
-dap.configurations.cpp = dap.configurations.lldb
-
-local dapui = require("dapui")
-
-dapui.setup({
-  layouts = {
-    {
-      elements = {
-        { id = 'scopes', size = 0.4 },
-        { id = 'breakpoints', size = 0.1 },
-        { id = 'stacks', size = 0.4 },
-        { id = 'watches', size = 0.1 },
-      },
-      size = 45,
-      position = "left", -- Can be "left" or "right"
-    },
-    {
-      elements = {
-        'repl'
-      },
-      size = 10,
-      position = "bottom", -- Can be "bottom" or "top"
-    },
-  },
-})
-
-dap.listeners.after.event_initialized["dapui_config"] = function()
-  dapui.open()
-end
-dap.listeners.before.event_terminated["dapui_config"] = function()
-  dapui.close()
-end
-dap.listeners.before.event_exited["dapui_config"] = function()
-  dapui.close()
-end
-
-EOF
-
-nnoremap <silent> <space>d :DapLoadLaunchJSON<CR>:DapContinue<CR>
-
-
-"=== Tree-sitter
-lua <<EOF
-local parsers
-local configs
-local install
-local ok, err = pcall(function ()
-  parsers = require "nvim-treesitter.parsers"
-  configs = require "nvim-treesitter.configs"
-  install = require "nvim-treesitter.install"
-end)
-if not ok then return end
-
-local is_windows = vim.loop.os_uname().sysname:find("Windows") and true or false
-if is_windows then
-  table.insert(install.compilers, "C:\\Program Files\\LLVM\\bin\\clang.exe")
-  install.prefer_git = false
-end
-
-local parser_config = parsers.get_parser_configs()
-parser_config.fuior = {
-  install_info = {
-    url = "https://github.com/critique-gaming/tree-sitter-fuior", -- local path or git repo
-    branch = "main",
-    files = {"src/parser.c"},
-  },
-}
-
-local parser_list = parsers.available_parsers()
-table.insert(parser_list, "fuior")
-
--- Astro doesn't compile on Windows
-if is_windows then
-  for i, v in ipairs(parser_list) do
-    if v == "astro" then
-      table.remove(parser_list, i)
-      break
-    end
-  end
-end
-
-configs.setup {
-  ensure_installed = parser_list,
-  highlight = { enable = true },
-  indent = { enable = false },
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = "gnn",
-      node_incremental = "grn",
-      scope_incremental = "grc",
-      node_decremental = "grm",
-    },
-  },
-  playground = {
-    enable = true,
-    disable = {},
-    updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
-    persist_queries = false, -- Whether the query persists across vim sessions
-    keybindings = {
-      toggle_query_editor = 'o',
-      toggle_hl_groups = 'i',
-      toggle_injected_languages = 't',
-      toggle_anonymous_nodes = 'a',
-      toggle_language_display = 'I',
-      focus_language = 'f',
-      unfocus_language = 'F',
-      update = 'R',
-      goto_node = '<cr>',
-      show_help = '?',
-    },
-  },
-  query_linter = {
-    enable = true,
-    use_virtual_text = true,
-    lint_events = {"BufWrite", "CursorHold"},
-  },
-}
-EOF
 
 
 "=== Show filename in title bar
@@ -373,7 +174,7 @@ endfunction
 func! DarkMode()
   let g:COLOR_SCHEME_MODE = "dark"
   set background=dark
-  colorscheme gruvbox-material
+  colorscheme nightfox
   AirlineTheme gruvbox_material
   highlight ExtraWhitespace ctermbg=9 guibg=#FF0000
   call SetITermProfile("Default")
@@ -382,7 +183,7 @@ endfunction
 func! LightMode()
   let g:COLOR_SCHEME_MODE = "light"
   set background=light
-  colorscheme gruvbox-material
+  colorscheme dayfox
   highlight ExtraWhitespace ctermbg=9 guibg=#FF0000
   AirlineTheme gruvbox_material
   call SetITermProfile("Light")
@@ -410,60 +211,14 @@ func s:DarkModeInit()
   endif
   let s:supress_profile_change = 0
 endfunction
+
 au VimEnter * call s:DarkModeInit() "After ShaDa loaded
 
-"=== LSP
-
-let g:coq_settings = { 'auto_start': 'shut-up' }
-
-lua << EOF
-local lsp = require "lspconfig"
-local coq = require "coq"
-
-lsp.clangd.setup(coq.lsp_ensure_capabilities({}))
-
--- Global mappings.
--- See `:help vim.diagnostic.*` for documentation on any of the below functions
-vim.keymap.set('n', '<space>r', vim.diagnostic.open_float)
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
-vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist)
-
--- Use LspAttach autocommand to only map the following keys
--- after the language server attaches to the current buffer
-vim.api.nvim_create_autocmd('LspAttach', {
-  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
-  callback = function(ev)
-    -- Enable completion triggered by <c-x><c-o>
-    vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
-
-    -- Buffer local mappings.
-    -- See `:help vim.lsp.*` for documentation on any of the below functions
-    local opts = { buffer = ev.buf }
-    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
-    vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
-    vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
-    vim.keymap.set('n', '<space>wl', function()
-      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-    end, opts)
-    vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
-    vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
-    vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
-    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-    vim.keymap.set('n', '<leader>=', function()
-      vim.lsp.buf.format { async = true }
-    end, opts)
-    vim.keymap.set('n', '<space>a', vim.lsp.buf.code_action, opts)
-    vim.keymap.set('n', '<space>s', '<cmd>FzfLua lsp_document_symbols<cr>', opts)
-    vim.keymap.set('n', '<space>S', '<cmd>FzfLua lsp_live_workspace_symbols<cr>', opts)
-  end,
-})
-
-EOF
-
 "=== Local config
+
+function! SourceIfExists(file)
+  if filereadable(expand(a:file))
+    exe 'source' a:file
+  endif
+endfunction
 call SourceIfExists(stdpath('config') . '/local_init.vim')
