@@ -17,7 +17,6 @@ local plugins = {
   {
     "nvim-tree/nvim-tree.lua",
     version = "*",
-    lazy = false,
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       require("nvim-tree").setup({
@@ -116,36 +115,34 @@ local plugins = {
     end,
   },
 
-  { 'tpope/vim-fugitive', lazy = false },
-  { 'tikhomirov/vim-glsl', lazy = false },
-  { 'tpope/vim-commentary', lazy = false },
+  { 'tpope/vim-fugitive' },
+  { 'tikhomirov/vim-glsl' },
+  { 'tpope/vim-commentary' },
 
-  { 'morhetz/gruvbox', lazy = false, priority = 1000 },
-  { 'sainnhe/gruvbox-material', lazy = false, priority = 1000 },
-  { 'EdenEast/nightfox.nvim', lazy = false, priority = 1000 },
+  { 'morhetz/gruvbox', priority = 1000 },
+  { 'sainnhe/gruvbox-material', priority = 1000 },
+  { 'EdenEast/nightfox.nvim', priority = 1000 },
 
   {
     'vim-airline/vim-airline',
-    lazy = false,
-    config = function ()
+    init = function ()
       vim.g.airline_powerline_fonts = 1
     end,
   },
-  { 'vim-airline/vim-airline-themes', lazy = false },
+  { 'vim-airline/vim-airline-themes' },
 
-  { 'soywod/quicklist.vim', lazy = false },
-  { 'yegappan/greplace', lazy = false },
+  { 'soywod/quicklist.vim' },
+  { 'yegappan/greplace' },
 
-  { 'ntpeters/vim-better-whitespace', lazy = false },
-  { 'editorconfig/editorconfig-vim', lazy = false },
-  { 'ap/vim-css-color', lazy = false },
-  { 'rhysd/vim-clang-format', lazy = false },
+  { 'ntpeters/vim-better-whitespace' },
+  { 'editorconfig/editorconfig-vim' },
+  { 'ap/vim-css-color' },
+  { 'rhysd/vim-clang-format' },
 
-  { 'ii14/exrc.vim', lazy = false },
+  { 'ii14/exrc.vim' },
 
   {
     'mfussenegger/nvim-dap',
-    lazy = false,
     config = function()
       local dap = require("dap")
 
@@ -201,8 +198,7 @@ local plugins = {
   {
     'ms-jpq/coq_nvim',
     branch = 'coq',
-    lazy = false,
-    config = function ()
+    init = function ()
       vim.g.coq_settings = { auto_start = 'shut-up' }
     end,
   },
@@ -210,7 +206,6 @@ local plugins = {
   {
     'ms-jpq/coq.artifacts',
     branch = 'artifacts',
-    lazy = false,
     dependencies = { 'ms-jpq/coq_nvim' }
   },
 
@@ -269,7 +264,6 @@ local plugins = {
   {
     'p00f/clangd_extensions.nvim',
     dependencies = { 'neovim/nvim-lspconfig' },
-    lazy = false,
   },
 }
 
