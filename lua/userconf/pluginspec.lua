@@ -284,19 +284,19 @@ local plugins = {
       end
     end,
     init = function()
-        local possession = require("nvim-possession")
-        vim.keymap.set("n", "<space>sl", function()
-            possession.list()
-        end)
-        vim.keymap.set("n", "<space>sn", function()
-            possession.new()
-        end)
-        vim.keymap.set("n", "<space>su", function()
-            possession.update()
-        end)
-        vim.keymap.set("n", "<space>sd", function()
-            possession.delete()
-        end)
+      local possession = require("nvim-possession")
+      vim.keymap.set("n", "<space>sl", function()
+        possession.list()
+      end)
+      vim.keymap.set("n", "<space>sn", function()
+        possession.new()
+      end)
+      vim.keymap.set("n", "<space>su", function()
+        possession.update()
+      end)
+      vim.keymap.set("n", "<space>sd", function()
+        possession.delete()
+      end)
     end,
   }
 }
