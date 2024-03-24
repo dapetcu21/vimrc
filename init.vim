@@ -1,5 +1,5 @@
 "=== Startup settings
-let g:loaded_netrw = 1
+let g:loaded_netrw = 1 " Disable the built-in directory browser. We use nvim-tree
 let g:loaded_netrwPlugin = 1
 
 set encoding=utf-8
