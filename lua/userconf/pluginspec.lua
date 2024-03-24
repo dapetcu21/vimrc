@@ -126,8 +126,45 @@ local plugins = {
   {
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
-    init = function ()
-      require('lualine').setup()
+    config = function ()
+      require('lualine').setup({
+        disabled_filetypes = { 'NvimTree' },
+        sections = {
+          lualine_a = {'mode'},
+          lualine_b = {'diff', 'diagnostics'},
+          lualine_c = {'filename'},
+          lualine_x = {'encoding', 'fileformat', 'filetype'},
+          lualine_y = {'progress'},
+          lualine_z = {'location'}
+        },
+        tabline = {
+          lualine_a = {
+            {
+              require("nvim-possession").status,
+              cond = function()
+                return require("nvim-possession").status() ~= nil
+              end,
+            },
+          },
+          lualine_b = {'branch'},
+          lualine_c = {
+            {
+              'filetype',
+              icon_only = true,
+              separator = { left = '', right = '' },
+              padding = { left = 1, right = 0 },
+            },
+            {
+              'filename',
+              path = 1,
+              padding = { left = 0, right = 1 },
+            }
+          },
+          lualine_x = {},
+          lualine_y = {},
+          lualine_z = {'tabs'}
+        }
+      })
     end,
   },
 
@@ -304,6 +341,39 @@ local plugins = {
       vim.keymap.set("n", "<space>sd", function()
         possession.delete()
       end)
+    end,
+  },
+
+  {
+    "f-person/auto-dark-mode.nvim",
+    config = function ()
+      function set_term_profile(profile)
+        if vim.env.TERM_PROGRAM ~= "iTerm.app" then
+          return
+        end
+        vim.cmd("new")
+        vim.cmd([[call setline(1, "\033]50;SetProfile=]] .. profile .. [[\007")]])
+        vim.cmd("write >> /dev/stdout")
+        vim.cmd("q!")
+      end
+
+      require('auto-dark-mode').setup({
+        update_interval = 1000,
+
+        set_dark_mode = function()
+          vim.opt.background = "dark"
+          vim.cmd("colorscheme nightfox")
+          vim.cmd("highlight ExtraWhitespace ctermbg=9 guibg=#FF0000")
+          set_term_profile("Light")
+        end,
+
+        set_light_mode = function()
+          vim.opt.background = "light"
+          vim.cmd("colorscheme gruvbox")
+          vim.cmd("highlight ExtraWhitespace ctermbg=9 guibg=#FF0000")
+          set_term_profile("Default")
+        end,
+      })
     end,
   }
 }

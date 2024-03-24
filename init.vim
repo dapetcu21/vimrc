@@ -160,58 +160,6 @@ if has("gui") || $TERM =~ '^\(screen\|xterm\)'
 endif
 
 
-"=== Color schemes
-
-func! SetITermProfile(profile)
-  if $TERM_PROGRAM == "iTerm.app" && !s:supress_profile_change
-    new
-    call setline(1, "\033]50;SetProfile=" . a:profile . "\007")
-    write >> /dev/stdout
-    q!
-  endif
-endfunction
-
-func! DarkMode()
-  let g:COLOR_SCHEME_MODE = "dark"
-  set background=dark
-  colorscheme nightfox
-  highlight ExtraWhitespace ctermbg=9 guibg=#FF0000
-  call SetITermProfile("Default")
-endfunction
-
-func! LightMode()
-  let g:COLOR_SCHEME_MODE = "light"
-  set background=light
-  colorscheme dayfox
-  highlight ExtraWhitespace ctermbg=9 guibg=#FF0000
-  call SetITermProfile("Light")
-endfunction
-
-func! ToggleDarkMode()
-  if g:COLOR_SCHEME_MODE == "dark"
-    call LightMode()
-  else
-    call DarkMode()
-  endif
-endfunction
-
-let s:supress_profile_change = 0
-command! LightMode :call LightMode()
-command! DarkMode :call DarkMode()
-command! ToggleDarkMode :call ToggleDarkMode()
-
-func s:DarkModeInit()
-  let s:supress_profile_change = 1
-  if exists("g:COLOR_SCHEME_MODE") && g:COLOR_SCHEME_MODE == "light"
-    LightMode
-  else
-    DarkMode
-  endif
-  let s:supress_profile_change = 0
-endfunction
-
-au VimEnter * call s:DarkModeInit() "After ShaDa loaded
-
 "=== Local config
 
 function! SourceIfExists(file)
