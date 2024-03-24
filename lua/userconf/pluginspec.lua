@@ -277,13 +277,20 @@ local plugins = {
       },
 
     },
+
     build = function()
       local sessions_path = vim.fn.stdpath("data") .. "/sessions"
       if vim.fn.isdirectory(sessions_path) == 0 then
         vim.uv.fs_mkdir(sessions_path, 511) -- 0777
       end
     end,
+
     init = function()
+      vim.opt.sessionoptions:remove('options')  -- Don't save options
+      vim.opt.sessionoptions:remove('buffers')  -- Don't save hidden buffers
+      vim.opt.sessionoptions:remove('terminal') -- Don't save terminals
+      vim.opt.sessionoptions:remove('help')     -- Don't save help windows
+
       local possession = require("nvim-possession")
       vim.keymap.set("n", "<space>sl", function()
         possession.list()
