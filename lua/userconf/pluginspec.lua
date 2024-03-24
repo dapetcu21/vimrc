@@ -128,12 +128,23 @@ local plugins = {
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function ()
       require('lualine').setup({
-        disabled_filetypes = { 'NvimTree' },
+        extensions = { 'nvim-tree', 'nvim-dap-ui', 'quickfix' },
         sections = {
           lualine_a = {'mode'},
           lualine_b = {'diff', 'diagnostics'},
           lualine_c = {'filename'},
-          lualine_x = {'encoding', 'fileformat', 'filetype'},
+          lualine_x = {
+            'encoding',
+            {
+              function () return 'BOM' end,
+              cond = function ()
+                local bufnr = vim.api.nvim_get_current_buf()
+                return not not vim.bo[bufnr].bomb
+              end,
+            },
+            'fileformat',
+            'filetype'
+          },
           lualine_y = {'progress'},
           lualine_z = {'location'}
         },
