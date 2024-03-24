@@ -30,7 +30,7 @@ local plugins = {
 
   {
     "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
+    build = ":TSUpdateSync",
     config = function()
       local parsers
       local configs
@@ -42,7 +42,7 @@ local plugins = {
       end)
       if not ok then return end
 
-      local is_windows = vim.loop.os_uname().sysname:find("Windows") and true or false
+      local is_windows = vim.uv.os_uname().sysname:find("Windows") and true or false
       if is_windows then
         table.insert(install.compilers, "C:\\Program Files\\LLVM\\bin\\clang.exe")
         install.prefer_git = false
@@ -198,6 +198,7 @@ local plugins = {
   {
     'ms-jpq/coq_nvim',
     branch = 'coq',
+    build = ':COQdeps',
     init = function ()
       vim.g.coq_settings = { auto_start = 'shut-up' }
     end,
@@ -265,6 +266,39 @@ local plugins = {
     'p00f/clangd_extensions.nvim',
     dependencies = { 'neovim/nvim-lspconfig' },
   },
+
+  {
+    "gennaro-tedesco/nvim-possession",
+    dependencies = { "ibhagwan/fzf-lua" },
+    config = {
+      autoload = true,
+      autoswitch = {
+        enable = true,
+      },
+
+    },
+    build = function()
+      local sessions_path = vim.fn.stdpath("data") .. "/sessions"
+      if vim.fn.isdirectory(sessions_path) == 0 then
+        vim.uv.fs_mkdir(sessions_path, 511) -- 0777
+      end
+    end,
+    init = function()
+        local possession = require("nvim-possession")
+        vim.keymap.set("n", "<space>sl", function()
+            possession.list()
+        end)
+        vim.keymap.set("n", "<space>sn", function()
+            possession.new()
+        end)
+        vim.keymap.set("n", "<space>su", function()
+            possession.update()
+        end)
+        vim.keymap.set("n", "<space>sd", function()
+            possession.delete()
+        end)
+    end,
+  }
 }
 
 local local_plugins_path = vim.fn.stdpath("config") .. "/local_pluginspec.lua"
