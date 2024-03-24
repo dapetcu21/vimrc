@@ -175,7 +175,6 @@ func! DarkMode()
   let g:COLOR_SCHEME_MODE = "dark"
   set background=dark
   colorscheme nightfox
-  AirlineTheme gruvbox_material
   highlight ExtraWhitespace ctermbg=9 guibg=#FF0000
   call SetITermProfile("Default")
 endfunction
@@ -185,7 +184,6 @@ func! LightMode()
   set background=light
   colorscheme dayfox
   highlight ExtraWhitespace ctermbg=9 guibg=#FF0000
-  AirlineTheme gruvbox_material
   call SetITermProfile("Light")
 endfunction
 

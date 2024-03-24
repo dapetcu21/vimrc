@@ -124,12 +124,12 @@ local plugins = {
   { 'EdenEast/nightfox.nvim', priority = 1000 },
 
   {
-    'vim-airline/vim-airline',
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
     init = function ()
-      vim.g.airline_powerline_fonts = 1
+      require('lualine').setup()
     end,
   },
-  { 'vim-airline/vim-airline-themes' },
 
   { 'soywod/quicklist.vim' },
   { 'yegappan/greplace' },
