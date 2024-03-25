@@ -151,10 +151,13 @@ local plugins = {
         tabline = {
           lualine_a = {
             {
-              require("nvim-possession").status,
-              cond = function()
-                return require("nvim-possession").status() ~= nil
-              end,
+              function ()
+                local possession_status = require("nvim-possession").status()
+                if possession_status ~= nil then
+                  return possession_status
+                end
+                return vim.fn.fnamemodify(vim.uv.cwd(), ':t')
+              end
             },
           },
           lualine_b = {'branch'},
