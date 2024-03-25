@@ -132,7 +132,9 @@ local plugins = {
         sections = {
           lualine_a = {'mode'},
           lualine_b = {'diff', 'diagnostics'},
-          lualine_c = {'filename'},
+          lualine_c = {
+            { 'filename', newfile_status = true }
+          },
           lualine_x = {
             'encoding',
             {
@@ -172,6 +174,7 @@ local plugins = {
               'filename',
               path = 1,
               padding = { left = 0, right = 1 },
+              shorting_target = 10,
             }
           },
           lualine_x = {},
