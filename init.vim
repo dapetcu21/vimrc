@@ -29,9 +29,7 @@ autocmd TermOpen * setlocal scrollback=-1
 set hidden
 set updatetime=300
 set signcolumn=number
-
-" Load filetype plugins from ~/.config/nvim/ftplugins
-filetype plugin indent on
+filetype indent on
 
 " Ripgrep or The Silver Searcher
 if executable("rg")
@@ -98,32 +96,6 @@ au FileType cpp    if get(b:, 'editorconfig_applied', 0) != 1 | setlocal noexpan
 au BufNewFile,BufRead *.script\|*.gui_script\|*.render_script\|*.editor_script\|*.lua_  setlocal filetype=lua
 au BufNewFile,BufRead *.vsh\|*.fsh\|*.fp\|*.vp setlocal filetype=glsl
 au BufNewFile,BufRead *.fui setlocal filetype=fuior
-
-
-"=== Plugin config
-let g:better_whitespace_enabled=1
-let g:strip_whitespace_on_save=1
-let g:show_spaces_that_precede_tabs=1
-let g:better_whitespace_filetypes_blacklist=['NvimTree', 'fugitive', 'diff', 'git', 'gitcommit', 'unite', 'qf', 'help', 'markdown']
-
-function! TryWincmdL()
-	try
-		wincmd L
-	catch /.*/
-	endtry
-endfunction
-autocmd User FugitiveIndex silent call TryWincmdL()
-
-function! ToggleGStatus()
-    if buflisted(bufname('.git//'))
-        bd .git//
-    else
-        G
-    endif
-endfunction
-command ToggleGStatus :call ToggleGStatus()
-
-map <silent><nowait> <space>g :ToggleGStatus<CR>
 
 
 "=== Show filename in title bar

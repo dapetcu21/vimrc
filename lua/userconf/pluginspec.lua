@@ -115,7 +115,31 @@ local plugins = {
     end,
   },
 
-  { 'tpope/vim-fugitive' },
+  {
+    'tpope/vim-fugitive',
+    init = function ()
+      function toggle_git_status()
+        if vim.fn.buflisted(vim.fn.bufname('.git//')) == 1 then
+          vim.cmd('bd .git//')
+        else
+          vim.cmd('G')
+        end
+      end
+
+      vim.keymap.set('n', '<space>g', toggle_git_status)
+
+      vim.cmd([[
+        function! TryWincmdL()
+          try
+            wincmd L
+          catch /.*/
+          endtry
+        endfunction
+        autocmd User FugitiveIndex silent call TryWincmdL()
+      ]])
+    end,
+  },
+
   { 'tikhomirov/vim-glsl' },
   { 'tpope/vim-commentary' },
 
@@ -188,7 +212,37 @@ local plugins = {
   { 'soywod/quicklist.vim' },
   { 'yegappan/greplace' },
 
-  { 'ntpeters/vim-better-whitespace' },
+  {
+    'ntpeters/vim-better-whitespace',
+    init = function ()
+      vim.g.better_whitespace_enabled = 1
+      vim.g.strip_whitespace_on_save = 1
+      vim.g.show_spaces_that_precede_tabs = 1
+      vim.g.better_whitespace_filetypes_blacklist= {
+        'NvimTree', 'fugitive', 'diff', 'git', 'gitcommit', 'unite', 'qf', 'help', 'markdown'
+      }
+
+      local disabled_bws_filetypes = { 'fugitive' }
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = '*',
+        callback = function (args)
+          local is_disabled = false
+          for _, ft in ipairs(disabled_bws_filetypes) do
+            if args.match == ft then
+              is_disabled = true
+              break
+            end
+          end
+
+          if is_disabled then
+            vim.b.better_whitespace_enabled = 0
+          else
+            vim.b.better_whitespace_enabled = nil
+          end
+        end,
+      })
+    end,
+  },
   { 'editorconfig/editorconfig-vim' },
   { 'ap/vim-css-color' },
   { 'rhysd/vim-clang-format' },
