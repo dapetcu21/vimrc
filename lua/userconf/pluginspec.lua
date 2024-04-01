@@ -221,26 +221,6 @@ local plugins = {
       vim.g.better_whitespace_filetypes_blacklist= {
         'NvimTree', 'fugitive', 'diff', 'git', 'gitcommit', 'unite', 'qf', 'help', 'markdown'
       }
-
-      local disabled_bws_filetypes = { 'fugitive' }
-      vim.api.nvim_create_autocmd('FileType', {
-        pattern = '*',
-        callback = function (args)
-          local is_disabled = false
-          for _, ft in ipairs(disabled_bws_filetypes) do
-            if args.match == ft then
-              is_disabled = true
-              break
-            end
-          end
-
-          if is_disabled then
-            vim.b.better_whitespace_enabled = 0
-          else
-            vim.b.better_whitespace_enabled = nil
-          end
-        end,
-      })
     end,
   },
   { 'editorconfig/editorconfig-vim' },
