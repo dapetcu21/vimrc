@@ -383,7 +383,15 @@ local plugins = {
       autoswitch = {
         enable = true,
       },
-
+      save_hook = function()
+        local buflist = vim.api.nvim_list_bufs()
+        for _, bufnr in ipairs(buflist) do
+          local ft = vim.api.nvim_get_option_value('filetype', { buf = bufnr })
+          if ft == 'fugitive' or ft == 'NvimTree' then
+            vim.api.nvim_buf_delete(bufnr)
+          end
+        end
+      end
     },
 
     build = function()
