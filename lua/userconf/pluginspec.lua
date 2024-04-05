@@ -150,14 +150,22 @@ local plugins = {
   {
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
+
     config = function ()
+      local filename_symbols = {
+        modified = '',
+        readonly = '󰌾',
+        unnamed = '[No Name]',
+        newfile = '[New]',
+      }
+
       require('lualine').setup({
         extensions = { 'nvim-tree', 'nvim-dap-ui', 'quickfix' },
         sections = {
           lualine_a = {'mode'},
           lualine_b = {'diff', 'diagnostics'},
           lualine_c = {
-            { 'filename', newfile_status = true }
+            { 'filename', newfile_status = true, symbols = filename_symbols }
           },
           lualine_x = {
             'encoding',
@@ -199,6 +207,7 @@ local plugins = {
               path = 1,
               padding = { left = 0, right = 1 },
               shorting_target = 10,
+              symbols = filename_symbols,
             }
           },
           lualine_x = {},
