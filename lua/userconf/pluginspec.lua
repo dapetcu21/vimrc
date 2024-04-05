@@ -102,22 +102,14 @@ local plugins = {
       table.insert(parser_list, "fuior")
 
       -- A few parsers don't compile on Windows
+      local ignore_install= {}
       if is_windows then
-        local parser_count = #parser_list
-        local i = 1
-        while i <= parser_count do
-          local v = parser_list[i]
-          if v == "astro" or v == "ocaml" or v == "ocaml_interface" then
-            table.remove(parser_list, i)
-            parser_count = parser_count - 1
-          else
-            i = i + 1
-          end
-        end
+        ignore_install = { "astro", "ocaml", "ocaml_interface" }
       end
 
       configs.setup {
         ensure_installed = parser_list,
+        ignore_install = ignore_install,
         highlight = { enable = true },
         indent = { enable = false },
         incremental_selection = {
