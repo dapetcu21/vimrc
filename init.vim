@@ -1,7 +1,4 @@
 "=== Startup settings
-let g:loaded_netrw = 1 " Disable the built-in directory browser. We use nvim-tree
-let g:loaded_netrwPlugin = 1
-
 set encoding=utf-8
 
 "Fix unicode clipboard issues
@@ -43,7 +40,7 @@ endif
 
 "=== Keybindings and command mappings
 " Quick access to nohl
-nnoremap <silent><nowait> <space>n  :<C-u>nohl<CR>
+nnoremap <silent><nowait> <space>n  <Cmd>nohl<CR>
 
 " Search visual selection or current word
 vnoremap <leader>/ y/\V<C-R>=escape(@",'/\')<CR><CR>
@@ -55,9 +52,6 @@ command! EditInit :execute "e " . stdpath("config") . "/init.vim"
 " Git untracked grep (grep everywhere except .gitignore'd files)
 command! -nargs=+ Gugrep :Ggrep -I --untracked <args>
 
-" Clang Format
-nnoremap <space>= :ClangFormat<CR>
-
 " Terminal
 nmap <silent><nowait> <space>t <Plug>(coc-terminal-toggle)
 tnoremap <silent><nowait> <leader><ESC> <C-\><C-n>
@@ -65,24 +59,9 @@ tnoremap <silent><nowait> <leader><ESC> <C-\><C-n>
 " Quicklist
 nmap <silent><nowait> <leader>c <plug>(quicklist-toggle-qf)
 nmap <silent><nowait> <leader>l <plug>(quicklist-toggle-lc)
-nnoremap <silent> <leader>gc :<C-u>Gqfopen<CR><C-W>L
+nnoremap <silent> <leader>gc <Cmd>Gqfopen<CR><C-W>L
 
-" Global search selection or word under cursor
-vnoremap <silent><nowait> <space>/ :<C-u>FzfLua grep_visual<CR>
-nnoremap <silent><nowait> <space>/ :<C-u>FzfLua grep_cword<CR>
-
-nnoremap <silent><nowait> <space>z  :<C-u>FzfLua<cr>
-nnoremap <silent><nowait> <space>f  :<C-u>FzfLua files<cr>
-nnoremap <silent><nowait> <space>F  :<C-u>FzfLua oldfiles<cr>
-nnoremap <silent><nowait> <space>b  :<C-u>FzfLua buffers<cr>
-nnoremap <silent><nowait> <space>q  :<C-u>FzfLua quickfix<CR>
-
-nnoremap <silent><nowait> <space>e :<C-u>NvimTreeToggle<CR>
-nnoremap <silent><nowait> <leader>e :<C-u>NvimTreeFindFile<CR>
-
-nnoremap <silent><nowait> <space>i :<C-u>ClangdSwitchSourceHeader<CR>
-
-nnoremap <silent><nowait> <space>d :DapLoadLaunchJSON<CR>:DapContinue<CR>
+nnoremap <silent><nowait> <space>i <Cmd>ClangdSwitchSourceHeader<CR>
 
 "=== Indentation
 set expandtab shiftwidth=2 tabstop=2

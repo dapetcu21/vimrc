@@ -5,6 +5,18 @@ local plugins = {
       { "junegunn/fzf", build = "call fzf#install()" },
       "nvim-tree/nvim-web-devicons",
     },
+
+    cmd = { 'FzfLua' },
+    keys = {
+      { "<space>/", "<Cmd>FzfLua grep_visual<CR>", mode = 'v', silent = true },
+      { "<space>/", "<Cmd>FzfLua grep_cword<CR>", mode = 'n', silent = true },
+      { "<space>z", "<Cmd>FzfLua<CR>", mode = 'n', silent = true },
+      { "<space>f", "<Cmd>FzfLua files<CR>", mode = 'n', silent = true },
+      { "<space>F", "<Cmd>FzfLua oldfiles<CR>", mode = 'n', silent = true },
+      { "<space>b", "<Cmd>FzfLua buffers<CR>", mode = 'n', silent = true },
+      { "<space>q", "<Cmd>FzfLua quickfix<CR>", mode = 'n', silent = true },
+    },
+
     config = function()
       require("fzf-lua").setup({
         grep = {
@@ -18,6 +30,32 @@ local plugins = {
     "nvim-tree/nvim-tree.lua",
     version = "*",
     dependencies = { "nvim-tree/nvim-web-devicons" },
+
+    cmd = {
+      "NvimTreeOpen",
+      "NvimTreeClose",
+      "NvimTreeFocus",
+      "NvimTreeHiTest",
+      "NvimTreeResize",
+      "NvimTreeToggle",
+      "NvimTreeRefresh",
+      "NvimTreeCollapse",
+      "NvimTreeFindFile",
+      "NvimTreeClipboard",
+      "NvimTreeFindFileToggle",
+      "NvimTreeCollapseKeepBuffers",
+    },
+
+    keys = {
+      { '<space>e', '<Cmd>NvimTreeToggle<CR>', mode = 'n', silent = true },
+      { '<leader>e', '<Cmd>NvimTreeFindFile<CR>', mode = 'n', silent = true },
+    },
+
+    init = function ()
+      vim.g.loaded_netrw = 1
+      vim.g.loaded_netrwPlugin = 1
+    end,
+
     config = function()
       require("nvim-tree").setup({
         sync_root_with_cwd = true,
@@ -197,7 +235,10 @@ local plugins = {
           lualine_a = {
             {
               function ()
-                local possession_status = require("nvim-possession").status()
+                local possession_status
+                if package.loaded['nvim-possession'] ~= nil then
+                  possession_status = require("nvim-possession").status()
+                end
                 if possession_status ~= nil then
                   return possession_status
                 end
@@ -245,7 +286,14 @@ local plugins = {
   },
   { 'editorconfig/editorconfig-vim' },
   { 'ap/vim-css-color' },
-  { 'rhysd/vim-clang-format' },
+
+  {
+    'rhysd/vim-clang-format',
+    cmd = { 'ClangFormat' },
+    keys = {
+      { '<space>=', '<Cmd>ClangFormat<CR>', silent = true },
+    },
+  },
 
   { 'ii14/exrc.vim' },
 
@@ -276,6 +324,11 @@ local plugins = {
   {
     "rcarriga/nvim-dap-ui",
     dependencies = {"mfussenegger/nvim-dap", "nvim-neotest/nvim-nio"},
+
+    keys = {
+      { '<space>d', '<Cmd>DapLoadLaunchJSON<CR><Cmd>DapContinue<CR>', mode = 'n', silent = true },
+    },
+
     config = function ()
       local dapui = require("dapui")
 
@@ -378,6 +431,14 @@ local plugins = {
   {
     "gennaro-tedesco/nvim-possession",
     dependencies = { "ibhagwan/fzf-lua" },
+
+    keys = {
+      { '<space>sl', function () require('nvim-possession').list() end, mode = 'n', silent = true },
+      { '<space>sn', function () require('nvim-possession').new() end, mode = 'n', silent = true },
+      { '<space>su', function () require('nvim-possession').update() end, mode = 'n', silent = true },
+      { '<space>sd', function () require('nvim-possession').delete() end, mode = 'n', silent = true },
+    },
+
     config = {
       autoload = true,
       autoswitch = {
@@ -388,7 +449,7 @@ local plugins = {
         for _, bufnr in ipairs(buflist) do
           local ft = vim.api.nvim_get_option_value('filetype', { buf = bufnr })
           if ft == 'fugitive' or ft == 'NvimTree' then
-            vim.api.nvim_buf_delete(bufnr)
+            vim.api.nvim_buf_delete(bufnr, { force = true })
           end
         end
       end
@@ -406,21 +467,7 @@ local plugins = {
       vim.opt.sessionoptions:remove('buffers')  -- Don't save hidden buffers
       vim.opt.sessionoptions:remove('terminal') -- Don't save terminals
       vim.opt.sessionoptions:remove('help')     -- Don't save help windows
-
-      local possession = require("nvim-possession")
-      vim.keymap.set("n", "<space>sl", function()
-        possession.list()
-      end)
-      vim.keymap.set("n", "<space>sn", function()
-        possession.new()
-      end)
-      vim.keymap.set("n", "<space>su", function()
-        possession.update()
-      end)
-      vim.keymap.set("n", "<space>sd", function()
-        possession.delete()
-      end)
-    end,
+    end
   },
 
   {
