@@ -61,7 +61,6 @@ nmap <silent><nowait> <leader>c <plug>(quicklist-toggle-qf)
 nmap <silent><nowait> <leader>l <plug>(quicklist-toggle-lc)
 nnoremap <silent> <leader>gc <Cmd>Gqfopen<CR><C-W>L
 
-nnoremap <silent><nowait> <space>i <Cmd>ClangdSwitchSourceHeader<CR>
 
 "=== Indentation
 set expandtab shiftwidth=2 tabstop=2

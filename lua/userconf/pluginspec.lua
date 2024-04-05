@@ -370,7 +370,12 @@ local plugins = {
       local lsp = require "lspconfig"
       local coq = require "coq"
 
-      lsp.clangd.setup(coq.lsp_ensure_capabilities({}))
+      lsp.clangd.setup(coq.lsp_ensure_capabilities({
+        on_attach = function ()
+          require("clangd_extensions.inlay_hints").setup_autocmd()
+          require("clangd_extensions.inlay_hints").set_inlay_hints()
+        end,
+      }))
 
       -- Global mappings.
       -- See `:help vim.diagnostic.*` for documentation on any of the below functions
@@ -418,6 +423,16 @@ local plugins = {
   {
     'p00f/clangd_extensions.nvim',
     dependencies = { 'neovim/nvim-lspconfig' },
+    keys = {
+      { "<space>i", "<Cmd>ClangdSwitchSourceHeader<CR>", mode = "n", silent = true },
+    },
+    cmd = {
+      "ClangdSwitchSourceHeader",
+      "ClangdAST",
+      "ClangdSymbolInfo",
+      "ClangdTypeHierarchy",
+      "ClangdMemoryUsage",
+    },
   },
 
   {
