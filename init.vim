@@ -16,10 +16,10 @@ lua require("userconf")
 
 "=== General settings
 set autoread "Reload files that changed on disk
-if $COLORTERM == 'truecolor'
+if $COLORTERM == 'truecolor' || has('gui_running')
   set termguicolors
+  set pumblend=20
 end
-set pumblend=20
 set clipboard=unnamedplus
 set mouse=a
 set number
