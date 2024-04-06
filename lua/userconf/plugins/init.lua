@@ -27,15 +27,19 @@ return {
       vim.g.strip_whitespace_on_save = 1
       vim.g.show_spaces_that_precede_tabs = 1
       vim.g.better_whitespace_filetypes_blacklist= {
-        'NvimTree', 'fugitive', 'diff', 'git', 'gitcommit', 'unite', 'qf', 'help', 'markdown'
+        'NvimTree', 'fugitive', 'diff', 'git', 'gitcommit', 'unite', 'qf', 'help', 'markdown', 'toggleterm'
       }
     end,
   },
 
+
   {
-    'caenrique/buffer-term.nvim',
-    keys = {
-      { '<space>t', function () require('buffer-term').toggle(1) end, mode = 'n', silent = true },
-    }
+    'akinsho/toggleterm.nvim',
+    version = "*",
+    opts = {
+      direction = 'horizontal',
+      open_mapping = '<space>t',
+      insert_mappings =  false,
+    },
   },
 }
