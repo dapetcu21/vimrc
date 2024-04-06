@@ -2,5 +2,5 @@
 sessions
 .clangd
 /local_init.vim
-/local_pluginspec.lua
+/lua/userconf/plugins/local.lua
 /lazy-lock.json

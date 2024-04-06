@@ -52,14 +52,8 @@ command! EditInit :execute "e " . stdpath("config") . "/init.vim"
 " Git untracked grep (grep everywhere except .gitignore'd files)
 command! -nargs=+ Gugrep :Ggrep -I --untracked <args>
 
-" Terminal
-nmap <silent><nowait> <space>t <Plug>(coc-terminal-toggle)
+" Exit terminal
 tnoremap <silent><nowait> <leader><ESC> <C-\><C-n>
-
-" Quicklist
-nmap <silent><nowait> <leader>c <plug>(quicklist-toggle-qf)
-nmap <silent><nowait> <leader>l <plug>(quicklist-toggle-lc)
-nnoremap <silent> <leader>gc <Cmd>Gqfopen<CR><C-W>L
 
 
 "=== Indentation
