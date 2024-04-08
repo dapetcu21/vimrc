@@ -1,6 +1,4 @@
 return {
-  { 'morhetz/gruvbox', priority = 1000 },
-  { 'sainnhe/gruvbox-material', priority = 1000 },
   { 'EdenEast/nightfox.nvim', priority = 1000 },
 
   {
@@ -28,7 +26,7 @@ return {
 
         set_light_mode = function()
           vim.opt.background = "light"
-          vim.cmd("colorscheme gruvbox")
+          vim.cmd("colorscheme dayfox")
           vim.cmd("highlight ExtraWhitespace ctermbg=9 guibg=#FF0000")
           set_term_profile("Default")
         end,
