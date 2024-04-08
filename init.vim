@@ -26,6 +26,7 @@ autocmd TermOpen * setlocal scrollback=-1
 set hidden
 set updatetime=300
 set signcolumn=number
+set confirm
 filetype indent on
 
 " Ripgrep or The Silver Searcher
