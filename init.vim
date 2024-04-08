@@ -22,7 +22,6 @@ set mouse=a
 set number
 set nowrap
 set cmdheight=1
-autocmd TermOpen * setlocal scrollback=-1
 set hidden
 set updatetime=300
 set signcolumn=number
@@ -37,6 +36,9 @@ elseif executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor\ --column
   set grepformat=%f:%l:%c:%m
 endif
+
+" Infinite terminal scrollback
+autocmd TermOpen * setlocal scrollback=-1
 
 
 "=== Keybindings and command mappings
