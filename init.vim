@@ -55,16 +55,6 @@ command! -nargs=+ Gugrep :Ggrep -I --untracked <args>
 " Exit terminal
 tnoremap <silent><nowait> <leader><ESC> <C-\><C-n>
 
-" Use PowerShell on Windows
-if has('win32')
-  set shell=powershell.exe
-  set shellxquote=
-  let &shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command '
-  let &shellquote   = ''
-  let &shellpipe    = '| Out-File -Encoding UTF8 %s'
-  let &shellredir   = '| Out-File -Encoding UTF8 %s'
-endif
-
 
 "=== Indentation
 set expandtab shiftwidth=2 tabstop=2
