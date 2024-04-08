@@ -4,31 +4,19 @@ return {
   {
     "f-person/auto-dark-mode.nvim",
     config = function ()
-      function set_term_profile(profile)
-        if vim.env.TERM_PROGRAM ~= "iTerm.app" then
-          return
-        end
-        vim.cmd("new")
-        vim.cmd([[call setline(1, "\033]50;SetProfile=]] .. profile .. [[\007")]])
-        vim.cmd("write >> /dev/stdout")
-        vim.cmd("q!")
-      end
-
       require('auto-dark-mode').setup({
-        update_interval = 1000,
+        update_interval = 2000,
 
         set_dark_mode = function()
-          vim.opt.background = "dark"
           vim.cmd("colorscheme nightfox")
+          vim.opt.background = "dark"
           vim.cmd("highlight ExtraWhitespace ctermbg=9 guibg=#FF0000")
-          set_term_profile("Light")
         end,
 
         set_light_mode = function()
-          vim.opt.background = "light"
           vim.cmd("colorscheme dayfox")
+          vim.opt.background = "light"
           vim.cmd("highlight ExtraWhitespace ctermbg=9 guibg=#FF0000")
-          set_term_profile("Default")
         end,
       })
     end,
