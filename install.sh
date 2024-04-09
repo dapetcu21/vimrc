@@ -2,7 +2,7 @@
 set -e
 
 if [ $(uname) == "Darwin" ]; then
-  brew install ripgrep node llvm
+  brew install ripgrep node llvm bat lua-language-server
 fi
 
-nvim +PlugInstall +qall
+npm install -g typescript vscode-langservers-extracted
