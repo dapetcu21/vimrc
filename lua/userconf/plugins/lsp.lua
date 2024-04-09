@@ -28,6 +28,8 @@ return {
         end,
       }))
 
+      lsp.lua_ls.setup(coq.lsp_ensure_capabilities({}))
+
       -- Global mappings.
       -- See `:help vim.diagnostic.*` for documentation on any of the below functions
       vim.keymap.set('n', '<space>r', vim.diagnostic.open_float)
@@ -69,6 +71,12 @@ return {
         end,
       })
     end,
+  },
+
+  {
+    "pmizio/typescript-tools.nvim",
+    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    opts = {},
   },
 
   {
