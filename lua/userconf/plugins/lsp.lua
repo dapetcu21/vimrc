@@ -30,6 +30,13 @@ return {
 
       lsp.lua_ls.setup(coq.lsp_ensure_capabilities({}))
 
+      --Enable (broadcasting) snippet capability for completion
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      capabilities.textDocument.completion.completionItem.snippetSupport = true
+      lsp.jsonls.setup(coq.lsp_ensure_capabilities({
+        capabilities = capabilities,
+      }))
+
       -- Global mappings.
       -- See `:help vim.diagnostic.*` for documentation on any of the below functions
       vim.keymap.set('n', '<space>r', vim.diagnostic.open_float)
