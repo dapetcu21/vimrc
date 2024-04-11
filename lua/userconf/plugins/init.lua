@@ -55,7 +55,7 @@ return {
     version = "*",
     opts = {
       direction = 'horizontal',
-      open_mapping = '<space>t',
+      open_mapping = '<C-t>',
       insert_mappings =  false,
     },
     init = function ()
