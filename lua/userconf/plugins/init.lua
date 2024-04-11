@@ -21,7 +21,14 @@ return {
   { 'ii14/exrc.vim' },
 
   { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
-  { "RRethy/vim-illuminate" },
+  {
+    'RRethy/vim-illuminate',
+    config = function ()
+      require('illuminate').configure({
+        modes_allowlist = { 'n', 'no' },
+      })
+    end,
+  },
   {
     'ntpeters/vim-better-whitespace',
     init = function ()
