@@ -42,7 +42,7 @@ autocmd TermOpen * setlocal scrollback=-1
 
 " Disable some Neovide animations
 let g:neovide_cursor_trail_size = 0
-
+let g:neovide_scroll_animation_far_lines = 0
 
 "=== Keybindings and command mappings
 " Quick access to nohl
