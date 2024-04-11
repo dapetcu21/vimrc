@@ -41,6 +41,14 @@ return {
     end,
   },
 
+  {
+    'ton/vim-bufsurf',
+    lazy = false,
+    keys = {
+      { '<leader>[', '<Cmd>BufSurfBack<CR>', mode = 'n', silent = true },
+      { '<leader>]', '<Cmd>BufSurfForward<CR>', mode = 'n', silent = true },
+    },
+  },
 
   {
     'akinsho/toggleterm.nvim',
