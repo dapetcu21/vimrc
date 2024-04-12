@@ -31,7 +31,7 @@ end
 
 local function grep_cword()
   local utils = require "fzf-lua.utils"
-  local search = [[\b]] .. utils.rg_escape(vim.fn.expand("<cword>")) .. [[\b]]
+  local search = utils.rg_escape(vim.fn.expand("<cword>"))
   grep_with_confirm(search)
 end
 
