@@ -1,7 +1,7 @@
 vim.g.fzf_glob = vim.g.fzf_glob or ""
 
 local function set_glob()
-  vim.ui.input({ prompt = 'Grep Filter Globs>', default = vim.g.fzf_glob }, function (input)
+  vim.ui.input({ prompt = 'Grep Filter Globs> ', default = vim.g.fzf_glob }, function (input)
     if input ~= nil then
       vim.g.fzf_glob = input
     end
@@ -10,7 +10,7 @@ end
 
 local function grep_with_confirm(default_search)
   local glob = vim.g.fzf_glob or ""
-  local prompt = (glob == "") and "Grep For>" or ("Grep For (" .. glob .. ")>")
+  local prompt = ((glob == "") and "" or ("[" .. glob .. "] ")) .. "Grep For> "
   vim.ui.input({ prompt = prompt, default = default_search }, function (search)
     if search == nil then
       return
