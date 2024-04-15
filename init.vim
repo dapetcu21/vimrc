@@ -12,11 +12,16 @@ endtry
 lua require("userconf")
 
 "=== General settings
-set autoread "Reload files that changed on disk
 if $COLORTERM == 'truecolor' || has('gui_running')
   set termguicolors
   set pumblend=20
 end
+
+if has('gui_running')
+  set guifont=FiraCode\ Nerd\ Font\ Mono:h11
+end
+
+set autoread "Reload files that changed on disk
 set clipboard=unnamedplus
 set mouse=a
 set number
