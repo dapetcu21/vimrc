@@ -50,6 +50,7 @@ return {
       { "<space>?", grep, mode = 'n', silent = true },
       { "<C-/>", set_glob, mode = 'n', silent = true },
       { "<space>z", "<Cmd>FzfLua<CR>", mode = 'n', silent = true },
+      { "<space>Z", "<Cmd>FzfLua resume<CR>", mode = 'n', silent = true },
       { "<space>f", "<Cmd>FzfLua files<CR>", mode = 'n', silent = true },
       { "<space>F", "<Cmd>FzfLua oldfiles<CR>", mode = 'n', silent = true },
       { "<space>b", "<Cmd>FzfLua buffers<CR>", mode = 'n', silent = true },
