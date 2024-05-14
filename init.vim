@@ -54,8 +54,8 @@ let g:neovide_scroll_animation_far_lines = 0
 nnoremap <silent><nowait> <space>n  <Cmd>nohl<CR>
 
 " Search visual selection or current word
-vnoremap <leader>/ y/\V<C-R>=escape(@",'/\')<CR><CR>
-nnoremap <leader>/ /\V<C-R>=expand('<cword>')<CR><CR>
+vnoremap <silent> <leader>/ y/\V<C-R>=escape(@",'/\')<CR><CR>
+nnoremap <silent> <leader>/ /\V<C-R>=expand('<cword>')<CR><CR>
 
 " Quick access to edit this file
 command! EditInit :execute "e " . stdpath("config") . "/init.vim"
