@@ -16,11 +16,12 @@ return {
       autoswitch = {
         enable = true,
       },
+      autosave = true,
       save_hook = function()
         local buflist = vim.api.nvim_list_bufs()
         for _, bufnr in ipairs(buflist) do
           local ft = vim.api.nvim_get_option_value('filetype', { buf = bufnr })
-          if ft == 'fugitive' or ft == 'NvimTree' or ft == 'toggleterm' then
+          if ft == 'fugitive' or ft == 'NvimTree' or ft == 'toggleterm' or ft == 'qf' or ft == 'trouble' then
             vim.api.nvim_buf_delete(bufnr, { force = true })
           end
         end

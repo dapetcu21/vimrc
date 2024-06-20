@@ -2,7 +2,7 @@ return {
   {
     'tpope/vim-fugitive',
     init = function ()
-      function toggle_git_status()
+      local function toggle_git_status()
         if vim.fn.buflisted(vim.fn.bufname('.git//')) == 1 then
           vim.cmd('bd .git//')
         else

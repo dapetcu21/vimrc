@@ -26,6 +26,7 @@ return {
     config = function ()
       require('illuminate').configure({
         modes_allowlist = { 'n', 'no' },
+        filetypes_deylist = { 'qf', 'trouble', 'NvimTree', 'fzf' },
       })
     end,
   },
@@ -33,21 +34,12 @@ return {
     'ntpeters/vim-better-whitespace',
     init = function ()
       vim.g.better_whitespace_enabled = 1
-      vim.g.strip_whitespace_on_save = 1
+      vim.g.strip_whitespace_on_save = 0
       vim.g.show_spaces_that_precede_tabs = 1
       vim.g.better_whitespace_filetypes_blacklist= {
-        'NvimTree', 'fugitive', 'diff', 'git', 'gitcommit', 'unite', 'qf', 'help', 'markdown', 'toggleterm'
+        'NvimTree', 'fugitive', 'diff', 'git', 'gitcommit', 'unite', 'qf', 'help', 'markdown', 'toggleterm', 'trouble'
       }
     end,
-  },
-
-  {
-    'ton/vim-bufsurf',
-    lazy = false,
-    keys = {
-      { '<leader>[', '<Cmd>BufSurfBack<CR>', mode = 'n', silent = true },
-      { '<leader>]', '<Cmd>BufSurfForward<CR>', mode = 'n', silent = true },
-    },
   },
 
   {

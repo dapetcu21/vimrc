@@ -11,8 +11,22 @@ return {
         newfile = '[New]',
       }
 
+      local symbols = require('trouble').statusline({
+        mode = "lsp_document_symbols",
+        groups = {},
+        title = false,
+        filter = { range = true },
+        format = "{kind_icon}{symbol.name:Normal}",
+        -- The following line is needed to fix the background color
+        -- Set it to the lualine section you want to use
+        hl_group = "lualine_c_normal",
+      })
+
       require('lualine').setup({
         extensions = { 'nvim-tree', 'nvim-dap-ui', 'quickfix' },
+        options = {
+          disabled_filetypes = { 'trouble', 'NvimTree' },
+        },
         sections = {
           lualine_a = {'mode'},
           lualine_b = {'diff', 'diagnostics'},
@@ -71,7 +85,11 @@ return {
               padding = { left = 0, right = 1 },
               shorting_target = 10,
               symbols = filename_symbols,
-            }
+            },
+            {
+              symbols.get,
+              cond = symbols.has,
+            },
           },
           lualine_x = {},
           lualine_y = {},
