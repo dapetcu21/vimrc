@@ -28,3 +28,6 @@ end
 
 vim.api.nvim_create_user_command('CopyPath', function () copy_path(false) end, {})
 vim.api.nvim_create_user_command('CopyFullPath', function () copy_path(true) end, {})
+
+-- Load local configuration
+require('userconf.util').require_if_exists('local')

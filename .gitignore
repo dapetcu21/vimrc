@@ -1,6 +1,5 @@
 .netrwhist
 sessions
 .clangd
-/local_init.vim
-/lua/userconf/plugins/local.lua
+/lua/local
 /lazy-lock.json

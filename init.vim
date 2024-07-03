@@ -113,13 +113,3 @@ if has("gui") || $TERM =~ '^\(screen\|xterm\)'
   call UpdateTitle()
   set title
 endif
-
-
-"=== Local config
-
-function! SourceIfExists(file)
-  if filereadable(expand(a:file))
-    exe 'source' a:file
-  endif
-endfunction
-call SourceIfExists(stdpath('config') . '/local_init.vim')
