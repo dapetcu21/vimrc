@@ -21,6 +21,7 @@ if has('gui_running')
   set guifont=FiraCode\ Nerd\ Font\ Mono:h11
 end
 
+set shm+=I "Disable intro screen
 set autoread "Reload files that changed on disk
 set clipboard=unnamedplus
 set mouse=a
