@@ -29,5 +29,18 @@ end
 vim.api.nvim_create_user_command('CopyPath', function () copy_path(false) end, {})
 vim.api.nvim_create_user_command('CopyFullPath', function () copy_path(true) end, {})
 
+local function exec(cmd)
+  require('toggleterm').exec(cmd)
+end
+
+vim.api.nvim_create_user_command('RgPrecache', function ()
+  local precache_cmd = [[ rg JUST_PRECACHE_DONT_ACTUALLY_SEARCH_ANYTHING ]]
+  if vim.loop.os_uname().sysname:find('Windows') then
+    exec([[ Measure-Command { ]] .. precache_cmd .. [[ }]])
+  else
+    exec([[ time ]] .. precache_cmd)
+  end
+end, {})
+
 -- Load local configuration
 require('userconf.util').require_if_exists('local')
