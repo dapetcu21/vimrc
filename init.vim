@@ -70,7 +70,6 @@ tnoremap <silent><nowait> <leader><ESC> <C-\><C-n>
 
 "=== Indentation
 set expandtab shiftwidth=2 tabstop=2
-au FileType *      if get(b:, 'editorconfig_applied', 0) != 1 | setlocal expandtab | setlocal tabstop=2 | setlocal shiftwidth=2 | endif
 au FileType make   if get(b:, 'editorconfig_applied', 0) != 1 | setlocal noexpandtab | setlocal tabstop=4 | setlocal shiftwidth=4 | endif
 au FileType c      if get(b:, 'editorconfig_applied', 0) != 1 | setlocal noexpandtab | setlocal tabstop=4 | setlocal shiftwidth=4 | endif
 au FileType cpp    if get(b:, 'editorconfig_applied', 0) != 1 | setlocal noexpandtab | setlocal tabstop=4 | setlocal shiftwidth=4 | endif
