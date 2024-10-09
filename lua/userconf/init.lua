@@ -56,23 +56,13 @@ end, {})
 
 
 -- Keybindings and command mappings
-vim.cmd([[
-" Quick access to nohl
-nnoremap <silent><nowait> <space>n  <Cmd>nohl<CR>
+vim.api.nvim_set_keymap('n', '<space>n', '<Cmd>nohl<CR>', { silent = true, desc = "Clear search highlighting (nohl)" })
+vim.api.nvim_set_keymap('v', '<leader>/', [[y/\V<C-R>=escape(@",'/\')<CR><CR>]], { silent = true, desc = "Search visual selection" })
+vim.api.nvim_set_keymap('v', '<leader>/', [[/\V<C-R>=expand('<cword>')<CR><CR>]], { silent = true, desc = "Search word under cursor" })
+vim.api.nvim_set_keymap('t', '<leader><ESC>', [[<C-\><C-n>]], { silent = true, nowait = true, desc = "Exit terminal" })
 
-" Search visual selection or current word
-vnoremap <silent> <leader>/ y/\V<C-R>=escape(@",'/\')<CR><CR>
-nnoremap <silent> <leader>/ /\V<C-R>=expand('<cword>')<CR><CR>
-
-" Quick access to edit this file
-command! EditInit :execute "e " . stdpath("config") . "/init.vim"
-
-" Git untracked grep (grep everywhere except .gitignore'd files)
-command! -nargs=+ Gugrep :Ggrep -I --untracked <args>
-
-" Exit terminal
-tnoremap <silent><nowait> <leader><ESC> <C-\><C-n>
-]])
+vim.api.nvim_create_user_command('EditInit', ':execute "e " . stdpath("config") . "/init.vim"', {})
+vim.api.nvim_create_user_command('Gugrep', ':Ggrep -I --untracked <args>', { nargs = "+" })
 
 
 -- Show filename in title bar
