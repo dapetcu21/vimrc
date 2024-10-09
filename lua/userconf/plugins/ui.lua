@@ -30,13 +30,15 @@ return {
   },
 
   {
-    "rcarriga/nvim-notify",
+    "dapetcu21/nvim-notify",
+    branch = "slide-out",
 
     config = function ()
       local notify = require("notify")
 
       notify.setup({
-        render = "wrapped-compact"
+        render = "wrapped-compact",
+        stages = "slide_out",
       })
       vim.notify = notify
 
