@@ -57,6 +57,7 @@ return {
       { "<space>c", "<Cmd>FzfLua quickfix<CR>", mode = 'n', silent = true, desc = 'Fzf: Quickfix' },
       { "<space>l", "<Cmd>FzfLua loclist<CR>", mode = 'n', silent = true, desc = 'Fzf: Loclist' },
       { "<space>L", "<Cmd>FzfLua loclist_stack<CR>", mode = 'n', silent = true, desc = 'Fzf: Loclist stack' },
+      { "<space>k", "<Cmd>FzfLua keymaps<CR>", mode = 'n', silent = true, desc = 'Fzf: Keymaps' },
     },
 
     config = function()
