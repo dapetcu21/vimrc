@@ -4,10 +4,10 @@ return {
     dependencies = { "ibhagwan/fzf-lua" },
 
     keys = {
-      { '<space>sl', function () require('nvim-possession').list() end, mode = 'n', silent = true },
-      { '<space>sn', function () require('nvim-possession').new() end, mode = 'n', silent = true },
-      { '<space>su', function () require('nvim-possession').update() end, mode = 'n', silent = true },
-      { '<space>sd', function () require('nvim-possession').delete() end, mode = 'n', silent = true },
+      { '<space>sl', function () require('nvim-possession').list() end, mode = 'n', silent = true, desc = 'Sessions: List sessions' },
+      { '<space>sn', function () require('nvim-possession').new() end, mode = 'n', silent = true, desc = 'Sessions: New session' },
+      { '<space>su', function () require('nvim-possession').update() end, mode = 'n', silent = true, desc = 'Sessions: Update session' },
+      { '<space>sd', function () require('nvim-possession').delete() end, mode = 'n', silent = true, desc = 'Sessions: Delete session' },
     },
     lazy = false,
 

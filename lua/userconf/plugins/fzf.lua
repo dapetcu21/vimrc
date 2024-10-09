@@ -45,16 +45,18 @@ return {
 
     cmd = { 'FzfLua' },
     keys = {
-      { "<space>/", grep_visual, mode = 'v', silent = true },
-      { "<space>/", grep_cword, mode = 'n', silent = true },
-      { "<space>?", grep, mode = 'n', silent = true },
-      { "<C-/>", set_glob, mode = 'n', silent = true },
-      { "<space>z", "<Cmd>FzfLua<CR>", mode = 'n', silent = true },
-      { "<space>Z", "<Cmd>FzfLua resume<CR>", mode = 'n', silent = true },
-      { "<space>f", "<Cmd>FzfLua files<CR>", mode = 'n', silent = true },
-      { "<space>F", "<Cmd>FzfLua oldfiles<CR>", mode = 'n', silent = true },
-      { "<space>b", "<Cmd>FzfLua buffers<CR>", mode = 'n', silent = true },
-      { "<space>q", "<Cmd>FzfLua quickfix<CR>", mode = 'n', silent = true },
+      { "<space>/", grep_visual, mode = 'v', silent = true, desc = 'Fzf: Grep visual selection' },
+      { "<space>/", grep_cword, mode = 'n', silent = true, desc = 'Fzf: Grep word under cursor' },
+      { "<space>?", grep, mode = 'n', silent = true, desc = 'Fzf: Grep' },
+      { "<C-/>", set_glob, mode = 'n', silent = true, desc = 'Fzf: Set glob pattern' },
+      { "<space>z", "<Cmd>FzfLua<CR>", mode = 'n', silent = true, desc = 'Fzf' },
+      { "<space>Z", "<Cmd>FzfLua resume<CR>", mode = 'n', silent = true, desc = 'Fzf: Resume' },
+      { "<space>f", "<Cmd>FzfLua files<CR>", mode = 'n', silent = true, desc = 'Fzf: Files' },
+      { "<space>F", "<Cmd>FzfLua oldfiles<CR>", mode = 'n', silent = true, desc = 'Fzf: File history' },
+      { "<space>b", "<Cmd>FzfLua buffers<CR>", mode = 'n', silent = true, desc = 'Fzf: Buffers' },
+      { "<space>c", "<Cmd>FzfLua quickfix<CR>", mode = 'n', silent = true, desc = 'Fzf: Quickfix' },
+      { "<space>l", "<Cmd>FzfLua loclist<CR>", mode = 'n', silent = true, desc = 'Fzf: Loclist' },
+      { "<space>L", "<Cmd>FzfLua loclist_stack<CR>", mode = 'n', silent = true, desc = 'Fzf: Loclist stack' },
     },
 
     config = function()

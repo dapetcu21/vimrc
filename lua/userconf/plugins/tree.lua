@@ -20,8 +20,8 @@ return {
     },
 
     keys = {
-      { '<space>e', '<Cmd>NvimTreeToggle<CR>', mode = 'n', silent = true },
-      { '<leader>e', '<Cmd>NvimTreeFindFile<CR>', mode = 'n', silent = true },
+      { '<space>e', '<Cmd>NvimTreeToggle<CR>', mode = 'n', silent = true, desc = 'Tree: Toggle tree' },
+      { '<leader>e', '<Cmd>NvimTreeFindFile<CR>', mode = 'n', silent = true, desc = 'Tree: Find current file in tree' },
     },
 
     init = function ()

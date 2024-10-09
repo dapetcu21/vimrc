@@ -10,7 +10,7 @@ return {
         end
       end
 
-      vim.keymap.set('n', '<space>g', toggle_git_status)
+      vim.keymap.set('n', '<space>g', toggle_git_status, { desc = 'Fugitive: Toggle Git status' })
 
       vim.cmd([[
         function! TryWincmdL()

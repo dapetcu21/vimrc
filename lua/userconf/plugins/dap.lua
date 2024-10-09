@@ -28,7 +28,7 @@ return {
     dependencies = {"mfussenegger/nvim-dap", "nvim-neotest/nvim-nio"},
 
     keys = {
-      { '<space>d', '<Cmd>DapLoadLaunchJSON<CR><Cmd>DapContinue<CR>', mode = 'n', silent = true },
+      { '<space>d', '<Cmd>DapLoadLaunchJSON<CR><Cmd>DapContinue<CR>', mode = 'n', silent = true, desc = 'DAP: Start/Continue debugging' },
     },
 
     config = function ()

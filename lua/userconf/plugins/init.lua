@@ -6,14 +6,14 @@ return {
   {
     'soywod/quicklist.vim',
     keys = {
-      { '<leader>c', '<plug>(quicklist-toggle-qf)', mode = 'n', silent = true },
-      { '<leader>l', '<plug>(quicklist-toggle-lc)', mode = 'n', silent = true },
+      { '<leader>q', '<plug>(quicklist-toggle-qf)', mode = 'n', silent = true, desc = 'Toggle quickfix list' },
+      { '<leader>l', '<plug>(quicklist-toggle-lc)', mode = 'n', silent = true, desc = 'Toggle location list' },
     },
   },
   {
     'yegappan/greplace',
     keys = {
-      { '<leader>gc', '<Cmd>Gqfopen<CR><C-W>L', mode = 'n', silent = true },
+      { '<leader>gc', '<Cmd>Gqfopen<CR><C-W>L', mode = 'n', silent = true, desc = 'Replace in quickfix' },
     },
   },
 
