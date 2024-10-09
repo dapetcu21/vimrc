@@ -14,6 +14,8 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup('userconf.plugins')
 
+
+-- Copy path
 local function copy_path(absolute)
   local path = vim.fs.normalize(vim.fn.expand(absolute and '%:p' or '%:.'));
 
@@ -29,6 +31,16 @@ end
 vim.api.nvim_create_user_command('CopyPath', function () copy_path(false) end, {})
 vim.api.nvim_create_user_command('CopyFullPath', function () copy_path(true) end, {})
 
+
+-- Ripgrep or The Silver Searcher
+if vim.fn.executable("rg") == 1 then
+  vim.api.nvim_set_option_value("grepprg", "rg --vimgrep --smart-case --hidden", {})
+  vim.api.nvim_set_option_value("grepformat", "%f:%l:%c:%m", {})
+elseif vim.fn.executable("ag") == 1 then
+  vim.api.nvim_set_option_value("grepprg", "ag --nogroup --nocolor --column", {})
+  vim.api.nvim_set_option_value("grepformat", "%f:%l:%c:%m", {})
+end
+
 local function exec(cmd)
   require('toggleterm').exec(cmd)
 end
@@ -41,6 +53,61 @@ vim.api.nvim_create_user_command('RgPrecache', function ()
     exec([[ time ]] .. precache_cmd)
   end
 end, {})
+
+
+-- Keybindings and command mappings
+vim.cmd([[
+" Quick access to nohl
+nnoremap <silent><nowait> <space>n  <Cmd>nohl<CR>
+
+" Search visual selection or current word
+vnoremap <silent> <leader>/ y/\V<C-R>=escape(@",'/\')<CR><CR>
+nnoremap <silent> <leader>/ /\V<C-R>=expand('<cword>')<CR><CR>
+
+" Quick access to edit this file
+command! EditInit :execute "e " . stdpath("config") . "/init.vim"
+
+" Git untracked grep (grep everywhere except .gitignore'd files)
+command! -nargs=+ Gugrep :Ggrep -I --untracked <args>
+
+" Exit terminal
+tnoremap <silent><nowait> <leader><ESC> <C-\><C-n>
+]])
+
+
+-- Show filename in title bar
+vim.cmd([[
+if has("gui") || $TERM =~ '^\(screen\|xterm\)'
+  function! s:abbreviate_filename(fname, maxlen)
+    let l:short_name = strpart(a:fname, strlen(a:fname) - a:maxlen)
+    if short_name != a:fname
+      let l:short_name = "..." . short_name
+    end
+    return l:short_name
+  endfunction
+
+  function! UpdateTitle()
+    let l:pwd = s:abbreviate_filename(fnamemodify(getcwd(), ":~"), 30)
+    let l:fname = fnamemodify(expand("%"), ":.")
+    let l:hfname = fnamemodify(expand("%"), ":~")
+    if strlen(hfname) < strlen(fname)
+      let l:fname = hfname
+    end
+    let l:fname = s:abbreviate_filename(fname, 30)
+    let &titlestring = "[" . pwd . "] " . fname
+  endfunction
+
+  autocmd WinEnter * call UpdateTitle()
+  autocmd BufEnter * call UpdateTitle()
+
+  if $TERM == "screen"
+    set t_ts=^[k
+    set t_fs=^[\
+  endif
+  call UpdateTitle()
+  set title
+endif
+]])
 
 -- Load local configuration
 require('userconf.util').require_if_exists('local')

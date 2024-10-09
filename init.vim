@@ -8,15 +8,13 @@ catch /^Vim\%((\a\+)\)\=:E319/
   "lang is unsupported in this vim
 endtry
 
-"=== Load plugins
-lua require("userconf")
-
-"=== General settings
 if $COLORTERM == 'truecolor' || has('gui_running')
   set termguicolors
   set pumblend=20
 end
 
+
+"=== General settings
 if has('gui_running')
   set guifont=FiraCode\ Nerd\ Font\ Mono:h11
 end
@@ -34,38 +32,12 @@ set signcolumn=number
 set confirm
 filetype indent on
 
-" Ripgrep or The Silver Searcher
-if executable("rg")
-  set grepprg=rg\ --vimgrep\ --smart-case\ --hidden
-  set grepformat=%f:%l:%c:%m
-elseif executable('ag')
-  set grepprg=ag\ --nogroup\ --nocolor\ --column
-  set grepformat=%f:%l:%c:%m
-endif
-
 " Infinite terminal scrollback
 autocmd TermOpen * setlocal scrollback=-1
 
 " Disable some Neovide animations
 let g:neovide_cursor_trail_size = 0
 let g:neovide_scroll_animation_far_lines = 0
-
-"=== Keybindings and command mappings
-" Quick access to nohl
-nnoremap <silent><nowait> <space>n  <Cmd>nohl<CR>
-
-" Search visual selection or current word
-vnoremap <silent> <leader>/ y/\V<C-R>=escape(@",'/\')<CR><CR>
-nnoremap <silent> <leader>/ /\V<C-R>=expand('<cword>')<CR><CR>
-
-" Quick access to edit this file
-command! EditInit :execute "e " . stdpath("config") . "/init.vim"
-
-" Git untracked grep (grep everywhere except .gitignore'd files)
-command! -nargs=+ Gugrep :Ggrep -I --untracked <args>
-
-" Exit terminal
-tnoremap <silent><nowait> <leader><ESC> <C-\><C-n>
 
 
 "=== Indentation
@@ -81,35 +53,6 @@ au BufNewFile,BufRead *.vsh\|*.fsh\|*.fp\|*.vp setlocal filetype=glsl
 au BufNewFile,BufRead *.fui setlocal filetype=fuior
 
 
-"=== Show filename in title bar
+"=== Load plugins and Lua init
+lua require("userconf")
 
-if has("gui") || $TERM =~ '^\(screen\|xterm\)'
-  function! s:abbreviate_filename(fname, maxlen)
-    let l:short_name = strpart(a:fname, strlen(a:fname) - a:maxlen)
-    if short_name != a:fname
-      let l:short_name = "..." . short_name
-    end
-    return l:short_name
-  endfunction
-
-  function! UpdateTitle()
-    let l:pwd = s:abbreviate_filename(fnamemodify(getcwd(), ":~"), 30)
-    let l:fname = fnamemodify(expand("%"), ":.")
-    let l:hfname = fnamemodify(expand("%"), ":~")
-    if strlen(hfname) < strlen(fname)
-      let l:fname = hfname
-    end
-    let l:fname = s:abbreviate_filename(fname, 30)
-    let &titlestring = "[" . pwd . "] " . fname
-  endfunction
-
-  autocmd WinEnter * call UpdateTitle()
-  autocmd BufEnter * call UpdateTitle()
-
-  if $TERM == "screen"
-    set t_ts=^[k
-    set t_fs=^[\
-  endif
-  call UpdateTitle()
-  set title
-endif
