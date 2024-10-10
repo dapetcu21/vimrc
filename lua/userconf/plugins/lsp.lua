@@ -37,6 +37,9 @@ return {
         capabilities = capabilities,
       }))
 
+      -- Disable LSP logging. We can enable it if we need it
+      vim.lsp.set_log_level("off")
+
       -- Global mappings.
       -- See `:help vim.diagnostic.*` for documentation on any of the below functions
       vim.keymap.set('n', '<space>r', vim.diagnostic.open_float, { desc = 'Diagnostics: Open float' })
