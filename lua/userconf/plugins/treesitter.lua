@@ -1,7 +1,7 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdateSync",
+    build = ":TSUpdate",
     config = function()
       local parsers
       local configs
