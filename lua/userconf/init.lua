@@ -58,8 +58,7 @@ end, {})
 -- Keybindings and command mappings
 vim.api.nvim_set_keymap('n', '<space>n', '<Cmd>nohl<CR>', { silent = true, desc = "Clear search highlighting (nohl)" })
 vim.api.nvim_set_keymap('v', '<leader>/', [[y/\V<C-R>=escape(@",'/\')<CR><CR>]], { silent = true, desc = "Search visual selection" })
-vim.api.nvim_set_keymap('v', '<leader>/', [[/\V<C-R>=expand('<cword>')<CR><CR>]], { silent = true, desc = "Search word under cursor" })
-vim.api.nvim_set_keymap('t', '<leader><ESC>', [[<C-\><C-n>]], { silent = true, nowait = true, desc = "Exit terminal" })
+vim.api.nvim_set_keymap('n', '<leader>/', [[/\V<C-R>=expand('<cword>')<CR><CR>]], { silent = true, desc = "Search word under cursor" })
 
 vim.api.nvim_create_user_command('EditInit', ':execute "e " . stdpath("config") . "/init.vim"', {})
 vim.api.nvim_create_user_command('Gugrep', ':Ggrep -I --untracked <args>', { nargs = "+" })
