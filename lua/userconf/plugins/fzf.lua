@@ -47,7 +47,7 @@ return {
     keys = {
       { "<space>/", grep_visual, mode = 'v', silent = true, desc = 'Fzf: Grep visual selection' },
       { "<space>/", grep_cword, mode = 'n', silent = true, desc = 'Fzf: Grep word under cursor' },
-      { "<space>?", grep, mode = 'n', silent = true, desc = 'Fzf: Grep' },
+      { "<space><space>/", grep, mode = 'n', silent = true, desc = 'Fzf: Grep' },
       { "<C-/>", set_glob, mode = 'n', silent = true, desc = 'Fzf: Set glob pattern' },
       { "<space>z", "<Cmd>FzfLua<CR>", mode = 'n', silent = true, desc = 'Fzf' },
       { "<space>Z", "<Cmd>FzfLua resume<CR>", mode = 'n', silent = true, desc = 'Fzf: Resume' },
