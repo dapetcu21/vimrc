@@ -1,3 +1,7 @@
+local utility_file_types = {
+  'NvimTree', 'fugitive', 'diff', 'git', 'gitcommit', 'unite', 'qf', 'help', 'markdown', 'fzf', 'toggleterm', 'trouble', 'snacks_dashboard', 'snacks_picker_input', 'snacks_picker_preview'
+}
+
 return {
   { 'tikhomirov/vim-glsl' },
   { 'ap/vim-css-color' },
@@ -26,19 +30,18 @@ return {
     config = function ()
       require('illuminate').configure({
         modes_allowlist = { 'n', 'no' },
-        filetypes_deylist = { 'qf', 'trouble', 'NvimTree', 'fzf' },
+        filetypes_deylist = utility_file_types
       })
     end,
   },
   {
     'ntpeters/vim-better-whitespace',
+    event = 'BufReadPre',
     init = function ()
       vim.g.better_whitespace_enabled = 1
       vim.g.strip_whitespace_on_save = 0
       vim.g.show_spaces_that_precede_tabs = 1
-      vim.g.better_whitespace_filetypes_blacklist= {
-        'NvimTree', 'fugitive', 'diff', 'git', 'gitcommit', 'unite', 'qf', 'help', 'markdown', 'toggleterm', 'trouble'
-      }
+      vim.g.better_whitespace_filetypes_blacklist = utility_file_types
     end,
   },
 

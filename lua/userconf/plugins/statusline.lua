@@ -71,13 +71,6 @@ return {
           lualine_a = {
             {
               function ()
-                local possession_status
-                if package.loaded['nvim-possession'] ~= nil then
-                  possession_status = require("nvim-possession").status()
-                end
-                if possession_status ~= nil then
-                  return possession_status
-                end
                 return vim.fn.fnamemodify(vim.uv.cwd(), ':t')
               end
             },
