@@ -6,7 +6,7 @@ return {
       local parsers
       local configs
       local install
-      local ok, err = pcall(function ()
+      local ok, _ = pcall(function ()
         parsers = require "nvim-treesitter.parsers"
         configs = require "nvim-treesitter.configs"
         install = require "nvim-treesitter.install"
@@ -37,10 +37,22 @@ return {
         ignore_install = { "astro", "ocaml", "ocaml_interface" }
       end
 
+      local function disable(_, buf)
+        local max_filesize = 100 * 1024 -- 100 KB
+        local ok2, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+        if ok2 and stats and stats.size > max_filesize then
+          return true
+        end
+      end
+
       configs.setup {
-        ensure_installed = parser_list,
+        ensure_installed = { "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "json" },
         ignore_install = ignore_install,
-        highlight = { enable = true },
+        auto_install = true,
+        highlight = {
+          enable = true,
+          disable = disable,
+        },
         indent = { enable = false },
         incremental_selection = {
           enable = true,
@@ -50,29 +62,6 @@ return {
             scope_incremental = "grc",
             node_decremental = "grm",
           },
-        },
-        playground = {
-          enable = true,
-          disable = {},
-          updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
-          persist_queries = false, -- Whether the query persists across vim sessions
-          keybindings = {
-            toggle_query_editor = 'o',
-            toggle_hl_groups = 'i',
-            toggle_injected_languages = 't',
-            toggle_anonymous_nodes = 'a',
-            toggle_language_display = 'I',
-            focus_language = 'f',
-            unfocus_language = 'F',
-            update = 'R',
-            goto_node = '<cr>',
-            show_help = '?',
-          },
-        },
-        query_linter = {
-          enable = true,
-          use_virtual_text = true,
-          lint_events = {"BufWrite", "CursorHold"},
         },
       }
     end,
