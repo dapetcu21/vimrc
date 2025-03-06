@@ -21,7 +21,6 @@ return {
     },
   },
 
-  { 'editorconfig/editorconfig-vim' },
   { 'ii14/exrc.vim' },
 
   { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },

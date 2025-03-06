@@ -100,5 +100,8 @@ if has("gui") || $TERM =~ '^\(screen\|xterm\)'
 endif
 ]])
 
+-- Indentation
+require("userconf.indent").setup()
+
 -- Load local configuration
 require('userconf.util').require_if_exists('local')

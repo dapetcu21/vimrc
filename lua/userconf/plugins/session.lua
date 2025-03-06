@@ -18,6 +18,7 @@ return {
       vim.opt.sessionoptions:remove('terminal') -- Don't save terminals
       vim.opt.sessionoptions:remove('help')     -- Don't save help windows
       vim.opt.sessionoptions:remove('blank')    -- Don't save utility windows
+      vim.opt.sessionoptions:append('globals')  -- Save globals that start with Uppercase
 
       require('persistence').setup({
         dir = sessions_path .. "/",

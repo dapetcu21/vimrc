@@ -41,19 +41,6 @@ let g:neovide_cursor_trail_size = 0
 let g:neovide_scroll_animation_far_lines = 0
 
 
-"=== Indentation
-set expandtab shiftwidth=2 tabstop=2
-au FileType make   if get(b:, 'editorconfig_applied', 0) != 1 | setlocal noexpandtab | setlocal tabstop=4 | setlocal shiftwidth=4 | endif
-au FileType c      if get(b:, 'editorconfig_applied', 0) != 1 | setlocal noexpandtab | setlocal tabstop=4 | setlocal shiftwidth=4 | endif
-au FileType cpp    if get(b:, 'editorconfig_applied', 0) != 1 | setlocal noexpandtab | setlocal tabstop=4 | setlocal shiftwidth=4 | endif
-
-
-"=== File types
-au BufNewFile,BufRead *.script\|*.gui_script\|*.render_script\|*.editor_script\|*.lua_  setlocal filetype=lua
-au BufNewFile,BufRead *.vsh\|*.fsh\|*.fp\|*.vp setlocal filetype=glsl
-au BufNewFile,BufRead *.fui setlocal filetype=fuior
-
-
 "=== Load plugins and Lua init
 lua require("userconf")
 

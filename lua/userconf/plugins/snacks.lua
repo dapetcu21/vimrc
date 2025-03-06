@@ -1,14 +1,14 @@
 local function set_globs()
-  vim.ui.input({ prompt = 'Grep Filter Globs> ', default = vim.g.rg_glob or "" }, function (input)
+  vim.ui.input({ prompt = 'Grep Filter Globs> ', default = vim.g.Session_rg_glob or "" }, function (input)
     if input ~= nil then
-      vim.g.rg_glob = input
+      vim.g.Session_rg_glob = input
     end
   end)
 end
 
 local function get_globs()
   local globs = {}
-  for substring in (vim.g.rg_glob or ""):gmatch("%S+") do
+  for substring in (vim.g.Session_rg_glob or ""):gmatch("%S+") do
     table.insert(globs, substring)
   end
   return globs
