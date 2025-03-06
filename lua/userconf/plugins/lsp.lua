@@ -20,7 +20,7 @@ return {
 
     lazy = false,
     keys = {
-      { "<leader>,i", function () vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, mode = 'n', silent = true, desc = "LSP: Toggle Inlay Hints" }
+      { "<leader>mi", function () vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, mode = 'n', silent = true, desc = "LSP: Toggle Inlay Hints" }
     },
 
     config = function ()

@@ -17,24 +17,67 @@ end
 return {
   "folke/snacks.nvim",
 
-  opts = {
-    picker = {},
-    explorer = {},
-    dashboard = {}
-  },
+  opts = function ()
+    local persistence = require("persistence")
+    local persistence_config = require("persistence.config")
+    local uv = vim.uv or vim.loop
+
+    local items = {}
+    local have = {}
+    for _, session in ipairs(persistence.list()) do
+      if uv.fs_stat(session) then
+        local file = session:sub(#persistence_config.options.dir + 1, -5)
+        local dir, branch = unpack(vim.split(file, "%%", { plain = true }))
+        dir = dir:gsub("%%", "/")
+        if jit.os:find("Windows") then
+          dir = dir:gsub("^(%w)/", "%1:/")
+        end
+        if not have[dir] then
+          have[dir] = true
+          items[#items + 1] = dir
+        end
+      end
+    end
+
+    return {
+      picker = {},
+      explorer = {},
+      dashboard = {
+        preset = {
+          keys = {
+            { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+            { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
+            { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
+            { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
+            { icon = " ", key = "c", desc = "Config", action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
+            { icon = " ", key = "s", desc = "Restore Session", section = "session" },
+            { icon = "󰒲 ", key = "L", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
+          },
+        },
+        sections = {
+          { section = "header" },
+          { section = "keys", gap = 1, padding = 2 },
+          { title = "Sessions", padding = 1 },
+          { section = "projects", dirs = items, padding = 1 },
+          { section = "startup" },
+        },
+      },
+    }
+  end,
 
   lazy = false,
 
   keys = {
     -- Top Pickers & Explorer
-    { "<leader><space>", function() Snacks.picker.smart() end, desc = "Smart Find Files" },
+    { "<leader><leader>", function() Snacks.picker.smart() end, desc = "Smart Find Files" },
     { "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
-    { "<leader>/", function() Snacks.picker.grep({ glob = get_globs() }) end, desc = "Grep" },
-    { "<leader>,,/", set_globs, desc = "Set Grep Globs" },
-    { "<leader>,/", function() Snacks.picker.grep_word({ live = true, glob = get_globs() }) end, desc = "Visual selection or word", mode = { "n", "x" } },
     { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command History" },
-    { "<leader>n", function() Snacks.picker.notifications() end, desc = "Notification History" },
+    { "<leader>n", function() Snacks.picker.notifications() end, desc = "Notification History" }, -- TODO: Notifications are currently handled by Noice
     { "<leader>e", function() Snacks.explorer() end, desc = "File Explorer" },
+    -- Top Grep
+    { "<leader>/", function() Snacks.picker.grep({ glob = get_globs() }) end, desc = "Grep" },
+    { "<leader>mm", set_globs, desc = "Set Grep Globs" },
+    { "<leader>m/", function() Snacks.picker.grep_word({ live = true, glob = get_globs() }) end, desc = "Grep for Visual Selection or Word", mode = { "n", "x" } },
     -- find
     { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
     { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
@@ -52,9 +95,9 @@ return {
     { "<leader>gf", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
     -- Grep
     { "<leader>sb", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
-    { "<leader>sB", function() Snacks.picker.grep_buffers() end, desc = "Grep Open Buffers" },
+    { "<leader>sB", function() Snacks.picker.grep_buffers() end, desc = "Grep in Open Buffers" },
     { "<leader>sg", function() Snacks.picker.grep({ glob = get_globs() }) end, desc = "Grep" },
-    { "<leader>sw", function() Snacks.picker.grep_word({ live = true, glob = get_globs() }) end, desc = "Visual selection or word", mode = { "n", "x" } },
+    { "<leader>sw", function() Snacks.picker.grep_word({ live = true, glob = get_globs() }) end, desc = "Grep for Visual Selection or Word", mode = { "n", "x" } },
     -- search
     { '<leader>s"', function() Snacks.picker.registers() end, desc = "Registers" },
     { '<leader>s/', function() Snacks.picker.search_history() end, desc = "Search History" },
