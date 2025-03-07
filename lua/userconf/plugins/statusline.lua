@@ -107,6 +107,7 @@ return {
         group = augroup,
         callback = function()
           lualine.refresh({
+            scope = "window",
             place = { "statusline" },
           })
         end,
@@ -125,6 +126,7 @@ return {
           timer:start(50, 0,
             vim.schedule_wrap(function()
               lualine.refresh({
+                scope = "window",
                 place = { "statusline" },
               })
             end)
