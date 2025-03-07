@@ -11,16 +11,31 @@ return {
         newfile = '[New]',
       }
 
-      local symbols = require('trouble').statusline({
-        mode = "lsp_document_symbols",
-        groups = {},
-        title = false,
-        filter = { range = true },
-        format = "{kind_icon}{symbol.name:Normal}",
-        -- The following line is needed to fix the background color
-        -- Set it to the lualine section you want to use
-        hl_group = "lualine_c_normal",
-      })
+      local symbols_cached
+      local function load_symbols()
+        if symbols_cached == nil and require("lazy.core.config").plugins["trouble.nvim"]._.loaded then
+          symbols_cached = require('trouble').statusline({
+            mode = "lsp_document_symbols",
+            groups = {},
+            title = false,
+            filter = { range = true },
+            format = "{kind_icon}{symbol.name:Normal}",
+            -- The following line is needed to fix the background color
+            -- Set it to the lualine section you want to use
+            hl_group = "lualine_c_normal",
+          })
+        end
+      end
+
+      local symbols = {
+        has = function()
+          load_symbols()
+          return symbols_cached ~= nil and symbols_cached.has()
+        end,
+        get = function()
+          return symbols_cached.get()
+        end,
+      }
 
       local function recording_status()
         local recording_register = vim.fn.reg_recording()

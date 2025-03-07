@@ -52,6 +52,18 @@ return {
       open_mapping = '<C-t>',
       insert_mappings =  false,
     },
+    cmd = {
+      "ToggleTerm",
+      "ToggleTermSendCurrentLine",
+      "ToggleTermSendVisualLines",
+      "ToggleTermSendVisualSelection",
+      "ToggleTermSetName",
+      "ToggleTermToggleAll",
+    },
+    keys = {
+      { "<C-t>", mode = "n", desc = "Toggle Terminal" },
+    },
+
     init = function ()
       -- Use PowerShell on Windows
       if vim.fn.has('win32') == 1 then
