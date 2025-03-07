@@ -32,12 +32,15 @@ return {
   {
     "folke/trouble.nvim",
 
+    dependencies = {
+      "folke/snacks.nvim"
+    },
+
     specs = {
       "folke/snacks.nvim",
       opts = function(_, opts)
         return vim.tbl_deep_extend("force", opts or {}, {
           picker = {
-            actions = require("trouble.sources.snacks").actions,
             win = {
               input = {
                 keys = {
@@ -64,7 +67,19 @@ return {
         },
       },
     },
+
+    config = function(opts)
+      require('trouble').setup(opts)
+      if Snacks and Snacks.picker then
+        for k, v in pairs(require("trouble.sources.snacks").actions) do
+          Snacks.picker.actions[k] = v
+        end
+      end
+    end,
+
     cmd = "Trouble",
+    event = "VeryLazy",
+
     keys = {
       {
         "<leader>td",
