@@ -25,27 +25,8 @@ return {
     },
     dependencies = {
       "MunifTanjim/nui.nvim",
-      "rcarriga/nvim-notify",
+      "folke/snacks.nvim"
     }
-  },
-
-  {
-    "dapetcu21/nvim-notify",
-    branch = "slide-out",
-
-    config = function ()
-      local notify = require("notify")
-
-      notify.setup({
-        render = "wrapped-compact",
-        stages = "slide_out",
-      })
-      vim.notify = notify
-
-      vim.api.nvim_create_user_command('NotifyDismiss', function ()
-        notify.dismiss({ pending = true, silent = true })
-      end, {})
-    end,
   },
 
   {

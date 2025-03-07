@@ -27,7 +27,7 @@ return {
     for _, session in ipairs(persistence.list()) do
       if uv.fs_stat(session) then
         local file = session:sub(#persistence_config.options.dir + 1, -5)
-        local dir, branch = unpack(vim.split(file, "%%", { plain = true }))
+        local dir, _ = unpack(vim.split(file, "%%", { plain = true }))
         dir = dir:gsub("%%", "/")
         if jit.os:find("Windows") then
           dir = dir:gsub("^(%w)/", "%1:/")
@@ -41,6 +41,7 @@ return {
 
     return {
       picker = {},
+      notifier = {},
       explorer = {},
       dashboard = {
         preset = {
