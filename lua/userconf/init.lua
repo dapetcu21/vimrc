@@ -104,4 +104,4 @@ endif
 require("userconf.indent").setup()
 
 -- Load local configuration
-require('userconf.util').require_if_exists('local')
+require("userconf.local").setup()
