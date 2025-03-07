@@ -71,7 +71,7 @@ return {
           lualine_a = {
             {
               function ()
-                return vim.fn.fnamemodify(vim.uv.cwd(), ':t')
+                return vim.fn.fnamemodify(vim.uv.cwd() or "", ':t')
               end
             },
           },
