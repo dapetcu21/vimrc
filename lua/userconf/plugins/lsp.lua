@@ -1,22 +1,46 @@
 return {
   {
-    'ms-jpq/coq_nvim',
-    branch = 'coq',
-    build = ':COQdeps',
-    init = function ()
-      vim.g.coq_settings = { auto_start = 'shut-up' }
-    end,
-  },
+    'saghen/blink.cmp',
+    version = 'v0.13.1',
 
-  {
-    'ms-jpq/coq.artifacts',
-    branch = 'artifacts',
-    dependencies = { 'ms-jpq/coq_nvim' }
+    dependencies = 'rafamadriz/friendly-snippets',
+
+    opts = {
+      keymap = {
+        preset = "enter",
+        ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
+        ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
+      },
+
+      completion = {
+        list = {
+          selection = {
+            preselect = false,
+            auto_insert = false,
+          },
+        },
+        documentation = { auto_show = true, auto_show_delay_ms = 500 },
+        ghost_text = { enabled = true },
+      },
+
+      appearance = {
+        use_nvim_cmp_as_default = true,
+        nerd_font_variant = 'mono'
+      },
+
+      sources = {
+        default = { 'lsp', 'path', 'snippets', 'buffer' },
+      },
+
+      fuzzy = { implementation = "prefer_rust_with_warning" },
+
+      signature = { enabled = true },
+    },
+    opts_extend = { "sources.default" }
   },
 
   {
     'neovim/nvim-lspconfig',
-    dependencies = { 'ms-jpq/coq_nvim' },
 
     lazy = false,
     keys = {
@@ -25,17 +49,10 @@ return {
 
     config = function ()
       local lsp = require "lspconfig"
-      local coq = require "coq"
 
-      lsp.clangd.setup(coq.lsp_ensure_capabilities({}))
-      lsp.lua_ls.setup(coq.lsp_ensure_capabilities({}))
-
-      --Enable (broadcasting) snippet capability for completion
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
-      capabilities.textDocument.completion.completionItem.snippetSupport = true
-      lsp.jsonls.setup(coq.lsp_ensure_capabilities({
-        capabilities = capabilities,
-      }))
+      lsp.clangd.setup{}
+      lsp.lua_ls.setup{}
+      lsp.jsonls.setup{}
 
       -- Disable LSP logging. We can enable it if we need it
       vim.lsp.set_log_level("off")
@@ -55,9 +72,6 @@ return {
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('UserLspConfig', {}),
         callback = function(ev)
-          -- Enable completion triggered by <c-x><c-o>
-          vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
-
           -- Buffer local mappings.
           -- See `:help vim.lsp.*` for documentation on any of the below functions
           local opts = function(desc) return { buffer = ev.buf, desc = desc } end
