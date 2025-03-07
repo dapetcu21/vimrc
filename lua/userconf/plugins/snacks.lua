@@ -73,7 +73,8 @@ return {
     { "<leader><leader>", function() Snacks.picker.smart() end, desc = "Smart Find Files" },
     { "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
     { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command History" },
-    { "<leader>n", function() Snacks.picker.notifications() end, desc = "Notification History" }, -- TODO: Notifications are currently handled by Noice
+    { "<leader>n", function() Snacks.picker.noice() end, desc = "Notification History" },
+    { "<leader>mn", function() Snacks.notifier.hide() end, desc = "Hide Notifications" },
     { "<leader>e", function() Snacks.explorer() end, desc = "File Explorer" },
     -- Top Grep
     { "<leader>/", function() Snacks.picker.grep({ glob = get_globs() }) end, desc = "Grep" },
