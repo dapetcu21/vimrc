@@ -5,19 +5,68 @@ return {
     event = "VeryLazy",
 
     dependencies = {
-      "jay-babu/mason-nvim-dap.nvim",
+      {
+        "jay-babu/mason-nvim-dap.nvim",
+        opts = {
+          automatic_installation = true,
+          handlers = {
+            function(config)
+              local function persistent_input(key, skip_if_set, prompt, default, ...)
+                local session_key = "Session_" .. key
+                local stored = vim.g[session_key]
+
+                if skip_if_set and stored ~= nil then
+                  return stored
+                end
+
+                default = stored or default
+
+                local result = vim.fn.input(prompt, default, ...)
+                if result ~= nil then
+                  vim.g[session_key] = result
+                end
+
+                return result
+              end
+
+              if config.name == "codelldb" then
+                local function get_program(skip_if_set)
+                  return function ()
+                    return persistent_input("codelldb_program", skip_if_set, "Path to executable: ", vim.fn.getcwd() .. "/", "file")
+                  end
+                end
+
+                local function get_args(skip_if_set)
+                  return function ()
+                    return vim.split(persistent_input("codelldb_args", skip_if_set, "Args: ", "") or "", " +", { trimempty = true })
+                  end
+                end
+
+                config.configurations[1].program = get_program(false)
+                config.configurations[2].program = get_program(false)
+                config.configurations[2].args = get_args(false)
+
+                table.insert(config.configurations, 1, {
+                  name = 'LLDB: Launch last program',
+                  type = 'codelldb',
+                  request = 'launch',
+                  program = get_program(true),
+                  cwd = '${workspaceFolder}',
+                  stopOnEntry = false,
+                  args = get_args(true),
+                  console = 'integratedTerminal',
+                })
+              end
+
+              require("mason-nvim-dap").default_setup(config)
+            end,
+          },
+        }
+      },
     },
 
     config = function()
       local dap = require("dap")
-
-      dap.adapters.lldb = {
-        type = "executable",
-        command = "/usr/local/opt/llvm/bin/lldb-vscode",
-        name = "lldb"
-      }
-      dap.configurations.lldb = dap.configurations.lldb or {}
-      dap.configurations.cpp = dap.configurations.lldb
 
       dap.listeners.after.event_initialized["dapui_config"] = function()
         require("dapui").open()
@@ -40,33 +89,16 @@ return {
     },
 
     keys = {
-      { "<leader>d", "<Cmd>DapLoadLaunchJSON<CR><Cmd>DapContinue<CR>", mode = "n", silent = true, desc = "DAP: Start/Continue debugging" },
+      { "<F5>", "<Cmd>DapContinue<CR>", mode = "n", silent = true, desc = "DAP: Start/Continue debugging" },
+      { "<F9>", "<Cmd>DapToggleBreakpoint<CR>", mode = "n", silent = true, desc = "DAP: Toggle breakpoint" },
+      { "<F11>", "<Cmd>DapStepInto<CR>", mode = "n", silent = true, desc = "DAP: Step into" },
+      { "<S-F11>", "<Cmd>DapStepOut<CR>", mode = "n", silent = true, desc = "DAP: Step out" },
+      { "<F10>", "<Cmd>DapStepOver<CR>", mode = "n", silent = true, desc = "DAP: Step over" },
     },
 
     config = function ()
-      local dapui = require("dapui")
-
-      dapui.setup({
-        layouts = {
-          {
-            elements = {
-              { id = "scopes", size = 0.4 },
-              { id = "breakpoints", size = 0.1 },
-              { id = "stacks", size = 0.4 },
-              { id = "watches", size = 0.1 },
-            },
-            size = 45,
-            position = "left", -- Can be "left" or "right"
-          },
-          {
-            elements = {
-              "repl"
-            },
-            size = 10,
-            position = "bottom", -- Can be "bottom" or "top"
-          },
-        },
-      })
-    end,
+      require("dapui").setup()
+      vim.fn.sign_define("DapBreakpoint", { text = "🐞" });
+    end
   },
 }
