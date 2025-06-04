@@ -56,6 +56,18 @@ return {
                   args = get_args(true),
                   console = 'integratedTerminal',
                 })
+
+                table.insert(config.configurations, {
+                  name = 'LLDB: Attach to process',
+                  type = 'codelldb',
+                  request = 'attach',
+                  cwd = '${workspaceFolder}',
+                  pid = function ()
+                    return tonumber(vim.fn.input("PID: "))
+                  end,
+                  stopOnEntry = false,
+                  console = 'integratedTerminal',
+                })
               end
 
               require("mason-nvim-dap").default_setup(config)
