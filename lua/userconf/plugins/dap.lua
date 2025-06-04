@@ -96,7 +96,7 @@ return {
               request = 'attach',
               cwd = '${workspaceFolder}',
               pid = function ()
-                return tonumber(vim.fn.input("PID: "))
+                return require('dap.utils').pick_process()
               end,
               stopOnEntry = false,
               console = 'integratedTerminal',
