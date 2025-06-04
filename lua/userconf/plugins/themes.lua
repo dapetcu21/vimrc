@@ -3,6 +3,8 @@ return {
 
   {
     "f-person/auto-dark-mode.nvim",
+    priority = 999,
+
     config = function ()
       require('auto-dark-mode').setup({
         update_interval = 2000,
