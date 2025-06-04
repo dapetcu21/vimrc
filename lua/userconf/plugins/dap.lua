@@ -25,7 +25,13 @@ return {
     },
 
     config = function()
-      vim.fn.sign_define("DapBreakpoint", { text = "🐞" });
+      vim.cmd("hi DapBreakpointColor guifg=#fa4848")
+      vim.cmd("hi DapStoppedColor guifg=#cbfa48")
+      vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DapBreakpointColor" });
+      vim.fn.sign_define("DapBreakpointCondition", { text = "", texthl = "DapBreakpointColor" });
+      vim.fn.sign_define("DapBreakpointRejected", { text = "", texthl = "DapBreakpointColor" });
+      vim.fn.sign_define("DapLogPoint", { text = "", texthl = "DapBreakpointColor" });
+      vim.fn.sign_define("DapStopped", { text = "", texthl = "DapStoppedColor" });
     end
   },
 
