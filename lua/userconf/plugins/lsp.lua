@@ -39,6 +39,11 @@ return {
   },
 
   {
+      "mason-org/mason.nvim",
+      opts = {}
+  },
+
+  {
     'neovim/nvim-lspconfig',
 
     lazy = false,
@@ -47,12 +52,6 @@ return {
     },
 
     config = function ()
-      local lsp = require "lspconfig"
-
-      lsp.clangd.setup{}
-      lsp.lua_ls.setup{}
-      lsp.jsonls.setup{}
-
       -- Disable LSP logging. We can enable it if we need it
       vim.lsp.set_log_level("off")
 
@@ -91,6 +90,15 @@ return {
         end,
       })
     end,
+  },
+
+  {
+      "mason-org/mason-lspconfig.nvim",
+      opts = {},
+      dependencies = {
+          "mason-org/mason.nvim",
+          "neovim/nvim-lspconfig",
+      },
   },
 
   {

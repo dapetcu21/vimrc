@@ -2,7 +2,5 @@
 set -e
 
 if [ $(uname) == "Darwin" ]; then
-  brew install ripgrep fd node llvm lua-language-server
+  brew install neovim ripgrep fd llvm
 fi
-
-npm install -g typescript vscode-langservers-extracted
