@@ -101,6 +101,9 @@ endif
 ]])
 
 -- Indentation
+require("userconf.lsp").setup()
+
+-- Indentation
 require("userconf.indent").setup()
 
 -- Load local configuration

@@ -2,85 +2,107 @@ return {
   {
     "mfussenegger/nvim-dap",
 
-    event = "VeryLazy",
-
     dependencies = {
-      {
-        "jay-babu/mason-nvim-dap.nvim",
-        opts = {
-          automatic_installation = true,
-          handlers = {
-            function(config)
-              local function persistent_input(key, skip_if_set, prompt, default, ...)
-                local session_key = "Session_" .. key
-                local stored = vim.g[session_key]
+      "jay-babu/mason-nvim-dap.nvim",
+    },
 
-                if skip_if_set and stored ~= nil then
-                  return stored
-                end
-
-                default = stored or default
-
-                local result = vim.fn.input(prompt, default, ...)
-                if result ~= nil then
-                  vim.g[session_key] = result
-                end
-
-                return result
-              end
-
-              if config.name == "codelldb" then
-                local function get_program(skip_if_set)
-                  return function ()
-                    return persistent_input("codelldb_program", skip_if_set, "Path to executable: ", vim.fn.getcwd() .. "/", "file")
-                  end
-                end
-
-                local function get_args(skip_if_set)
-                  return function ()
-                    return vim.split(persistent_input("codelldb_args", skip_if_set, "Args: ", "") or "", " +", { trimempty = true })
-                  end
-                end
-
-                config.configurations[1].program = get_program(false)
-                config.configurations[2].program = get_program(false)
-                config.configurations[2].args = get_args(false)
-
-                table.insert(config.configurations, 1, {
-                  name = 'LLDB: Launch last program',
-                  type = 'codelldb',
-                  request = 'launch',
-                  program = get_program(true),
-                  cwd = '${workspaceFolder}',
-                  stopOnEntry = false,
-                  args = get_args(true),
-                  console = 'integratedTerminal',
-                })
-
-                table.insert(config.configurations, {
-                  name = 'LLDB: Attach to process',
-                  type = 'codelldb',
-                  request = 'attach',
-                  cwd = '${workspaceFolder}',
-                  pid = function ()
-                    return tonumber(vim.fn.input("PID: "))
-                  end,
-                  stopOnEntry = false,
-                  console = 'integratedTerminal',
-                })
-              end
-
-              require("mason-nvim-dap").default_setup(config)
-            end,
-          },
-        }
-      },
+    cmd = {
+      "DapContinue",
+      "DapDisconnect",
+      "DapNew",
+      "DapTerminate",
+      "DapRestartFrame",
+      "DapStepInto",
+      "DapStepOut",
+      "DapStepOver",
+      "DapPause",
+      "DapEval",
+      "DapToggleRepl",
+      "DapClearBreakpoints",
+      "DapToggleBreakpoint",
+      "DapSetLogLevel",
+      "DapShowLog",
     },
 
     config = function()
       vim.fn.sign_define("DapBreakpoint", { text = "🐞" });
-    end,
+    end
   },
+
+  {
+    "jay-babu/mason-nvim-dap.nvim",
+
+    lazy = true,
+
+    opts = {
+      automatic_installation = true,
+      handlers = {
+        function(config)
+          local function persistent_input(key, skip_if_set, prompt, default, ...)
+            local session_key = "Session_" .. key
+            local stored = vim.g[session_key]
+
+            if skip_if_set and stored ~= nil then
+              return stored
+            end
+
+            default = stored or default
+
+            local result = vim.fn.input(prompt, default, ...)
+            if result ~= nil then
+              vim.g[session_key] = result
+            end
+
+            return result
+          end
+
+          if config.name == "codelldb" then
+            local function get_program(skip_if_set)
+              return function ()
+                return persistent_input("codelldb_program", skip_if_set, "Path to executable: ", vim.fn.getcwd() .. "/", "file")
+              end
+            end
+
+            local function get_args(skip_if_set)
+              return function ()
+                return vim.split(persistent_input("codelldb_args", skip_if_set, "Args: ", "") or "", " +", { trimempty = true })
+              end
+            end
+
+            config.configurations[1].program = get_program(false)
+            config.configurations[2].program = get_program(false)
+            config.configurations[2].args = get_args(false)
+
+            table.insert(config.configurations, 1, {
+              name = 'LLDB: Launch last program',
+              type = 'codelldb',
+              request = 'launch',
+              program = get_program(true),
+              cwd = '${workspaceFolder}',
+              stopOnEntry = false,
+              args = get_args(true),
+              console = 'integratedTerminal',
+            })
+
+            table.insert(config.configurations, {
+              name = 'LLDB: Attach to process',
+              type = 'codelldb',
+              request = 'attach',
+              cwd = '${workspaceFolder}',
+              pid = function ()
+                return tonumber(vim.fn.input("PID: "))
+              end,
+              stopOnEntry = false,
+              console = 'integratedTerminal',
+            })
+          end
+
+          require("mason-nvim-dap").default_setup(config)
+        end,
+      },
+    }
+  },
+
   {
     "rcarriga/nvim-dap-ui",
 
