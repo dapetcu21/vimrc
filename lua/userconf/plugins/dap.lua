@@ -89,6 +89,8 @@ return {
     dependencies = {
       "jay-babu/mason-nvim-dap.nvim",
       { "dapetcu21/nvim-vsdbg", opts = {} },
+      "igorlfs/nvim-dap-view",
+      "theHamsta/nvim-dap-virtual-text",
     },
 
     cmd = {
@@ -107,6 +109,14 @@ return {
       "DapToggleBreakpoint",
       "DapSetLogLevel",
       "DapShowLog",
+    },
+
+    keys = {
+      { "<F5>", "<Cmd>DapContinue<CR>", mode = "n", silent = true, desc = "DAP: Start/Continue debugging" },
+      { "<F9>", "<Cmd>DapToggleBreakpoint<CR>", mode = "n", silent = true, desc = "DAP: Toggle breakpoint" },
+      { "<F11>", "<Cmd>DapStepInto<CR>", mode = "n", silent = true, desc = "DAP: Step into" },
+      { "<S-F11>", "<Cmd>DapStepOut<CR>", mode = "n", silent = true, desc = "DAP: Step out" },
+      { "<F10>", "<Cmd>DapStepOver<CR>", mode = "n", silent = true, desc = "DAP: Step over" },
     },
 
     config = function()
@@ -168,20 +178,49 @@ return {
   },
 
   {
+    "igorlfs/nvim-dap-view",
+
+    lazy = true,
+
+    keys = {
+      { "<leader>dw", "<Cmd>DapViewWatch<CR>", mode = { "n", "v" }, silent = true, desc = "DAP: Add selection to watches" },
+    },
+
+    config = function()
+      local dv = require("dap-view")
+      local dap = require("dap")
+
+      dv.setup({
+        winbar = {
+          controls = { enabled = true },
+        },
+        switchbuf = "usevisible,usetab,newtab"
+      })
+
+      dap.defaults.fallback.switchbuf = "usevisible,usetab,newtab"
+
+      dap.listeners.before.attach["dap-view-config"] = function()
+        dv.open()
+      end
+      dap.listeners.before.launch["dap-view-config"] = function()
+        dv.open()
+      end
+      dap.listeners.before.event_terminated["dap-view-config"] = function()
+        dv.close()
+      end
+      dap.listeners.before.event_exited["dap-view-config"] = function()
+        dv.close()
+      end
+    end
+  },
+
+  --[[
+  {
     "rcarriga/nvim-dap-ui",
 
     dependencies = {
       "mfussenegger/nvim-dap",
       "nvim-neotest/nvim-nio",
-      "theHamsta/nvim-dap-virtual-text"
-    },
-
-    keys = {
-      { "<F5>", "<Cmd>DapContinue<CR>", mode = "n", silent = true, desc = "DAP: Start/Continue debugging" },
-      { "<F9>", "<Cmd>DapToggleBreakpoint<CR>", mode = "n", silent = true, desc = "DAP: Toggle breakpoint" },
-      { "<F11>", "<Cmd>DapStepInto<CR>", mode = "n", silent = true, desc = "DAP: Step into" },
-      { "<S-F11>", "<Cmd>DapStepOut<CR>", mode = "n", silent = true, desc = "DAP: Step out" },
-      { "<F10>", "<Cmd>DapStepOver<CR>", mode = "n", silent = true, desc = "DAP: Step over" },
     },
 
     config = function ()
@@ -203,4 +242,5 @@ return {
       end
     end
   },
+  ]]--
 }
