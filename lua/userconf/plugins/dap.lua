@@ -1,9 +1,94 @@
+local function persistent_input(key, skip_if_set, prompt, default, ...)
+  local session_key = "Session_" .. key
+  local stored = vim.g[session_key]
+
+  if skip_if_set and stored ~= nil then
+    return stored
+  end
+
+  default = stored or default
+
+  local result = vim.fn.input(prompt, default, ...)
+  if result ~= nil then
+    vim.g[session_key] = result
+  end
+
+  return result
+end
+
+local function make_get_program(persistence_key)
+  return function (skip_if_set)
+    return function ()
+      return persistent_input(persistence_key, skip_if_set, "Path to executable: ", vim.fn.getcwd() .. "/", "file")
+    end
+  end
+end
+
+local function make_get_args(persistence_key)
+  return function (skip_if_set)
+    return function ()
+      return vim.split(persistent_input(persistence_key, skip_if_set, "Args: ", "") or "", " +", { trimempty = true })
+    end
+  end
+end
+
+local function pick_process()
+  return require('dap.utils').pick_process()
+end
+
+local function add_vsdbg_configs()
+  local get_program = make_get_program("cppvsdbg_program")
+  local get_args = make_get_args("cppvsdbg_args")
+
+  local dap = require("dap")
+
+  if dap.adapters.cppvsdbg ~= nil then
+    local configs = {
+      {
+        name = 'VSDBG: Launch last program',
+        type = 'cppvsdbg',
+        request = 'launch',
+        program = get_program(true),
+        cwd = '${workspaceFolder}',
+        args = get_args(true),
+      },
+      {
+        name = 'VSDBG: Launch',
+        type = 'cppvsdbg',
+        request = 'launch',
+        program = get_program(false),
+        cwd = '${workspaceFolder}',
+        args = {},
+      },
+      {
+        name = 'VSDBG: Launch (args)',
+        type = 'cppvsdbg',
+        request = 'launch',
+        program = get_program(false),
+        cwd = '${workspaceFolder}',
+        args = get_args(false),
+      },
+      {
+        name = 'VSDBG: Attach to process',
+        type = 'cppvsdbg',
+        request = 'attach',
+        cwd = '${workspaceFolder}',
+        processId = pick_process
+      },
+    }
+
+    dap.configurations.c = vim.list_extend(dap.configurations.c or {}, configs)
+    dap.configurations.cpp = vim.list_extend(dap.configurations.cpp or {}, configs)
+  end
+end
+
 return {
   {
     "mfussenegger/nvim-dap",
 
     dependencies = {
       "jay-babu/mason-nvim-dap.nvim",
+      { "dapetcu21/nvim-vsdbg", opts = {} },
     },
 
     cmd = {
@@ -32,6 +117,8 @@ return {
       vim.fn.sign_define("DapBreakpointRejected", { text = "", texthl = "DapBreakpointColor" });
       vim.fn.sign_define("DapLogPoint", { text = "", texthl = "DapBreakpointColor" });
       vim.fn.sign_define("DapStopped", { text = "", texthl = "DapStoppedColor" });
+
+      add_vsdbg_configs()
     end
   },
 
@@ -44,36 +131,9 @@ return {
       automatic_installation = true,
       handlers = {
         function(config)
-          local function persistent_input(key, skip_if_set, prompt, default, ...)
-            local session_key = "Session_" .. key
-            local stored = vim.g[session_key]
-
-            if skip_if_set and stored ~= nil then
-              return stored
-            end
-
-            default = stored or default
-
-            local result = vim.fn.input(prompt, default, ...)
-            if result ~= nil then
-              vim.g[session_key] = result
-            end
-
-            return result
-          end
-
           if config.name == "codelldb" then
-            local function get_program(skip_if_set)
-              return function ()
-                return persistent_input("codelldb_program", skip_if_set, "Path to executable: ", vim.fn.getcwd() .. "/", "file")
-              end
-            end
-
-            local function get_args(skip_if_set)
-              return function ()
-                return vim.split(persistent_input("codelldb_args", skip_if_set, "Args: ", "") or "", " +", { trimempty = true })
-              end
-            end
+            local get_program = make_get_program("codelldb_program")
+            local get_args = make_get_args("codelldb_args")
 
             config.configurations[1].program = get_program(false)
             config.configurations[2].program = get_program(false)
@@ -95,9 +155,7 @@ return {
               type = 'codelldb',
               request = 'attach',
               cwd = '${workspaceFolder}',
-              pid = function ()
-                return require('dap.utils').pick_process()
-              end,
+              pid = pick_process,
               stopOnEntry = false,
               console = 'integratedTerminal',
             })
