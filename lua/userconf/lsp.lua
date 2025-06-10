@@ -33,10 +33,10 @@ function M.setup()
       vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, opts('LSP: Go to type definition'))
       vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts('LSP: Rename symbol'))
       vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts('LSP: Go to references'))
-      vim.keymap.set('n', '<leader>=', function()
+      vim.keymap.set({'n', 'v'}, '<leader>=', function()
         vim.lsp.buf.format { async = true }
       end, opts('LSP: Auto-format'))
-      vim.keymap.set('n', '<leader>a', vim.lsp.buf.code_action, opts('LSP: Code actions'))
+      vim.keymap.set({'n', 'v'}, '<leader>a', vim.lsp.buf.code_action, opts('LSP: Code actions'))
     end,
   })
 end
