@@ -82,6 +82,22 @@ local function add_vsdbg_configs()
   end
 end
 
+local function add_nlua_configs()
+  local dap = require("dap")
+
+  dap.configurations.lua = {
+    {
+      type = 'nlua',
+      request = 'attach',
+      name = "Attach to running Neovim instance",
+    }
+  }
+
+  dap.adapters.nlua = function(callback, config)
+    callback({ type = 'server', host = config.host or "127.0.0.1", port = config.port or 8086 })
+  end
+end
+
 return {
   {
     "mfussenegger/nvim-dap",
@@ -129,7 +145,19 @@ return {
       vim.fn.sign_define("DapStopped", { text = "", texthl = "DapStoppedColor" });
 
       add_vsdbg_configs()
+      add_nlua_configs()
     end
+  },
+
+  {
+    "jbyuki/one-small-step-for-vimkind",
+    dependencies = { "mfussenegger/nvim-dap" },
+    lazy = true,
+    init = function ()
+      vim.api.nvim_create_user_command('OSVLaunch', function ()
+        require("osv").launch({port = 8086})
+      end, {})
+    end,
   },
 
   {
