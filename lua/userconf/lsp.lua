@@ -23,11 +23,21 @@ function M.setup()
   vim.keymap.set('n', '<leader>rl', vim.diagnostic.setloclist, { desc = 'Diagnostics: Set loclist' })
   vim.keymap.set('n', '<leader>mi', function () vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, { silent = true, desc = "LSP: Toggle Inlay Hints" })
 
+  local augroup = vim.api.nvim_create_augroup('UserLspConfig', {})
+
+  vim.api.nvim_create_user_command('ToggleFormatOnWrite', function ()
+    local setting = vim.g.Session_format_on_write
+    setting = (setting == true or setting == 1)
+    vim.g.Session_format_on_write = setting and 0 or 1
+    vim.notify(setting and 'Format on write disabled' or 'Format on write enabled', vim.log.levels.INFO)
+  end, { desc = 'Toggles LSP format on buffer write' })
+
   -- Use LspAttach autocommand to only map the following keys
   -- after the language server attaches to the current buffer
   vim.api.nvim_create_autocmd('LspAttach', {
-    group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+    group = augroup,
     callback = function(ev)
+
       -- Buffer local mappings.
       -- See `:help vim.lsp.*` for documentation on any of the below functions
       local opts = function(desc) return { buffer = ev.buf, desc = desc } end
@@ -45,6 +55,22 @@ function M.setup()
         vim.lsp.buf.format { async = true }
       end, opts('LSP: Auto-format'))
       vim.keymap.set({'n', 'v'}, '<leader>a', vim.lsp.buf.code_action, opts('LSP: Code actions'))
+
+      local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
+      vim.api.nvim_clear_autocmds({ group = augroup, buffer = ev.buf })
+
+      if client:supports_method("textDocument/formatting") then
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          group = augroup,
+          buffer = ev.buf,
+          callback = function()
+            local setting = vim.g.Session_format_on_write
+            if setting == true or setting == 1 then
+              vim.lsp.buf.format({ async = false })
+            end
+          end,
+        })
+      end
     end,
   })
 end
