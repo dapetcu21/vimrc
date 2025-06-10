@@ -67,8 +67,9 @@ return {
     init = function ()
       -- Use PowerShell on Windows
       if vim.fn.has('win32') == 1 then
-        vim.opt.shell = (vim.fn.executable('pwsh') == 1) and 'pwsh' or 'powershell'
-        vim.opt.shellcmdflag = '-NoLogo -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.UTF8Encoding]::new();$PSDefaultParameterValues[\'Out-File:Encoding\']=\'utf8\';Remove-Alias -Force -ErrorAction SilentlyContinue tee;'
+        local has_new_pwsh = (vim.fn.executable('pwsh') == 1)
+        vim.opt.shell = has_new_pwsh and 'pwsh' or 'powershell'
+        vim.opt.shellcmdflag = '-NoLogo -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.UTF8Encoding]::new();$PSDefaultParameterValues[\'Out-File:Encoding\']=\'utf8\';' .. (has_new_pwsh and 'Remove-Alias -Force -ErrorAction SilentlyContinue tee;' or '')
         vim.opt.shellredir = '2>&1 | %%{ "$_" } | Out-File %s; exit $LastExitCode'
         vim.opt.shellpipe  = '2>&1 | %%{ "$_" } | tee %s; exit $LastExitCode'
         vim.opt.shellquote = ''
