@@ -1,5 +1,13 @@
 local M = {}
 
+local function get_count()
+  local count = vim.v.count
+  if count == 0 then
+    return 1
+  end
+  return count
+end
+
 function M.setup()
   -- Disable LSP logging. We can enable it if we need it
   vim.lsp.set_log_level("off")
@@ -10,8 +18,8 @@ function M.setup()
   -- See `:help vim.diagnostic.*` for documentation on any of the below functions
   vim.keymap.set('n', '<leader>r', vim.diagnostic.open_float, { desc = 'Diagnostics: Open float' })
   vim.keymap.set('n', '<leader>rf', vim.diagnostic.open_float, { desc = 'Diagnostics: Open float' })
-  vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Diagnostics: Go to previous diagnostic' })
-  vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Diagnostics: Go to next diagnostic' })
+  vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -get_count() }) end, { desc = 'Diagnostics: Go to previous diagnostic' })
+  vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = get_count() }) end, { desc = 'Diagnostics: Go to next diagnostic' })
   vim.keymap.set('n', '<leader>rl', vim.diagnostic.setloclist, { desc = 'Diagnostics: Set loclist' })
   vim.keymap.set('n', '<leader>mi', function () vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, { silent = true, desc = "LSP: Toggle Inlay Hints" })
 
