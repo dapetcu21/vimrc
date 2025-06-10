@@ -12,7 +12,8 @@ function M.setup()
   -- Disable LSP logging. We can enable it if we need it
   vim.lsp.set_log_level("off")
 
-  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+  -- Enable inlay hints
+  vim.lsp.inlay_hint.enable(true)
 
   -- Global mappings.
   -- See `:help vim.diagnostic.*` for documentation on any of the below functions
