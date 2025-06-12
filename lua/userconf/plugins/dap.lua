@@ -105,8 +105,9 @@ return {
     dependencies = {
       "jay-babu/mason-nvim-dap.nvim",
       { "dapetcu21/nvim-vsdbg", opts = {} },
+      { "theHamsta/nvim-dap-virtual-text", opts = {} },
       "igorlfs/nvim-dap-view",
-      "theHamsta/nvim-dap-virtual-text",
+      "rcarriga/nvim-dap-ui",
     },
 
     cmd = {
@@ -128,14 +129,26 @@ return {
     },
 
     keys = {
+      { "<leader>dc", "<Cmd>DapContinue<CR>", mode = "n", silent = true, desc = "DAP: Start/Continue debugging" },
+      { "<leader>dn", "<Cmd>DapNew<CR>", mode = "n", silent = true, desc = "DAP: New session" },
+      { "<leader>dx", "<Cmd>DapDisconnect<CR>", mode = "n", silent = true, desc = "DAP: Disconnect" },
+      { "<leader>dX", "<Cmd>DapTerminate<CR>", mode = "n", silent = true, desc = "DAP: Terminate" },
+      { "<leader>db", "<Cmd>DapToggleBreakpoint<CR>", mode = "n", silent = true, desc = "DAP: Toggle breakpoint" },
+      { "<leader>ds", "<Cmd>DapStepOver<CR>", mode = "n", silent = true, desc = "DAP: Step over" },
+      { "<leader>di", "<Cmd>DapStepInto<CR>", mode = "n", silent = true, desc = "DAP: Step into" },
+      { "<leader>do", "<Cmd>DapStepOut<CR>", mode = "n", silent = true, desc = "DAP: Step out" },
+
       { "<F5>", "<Cmd>DapContinue<CR>", mode = "n", silent = true, desc = "DAP: Start/Continue debugging" },
       { "<F9>", "<Cmd>DapToggleBreakpoint<CR>", mode = "n", silent = true, desc = "DAP: Toggle breakpoint" },
+      { "<F10>", "<Cmd>DapStepOver<CR>", mode = "n", silent = true, desc = "DAP: Step over" },
       { "<F11>", "<Cmd>DapStepInto<CR>", mode = "n", silent = true, desc = "DAP: Step into" },
       { "<S-F11>", "<Cmd>DapStepOut<CR>", mode = "n", silent = true, desc = "DAP: Step out" },
-      { "<F10>", "<Cmd>DapStepOver<CR>", mode = "n", silent = true, desc = "DAP: Step over" },
     },
 
     config = function()
+      local dap = require('dap')
+      dap.defaults.fallback.switchbuf = "usevisible,useopen,uselast"
+
       vim.cmd("hi DapBreakpointColor guifg=#fa4848")
       vim.cmd("hi DapStoppedColor guifg=#cbfa48")
       vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DapBreakpointColor" });
@@ -212,6 +225,7 @@ return {
 
     keys = {
       { "<leader>dw", "<Cmd>DapViewWatch<CR>", mode = { "n", "v" }, silent = true, desc = "DAP: Add selection to watches" },
+      { "<leader>dT", function () require("dap-view").toggle() end, mode = "n", desc = "DAP: Toggle UI (nvim-dap-view)" },
     },
 
     config = function()
@@ -222,53 +236,57 @@ return {
         winbar = {
           controls = { enabled = true },
         },
-        switchbuf = "usevisible,usetab,newtab"
+        windows = {
+          terminal = { position = "right" },
+        },
+        switchbuf = "useopen,uselast"
       })
 
-      dap.defaults.fallback.switchbuf = "usevisible,usetab,newtab"
+      local open = function ()
+        if vim.g.dap_view_enabled then
+          dv.open()
+        end
+      end
+      local close = function () dv.close() end
 
-      dap.listeners.before.attach["dap-view-config"] = function()
-        dv.open()
-      end
-      dap.listeners.before.launch["dap-view-config"] = function()
-        dv.open()
-      end
-      dap.listeners.before.event_terminated["dap-view-config"] = function()
-        dv.close()
-      end
-      dap.listeners.before.event_exited["dap-view-config"] = function()
-        dv.close()
-      end
+      dap.listeners.before.attach.dap_view_config = open
+      dap.listeners.before.launch.dap_view_config = open
+      dap.listeners.before.event_terminated.dap_view_config = close
+      dap.listeners.before.event_exited.dap_view_config = close
     end
   },
 
-  --[[
   {
     "rcarriga/nvim-dap-ui",
 
+    lazy = true,
+
     dependencies = {
-      "mfussenegger/nvim-dap",
       "nvim-neotest/nvim-nio",
+    },
+
+    keys = {
+      { "<M-k>", function () require("dapui").eval() end, mode = {"n", "v"}, desc = "DAP: Evaluate expression" },
+      { "<leader>dt", function () require("dapui").toggle() end, mode = "n", desc = "DAP: Toggle UI (nvim-dap-ui)" },
     },
 
     config = function ()
       local dap = require("dap")
       local dapui = require("dapui")
-      dapui.setup()
 
-      dap.listeners.before.attach.dapui_config = function()
-        dapui.open()
+      dapui.setup({})
+
+      local open = function ()
+        if not vim.g.dap_view_enabled then
+          dapui.open()
+        end
       end
-      dap.listeners.before.launch.dapui_config = function()
-        dapui.open()
-      end
-      dap.listeners.before.event_terminated.dapui_config = function()
-        dapui.close()
-      end
-      dap.listeners.before.event_exited.dapui_config = function()
-        dapui.close()
-      end
+      local close = function () dapui.close() end
+
+      dap.listeners.before.attach.dap_ui_config = open
+      dap.listeners.before.launch.dap_ui_config = open
+      dap.listeners.before.event_terminated.dap_ui_config = close
+      dap.listeners.before.event_exited.dap_ui_config = close
     end
   },
-  ]]--
 }
