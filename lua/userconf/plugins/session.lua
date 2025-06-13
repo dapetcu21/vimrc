@@ -6,10 +6,10 @@ return {
     event = "BufReadPre",
 
     keys = {
-      { '<leader>qs', function () require('persistence').load() end, mode = 'n', silent = true, desc = 'Sessions: Load from current dir' },
-      { '<leader>qS', function () require('persistence').load({ last = true }) end, mode = 'n', silent = true, desc = 'Sessions: Load last session' },
-      { '<leader>ql', function () require('persistence').select() end, mode = 'n', silent = true, desc = 'Sessions: Select session to load' },
-      { '<leader>qd', function () require('persistence').stop() end, mode = 'n', silent = true, desc = 'Sessions: Stop' },
+      { '<leader>po', function () require('persistence').load() end, mode = 'n', silent = true, desc = 'Sessions: Load from current dir' },
+      { '<leader>pO', function () require('persistence').load({ last = true }) end, mode = 'n', silent = true, desc = 'Sessions: Load last session' },
+      { '<leader>pl', function () require('persistence').select() end, mode = 'n', silent = true, desc = 'Sessions: Select session to load' },
+      { '<leader>ps', function () require('persistence').stop() end, mode = 'n', silent = true, desc = 'Sessions: Stop' },
     },
 
     config = function ()
