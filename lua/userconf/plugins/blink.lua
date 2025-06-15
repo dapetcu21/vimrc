@@ -10,6 +10,8 @@ return {
         preset = "enter",
         ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
         ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
+        ["<C-l>"] = { "snippet_forward", "fallback" },
+        ["<C-h"] = { "snippet_backward", "fallback" },
       },
 
       completion = {
