@@ -65,6 +65,9 @@ vim.api.nvim_set_keymap('n', '<leader>./', [[/\V<C-R>=expand('<cword>')<CR><CR>]
 vim.api.nvim_create_user_command('EditInit', ':execute "e " . stdpath("config") . "/init.vim"', {})
 vim.api.nvim_create_user_command('Gugrep', ':Ggrep -I --untracked <args>', { nargs = "+" })
 
+vim.api.nvim_set_keymap('n', '<leader>k', "", { silent = true, desc = "Go to file under cursor", callback = function () require('userconf.go-to-file').go() end })
+vim.api.nvim_set_keymap('v', '<leader>k', "", { silent = true, desc = "Go to file under cursor", callback = function () require('userconf.go-to-file').go() end })
+
 
 -- Show filename in title bar
 vim.cmd([[
@@ -108,3 +111,4 @@ require("userconf.indent").setup()
 
 -- Load local configuration
 require("userconf.local").setup()
+
