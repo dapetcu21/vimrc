@@ -15,6 +15,10 @@ function M.setup()
   -- Enable inlay hints
   vim.lsp.inlay_hint.enable(true)
 
+  vim.lsp.config('clangd', {
+    cmd = { 'clangd', '--header-insertion=never' }
+  })
+
   -- Global mappings.
   -- See `:help vim.diagnostic.*` for documentation on any of the below functions
   vim.keymap.set('n', '<leader>r', vim.diagnostic.open_float, { desc = 'Diagnostics: Open float' })
