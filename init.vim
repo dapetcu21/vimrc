@@ -31,6 +31,7 @@ set updatetime=300
 set signcolumn=number
 set confirm
 set foldcolumn=auto:9
+set switchbuf=useopen,uselast
 filetype indent on
 
 " Infinite terminal scrollback
