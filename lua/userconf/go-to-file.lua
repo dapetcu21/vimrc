@@ -98,6 +98,9 @@ function M.open(fname, row, col)
     local window = require("dap-view.views.windows")
     local win = window.get_win_respecting_switchbuf(vim.o.switchbuf, bufnr)
 
+    local esc = vim.api.nvim_replace_termcodes('<esc>', true, false, true)
+    vim.api.nvim_feedkeys(esc, 'x', false)
+
     if not win then
         win = vim.api.nvim_open_win(0, true, {
             split = "left",
