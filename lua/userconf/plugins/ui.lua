@@ -117,5 +117,20 @@ return {
         desc = "Trouble: Quickfix list",
       },
     },
-  }
+  },
+
+  {
+    "simeji/winresizer",
+    keys = {
+      {
+        "<C-e>",
+        desc = "Resize window",
+      },
+    },
+    cmd = {
+      "WinResizerStartResize",
+      "WinResizerStartFocus",
+      "WinResizerStartMove",
+    },
+  },
 }
