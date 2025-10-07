@@ -106,7 +106,6 @@ return {
       "jay-babu/mason-nvim-dap.nvim",
       { "dapetcu21/nvim-vsdbg", opts = {} },
       { "theHamsta/nvim-dap-virtual-text", opts = {} },
-      "igorlfs/nvim-dap-view",
       "rcarriga/nvim-dap-ui",
     },
 
@@ -217,45 +216,6 @@ return {
       },
     }
   },
-
-  {
-    "igorlfs/nvim-dap-view",
-
-    lazy = true,
-
-    keys = {
-      { "<leader>dw", "<Cmd>DapViewWatch<CR>", mode = { "n", "v" }, silent = true, desc = "DAP: Add selection to watches" },
-      { "<leader>dT", function () require("dap-view").toggle() end, mode = "n", desc = "DAP: Toggle UI (nvim-dap-view)" },
-    },
-
-    config = function()
-      local dv = require("dap-view")
-      local dap = require("dap")
-
-      dv.setup({
-        winbar = {
-          controls = { enabled = true },
-        },
-        windows = {
-          terminal = { position = "right" },
-        },
-        switchbuf = "useopen,uselast"
-      })
-
-      local open = function ()
-        if vim.g.dap_view_enabled then
-          dv.open()
-        end
-      end
-      local close = function () dv.close() end
-
-      dap.listeners.before.attach.dap_view_config = open
-      dap.listeners.before.launch.dap_view_config = open
-      dap.listeners.before.event_terminated.dap_view_config = close
-      dap.listeners.before.event_exited.dap_view_config = close
-    end
-  },
-
   {
     "rcarriga/nvim-dap-ui",
 
@@ -277,9 +237,7 @@ return {
       dapui.setup({})
 
       local open = function ()
-        if not vim.g.dap_view_enabled then
-          dapui.open()
-        end
+        dapui.open()
       end
       local close = function () dapui.close() end
 
