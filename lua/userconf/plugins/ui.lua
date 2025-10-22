@@ -133,4 +133,6 @@ return {
       "WinResizerStartMove",
     },
   },
+
+  { "igorlfs/nvim-dap-view", lazy = true }, -- For go-to-file only
 }
