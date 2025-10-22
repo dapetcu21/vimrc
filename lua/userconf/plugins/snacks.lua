@@ -79,7 +79,7 @@ return {
     -- Top Grep
     { "<leader>/", function() Snacks.picker.grep({ glob = get_globs() }) end, desc = "Grep" },
     { "<leader>mm", set_globs, desc = "Set Grep Globs" },
-    { "<leader>m/", function() Snacks.picker.grep_word({ live = true, glob = get_globs() }) end, desc = "Grep for Visual Selection or Word", mode = { "n", "x" } },
+    { "<leader>m/", function() Snacks.picker.grep_word({ glob = get_globs() }) end, desc = "Grep for Visual Selection or Word", mode = { "n", "x" } },
     -- find
     { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
     { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
@@ -99,7 +99,7 @@ return {
     { "<leader>sb", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
     { "<leader>sB", function() Snacks.picker.grep_buffers() end, desc = "Grep in Open Buffers" },
     { "<leader>sg", function() Snacks.picker.grep({ glob = get_globs() }) end, desc = "Grep" },
-    { "<leader>sw", function() Snacks.picker.grep_word({ live = true, glob = get_globs() }) end, desc = "Grep for Visual Selection or Word", mode = { "n", "x" } },
+    { "<leader>sw", function() Snacks.picker.grep_word({ glob = get_globs() }) end, desc = "Grep for Visual Selection or Word", mode = { "n", "x" } },
     -- search
     { '<leader>s"', function() Snacks.picker.registers() end, desc = "Registers" },
     { '<leader>s/', function() Snacks.picker.search_history() end, desc = "Search History" },
