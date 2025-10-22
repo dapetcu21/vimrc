@@ -77,13 +77,6 @@ return {
   },
 
   {
-    "pmizio/typescript-tools.nvim",
-    ft = "typescript",
-    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-    opts = {},
-  },
-
-  {
     'p00f/clangd_extensions.nvim',
     dependencies = { 'neovim/nvim-lspconfig' },
     keys = {
