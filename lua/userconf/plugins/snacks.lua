@@ -40,7 +40,9 @@ return {
     end
 
     return {
-      picker = {},
+      picker = {
+        show_delay = 1000,
+      },
       notifier = {},
       explorer = {},
       dashboard = {
