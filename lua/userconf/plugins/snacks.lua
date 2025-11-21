@@ -1,3 +1,8 @@
+---@class snacks.Picker
+---@field [string] unknown
+---@class snacks.picker.Config
+---@field [string] unknown
+
 local function set_globs()
   vim.ui.input({ prompt = 'Grep Filter Globs> ', default = vim.g.Session_rg_glob or "" }, function (input)
     if input ~= nil then
@@ -12,6 +17,15 @@ local function get_globs()
     table.insert(globs, substring)
   end
   return globs
+end
+
+local list_extend = function(where, what)
+  return vim.list_extend(vim.deepcopy(where), what)
+end
+
+local list_filter = function(where, what)
+  -- stylua: ignore
+  return vim.iter(where):filter(function(val) return not vim.list_contains(what, val) end):totable()
 end
 
 return {
@@ -42,6 +56,35 @@ return {
     return {
       picker = {
         show_delay = 1000,
+        sources = {
+          grep = {
+            case_sens = true,
+            toggles = {
+              case_sens = 's',
+            },
+            finder = function(opts, ctx)
+              local args_extend = { '--ignore-case' }
+              opts.args = list_filter(opts.args or {}, args_extend)
+              if not opts.case_sens then
+                opts.args = list_extend(opts.args, args_extend)
+              end
+              return require('snacks.picker.source.grep').grep(opts, ctx)
+            end,
+            actions = {
+              toggle_live_case_sens = function(picker)
+                picker.opts.case_sens = not picker.opts.case_sens
+                picker:find()
+              end,
+            },
+            win = {
+              input = {
+                keys = {
+                  ['<M-s>'] = { 'toggle_live_case_sens', mode = { 'i', 'n' } },
+                },
+              },
+            },
+          },
+        },
       },
       notifier = {},
       explorer = {},
