@@ -77,10 +77,19 @@ return {
   },
 
   {
-    'p00f/clangd_extensions.nvim',
+    'https://git.sr.ht/~chinmay/clangd_extensions.nvim',
+
+    config = function ()
+      require("clangd_extensions").setup({})
+
+      local switch_header_old = require("clangd_extensions.switch_source_header")
+      local switch_header_new = require("userconf.switch-source-header")
+      switch_header_old.switch_source_header = switch_header_new.switch_source_header
+    end,
+
     dependencies = { 'neovim/nvim-lspconfig' },
     keys = {
-      { "<leader>i", "<Cmd>ClangdSwitchSourceHeader<CR>", mode = "n", silent = true, desc = 'Clangd: Switch between header and source' },
+        { "<leader>i", "<Cmd>ClangdSwitchSourceHeader<CR>", mode = "n", silent = true, desc = 'Clangd: Switch between header and source' },
     },
     cmd = {
       "ClangdSwitchSourceHeader",
