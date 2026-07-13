@@ -21,12 +21,12 @@ function M.setup()
 
   -- Global mappings.
   -- See `:help vim.diagnostic.*` for documentation on any of the below functions
-  vim.keymap.set('n', '<leader>r', vim.diagnostic.open_float, { desc = 'Diagnostics: Open float' })
+  vim.keymap.set('n', '<leader>r', '<Nop>', { desc = 'LSP/Diagnostics' })
   vim.keymap.set('n', '<leader>rf', vim.diagnostic.open_float, { desc = 'Diagnostics: Open float' })
   vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -get_count() }) end, { desc = 'Diagnostics: Go to previous diagnostic' })
   vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = get_count() }) end, { desc = 'Diagnostics: Go to next diagnostic' })
   vim.keymap.set('n', '<leader>rl', vim.diagnostic.setloclist, { desc = 'Diagnostics: Set loclist' })
-  vim.keymap.set('n', '<leader>mi', function () vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, { silent = true, desc = "LSP: Toggle Inlay Hints" })
+  vim.keymap.set('n', '<leader>ri', function () vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, { silent = true, desc = "LSP: Toggle Inlay Hints" })
 
   local augroup = vim.api.nvim_create_augroup('UserLspConfig', {})
 
@@ -48,6 +48,7 @@ function M.setup()
       local opts = function(desc) return { buffer = ev.buf, desc = desc } end
       vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts('LSP: Hover'))
       vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts('LSP: Signature help'))
+      vim.keymap.set('n', '<leader>w', "<Nop>", opts('LSP Workspace'))
       vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, opts('LSP: Add workspace folder'))
       vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, opts('LSP: Remove workspace folder'))
       vim.keymap.set('n', '<leader>wl', function()
@@ -59,7 +60,7 @@ function M.setup()
       vim.keymap.set({'n', 'v'}, '<leader>=', function()
         vim.lsp.buf.format { async = true }
       end, opts('LSP: Auto-format'))
-      vim.keymap.set({'n', 'v'}, '<leader>a', vim.lsp.buf.code_action, opts('LSP: Code actions'))
+      vim.keymap.set({'n', 'v'}, '<leader>ra', vim.lsp.buf.code_action, opts('LSP: Code actions'))
 
       local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
       vim.api.nvim_clear_autocmds({ group = augroup, buffer = ev.buf })

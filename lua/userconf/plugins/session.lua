@@ -6,6 +6,7 @@ return {
     event = "BufReadPre",
 
     keys = {
+      { '<leader>p', '<Nop>', mode = 'n', desc = 'Sessions' },
       { '<leader>po', function () require('persistence').load() end, mode = 'n', silent = true, desc = 'Sessions: Load from current dir' },
       { '<leader>pO', function () require('persistence').load({ last = true }) end, mode = 'n', silent = true, desc = 'Sessions: Load last session' },
       { '<leader>pl', function () require('persistence').select() end, mode = 'n', silent = true, desc = 'Sessions: Select session to load' },

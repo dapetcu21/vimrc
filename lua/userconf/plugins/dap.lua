@@ -128,6 +128,7 @@ return {
     },
 
     keys = {
+      { "<leader>d", nil, mode = "n", silent = true, desc = "Debug Adapter Protocol" },
       { "<leader>dc", "<Cmd>DapContinue<CR>", mode = "n", silent = true, desc = "DAP: Start/Continue debugging" },
       { "<leader>dn", "<Cmd>DapNew<CR>", mode = "n", silent = true, desc = "DAP: New session" },
       { "<leader>dx", "<Cmd>DapDisconnect<CR>", mode = "n", silent = true, desc = "DAP: Disconnect" },

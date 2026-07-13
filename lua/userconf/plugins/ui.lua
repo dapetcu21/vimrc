@@ -82,6 +82,9 @@ return {
 
     keys = {
       {
+        "<leader>t", "<Nop>", desc = "Trouble",
+      },
+      {
         "<leader>td",
         "<cmd>Trouble diagnostics toggle<cr>",
         desc = "Trouble: Diagnostics",
@@ -131,6 +134,22 @@ return {
       "WinResizerStartResize",
       "WinResizerStartFocus",
       "WinResizerStartMove",
+    },
+  },
+
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    opts = {
+    },
+    keys = {
+      {
+        "<leader>?",
+        function()
+          require("which-key").show({ global = false })
+        end,
+        desc = "Buffer Local Keymaps (which-key)",
+      },
     },
   },
 
