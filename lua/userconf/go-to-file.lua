@@ -74,7 +74,11 @@ function M.extract_candidates()
   local suffix = line:sub(ecol)
 
   local prefix_trimmed = prefix:match("^.*%s(.-)$") or prefix
-  local suffix_trimmed = suffix:match("^(._)%s") or suffix
+  local suffix_trimmed = suffix:match("^(.-)%s") or suffix
+  extract_line_no(prefix_trimmed .. suffix_trimmed)
+
+  prefix_trimmed = prefix:match("^.*%((.-)$") or prefix
+  suffix_trimmed = suffix:match("^(.-)%)") or suffix
   extract_line_no(prefix_trimmed .. suffix_trimmed)
 end
 
@@ -82,14 +86,27 @@ function M.go()
   for fname, row, col in coroutine.wrap(M.extract_candidates) do
     local abs_path = vim.fn.fnamemodify(fname, ":p")
     if vim.uv.fs_stat(abs_path) then
-      M.open(abs_path, row, col)
-      break
+      M.open(abs_path, nil, row, col)
+      return
+    end
+    local n = #fname
+    for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+      local buf_name = vim.api.nvim_buf_get_name(bufnr)
+      if buf_name ~= "" then
+        local sep = buf_name:sub(-n - 1, -n - 1)
+        if buf_name:sub(-n):gsub("\\", "/") == fname:gsub("\\", "/") and (n == #buf_name or sep == "/" or sep == "\\") then
+          M.open(nil, bufnr, row, col)
+          return
+        end
+      end
     end
   end
 end
 
-function M.open(fname, row, col)
-    local bufnr = vim.uri_to_bufnr(vim.uri_from_fname(fname))
+function M.open(fname, bufnr, row, col)
+    if bufnr == nil then
+        bufnr = vim.uri_to_bufnr(vim.uri_from_fname(fname))
+    end
 
     if bufnr == nil then
         return
