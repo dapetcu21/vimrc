@@ -62,6 +62,7 @@ return {
     },
     keys = {
       { "<C-t>", mode = "n", desc = "Toggle Terminal" },
+      { "<C-V>", "<C-\\><C-n>pi", mode = "t", desc = "Paste into terminal" },
     },
 
     init = function ()
